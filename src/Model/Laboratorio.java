@@ -1,7 +1,9 @@
 package Model;
 
 import java.util.ArrayList;
-
+/**
+ * Creazione del model Laboratorio con getter e setter
+ */
 public class Laboratorio {
     private String Nome_Lab;
     private String topic;

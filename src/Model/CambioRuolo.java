@@ -3,6 +3,11 @@ package Model;
 import javax.xml.crypto.Data;
 import java.util.Date;
 
+/**
+ * Creazione del Model Cambio Ruolo, che serve a memorizzare la data in cui
+ * un dipendente è stato promosso a dirigente, unico scatto di carriera
+ * non calcolabile
+ */
 public class CambioRuolo {
     private int id_dip;
     private Date DataCambio;

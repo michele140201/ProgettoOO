@@ -15,6 +15,10 @@ public class Nuovo_Prog extends JPanel {
     private String[] topic = {"chimica" , "fisica" , "matematica" , "informatica" , "biologia"};
     public int c = 0;
     private Progetto p = new Progetto();
+
+    /**
+     * Creazione della finestra di inserimento di un nuovo Progetto
+     */
     public Nuovo_Prog(){
         add(panel1);
         setSize(500,300);

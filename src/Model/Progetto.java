@@ -1,6 +1,9 @@
 package Model;
 
 import java.util.*;
+/**
+ * Creazione del model Progetto con getter e setter
+ */
 public class Progetto {
     private int CUP;
     private String Nome_Prog;

@@ -19,6 +19,10 @@ public class DipendenteDAOimpl implements DipendenteDAO{
     Connection con;
     private List<Dipendente> dipendenti = new ArrayList<>();
 
+    /**
+     * Funzione per avere tutti i dipendenti
+     * @return
+     */
     @Override
     public List<Dipendente> getDipendente() {
         String sql = ("SELECT * FROM DIPENDENTE");
@@ -37,6 +41,11 @@ public class DipendenteDAOimpl implements DipendenteDAO{
         return dipendenti;
     }
 
+    /**
+     * Funzione per rimuovere un dipendente
+     * @param id_dip
+     * @return
+     */
     @Override
     public int remove_dip(int id_dip) {
         String sql = ("delete from Dipendente where Dipendente.id_dip = "+ id_dip);
@@ -51,6 +60,11 @@ public class DipendenteDAOimpl implements DipendenteDAO{
         return i;
     }
 
+    /**
+     * Funzione per aggiungere un dipendente
+     * @param nuovodip
+     * @return
+     */
     @Override
     public int add_dip(Dipendente nuovodip) {
         String sql = "insert into Dipendente(nome,cognome,data_n, id_dip,dirigente, data_assunzione)  values('"+nuovodip.getNome()+"','" + nuovodip.getCognome()+"','"+nuovodip.getData_nascita()+"','"+nuovodip.getId_dip()+"','"+nuovodip.isDirigente()+"','"+nuovodip.getAssunzione()+"')";
@@ -65,10 +79,11 @@ public class DipendenteDAOimpl implements DipendenteDAO{
         return 0;
     }
 
-    @Override
-    public int modify_dip() {
-        return 0;
-    }
+    /**
+     * Funzione per mod
+     * @return
+     */
+
 
     public int count(){
         String sql = ("select count(*) as count from dipendente");
@@ -86,6 +101,10 @@ public class DipendenteDAOimpl implements DipendenteDAO{
         return i;
     }
 
+    /**
+     * Funzione per trovare l'id dipendente maggiore
+     * @return
+     */
     public int Id_dip(){
         String sql = ("select MAX(id_dip) as Max from dipendente ");
         int i = 0;
@@ -101,6 +120,12 @@ public class DipendenteDAOimpl implements DipendenteDAO{
         return i;
     }
 
+    /**
+     * Funzione per impostare il laboratorio di un dipendente
+     * @param nome_lab
+     * @param id
+     * @return
+     */
     @Override
     public int set_lab(String nome_lab , int id) {
         String sql = ("update Dipendente set nome_lab = '" + nome_lab + "' where Dipendente.id_dip = " + id);
@@ -115,6 +140,11 @@ public class DipendenteDAOimpl implements DipendenteDAO{
         return 0;
     }
 
+    /**
+     * Funzione per la promozione di un dipendente
+     * @param id_dip
+     * @return
+     */
     @Override
     public int promuovi(int id_dip) {
         String sql = ("update Dipendente set Dirigente = 'yes' where Dipendente.id_dip = " + id_dip);
@@ -128,6 +158,11 @@ public class DipendenteDAOimpl implements DipendenteDAO{
         return 0;
     }
 
+    /**
+     * Funzione per degradare un dipendente
+     * @param id_dip
+     * @return
+     */
     @Override
     public int degrada(int id_dip) {
         String sql = ("update Dipendente set Dirigente = 'no' where Dipendente.id_dip = " + id_dip);
@@ -140,6 +175,11 @@ public class DipendenteDAOimpl implements DipendenteDAO{
         }
         return 0;
     }
+
+    /**
+     * Funzione per avere tutti i dirigenti
+     * @return
+     */
     public List<Dipendente> getDir(){
         String sql = ("select * from Dipendente where Dipendente.nome_lab is not null");
         List<Dipendente> Dirigenti = new ArrayList<>();
@@ -158,6 +198,11 @@ public class DipendenteDAOimpl implements DipendenteDAO{
         return Dirigenti;
     }
 
+    /**
+     * Funzione per avere la data in cui è stato assunto un dipendente
+     * @param id_dip
+     * @return
+     */
     @Override
     public Date DataAssunzione(int id_dip) {
         Date data = null;
@@ -175,10 +220,11 @@ public class DipendenteDAOimpl implements DipendenteDAO{
         return data;
     }
 
-
-
-
-
+    /**
+     * Funzione per avere tutti i dipendenti senior
+     * @param Nome_lab
+     * @return
+     */
     @Override
     public List<Dipendente> dipendente_senior(String Nome_lab) {
         List<Dipendente> Dipendenti = new ArrayList<>();
@@ -198,6 +244,11 @@ public class DipendenteDAOimpl implements DipendenteDAO{
         return Dipendenti;
     }
 
+    /**
+     * Funzione per contare tutti i dipendenti senior
+     * @param Nome_lab
+     * @return
+     */
     @Override
     public int conta_senior(String Nome_lab) {
         int i = 0;
@@ -214,9 +265,14 @@ public class DipendenteDAOimpl implements DipendenteDAO{
         return i;
     }
 
+    /**
+     * Funzione per avere tutti dirigenti di un laboratorio
+     * @param Nome_lab
+     * @return
+     */
     @Override
-    public List<Dipendente> dipendentes(String Nome_lab) {
-        List<Dipendente> dipendentes = new ArrayList<>();
+    public List<Dipendente> Dirigenti_Laboratorio(String Nome_lab) {
+        List<Dipendente> DirigentiLabiratorio = new ArrayList<>();
         String sql = ("Select * from dipendente where dipendente.nome_lab = '" + Nome_lab + "' and dirigente = 'yes'");
         try{
             con = controller.ConnectionController();
@@ -224,11 +280,11 @@ public class DipendenteDAOimpl implements DipendenteDAO{
             ResultSet rs = stmt.executeQuery(sql);
             while(rs.next()){
                 Dipendente dip = new Dipendente(rs.getString("Nome"), rs.getString("Cognome"), rs.getInt("id_dip") , rs.getBoolean("Dirigente"),rs.getDate("data_assunzione") , rs.getDate("data_n") );
-                dipendentes.add(dip);
+                DirigentiLabiratorio.add(dip);
             }
         }catch(SQLException e){
             e.printStackTrace();
         }
-        return dipendentes;
+        return DirigentiLabiratorio;
     }
 }

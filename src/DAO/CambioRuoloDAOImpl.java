@@ -9,6 +9,13 @@ import java.time.LocalDate;
 public class CambioRuoloDAOImpl implements CambioRuoloDAO{
     ConnectionController controller = new ConnectionController();
     Connection con;
+
+    /**
+     * Funzione per vedere quando un dipendente è
+     * stato promosso a dirigente
+     * @param id_dip
+     * @return
+     */
     @Override
     public Date data_cambio(int id_dip) {
         Date data = null;
@@ -25,6 +32,13 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO{
         }
         return data;
     }
+
+    /**
+     * funzione per inserire la data in cui un dipendente
+     * è stato promosso a dirigente
+     * @param id_dip
+     * @return
+     */
     @Override
     public int inserisci_data_promozione(int id_dip) {
         String data = LocalDate.now().toString();
@@ -40,6 +54,12 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO{
         }
         return 0;
     }
+
+    /**
+     * Funzione per rimuovere la promozione di un dipendente, quando viene degradato
+     * @param id_dip
+     * @return
+     */
     @Override
     public int delete_promozione(int id_dip) {
         String sql = ("Delete from Ruolo where ruolo.id_dip = "+id_dip);

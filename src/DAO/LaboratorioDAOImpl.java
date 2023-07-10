@@ -11,6 +11,11 @@ import java.util.List;
 public class LaboratorioDAOImpl implements LaboratorioDAO{
     ConnectionController controller = new ConnectionController();
     Connection con;
+
+    /**
+     * Funzione per avere tutti nomi dei Laboratori
+     * @return
+     */
     @Override
     public String[] NomeLab() {
         String[] Labs;
@@ -35,6 +40,10 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
         return Labs;
     }
 
+    /**
+     * Funzione per contare tutti i Laboratori
+     * @return
+     */
     @Override
     public int countLab() {
         int i = 0;
@@ -53,6 +62,10 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
         return i;
     }
 
+    /**
+     * Funzione per ottenere tutti i laboratori
+     * @return
+     */
     @Override
     public List<Laboratorio> ottieniLabs() {
         List<Laboratorio> Laboratori = new ArrayList<>();
@@ -75,6 +88,12 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
         return Laboratori;
     }
 
+    /**
+     * Inserimento di un nuovo laboratorio
+     * @param Nome_Lab
+     * @param Topic
+     * @return
+     */
     @Override
     public int Inserisci(String Nome_Lab, String Topic) {
         int i = 0;
@@ -89,6 +108,11 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
         return i;
     }
 
+    /**
+     * Rimozione di un laboratorio
+     * @param Nome
+     * @return
+     */
     @Override
     public int remove(String Nome) {
         String sql = ("delete from laboratorio where laboratorio.nome_lab = '" + Nome + "'");
@@ -103,6 +127,12 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
         return i;
     }
 
+    /**
+     * Assegnazione di un nuovo Referente
+     * @param Nome_Lab
+     * @param id_dip
+     * @return
+     */
     @Override
     public int riassegna(String Nome_Lab, int id_dip) {
         int c = 0;
@@ -117,8 +147,14 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
         return c;
     }
 
+    /**
+     * Riassegnazione di un nuovo progetto
+     * @param Nome_Lab
+     * @param Progetto
+     * @return
+     */
     @Override
-    public int riassegna_id(String Nome_Lab, int Progetto) {
+    public int riassegna_progetto(String Nome_Lab, int Progetto) {
         int c = 0;
         String sql = ("update Laboratorio set progetto = " + Progetto + " where nome_lab = '" + Nome_Lab + "'");
         try{
@@ -131,6 +167,11 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
         return c;
     }
 
+    /**
+     * Funzione per contare tutti i progetti
+     * @param progetto
+     * @return
+     */
     @Override
     public int conta_prog(int progetto) {
         int c = 0;
@@ -148,6 +189,11 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
         return c;
     }
 
+    /**
+     * Funzione per ottenere tutti i laboratori che stanno lavorando ad un progetto
+     * @param cup
+     * @return
+     */
     @Override
     public List<Laboratorio> lab_prog(int cup) {
         List<Laboratorio> labs = new ArrayList<>();
@@ -166,6 +212,11 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
         return labs;
     }
 
+    /**
+     * Funzione per ottenere il referente del laboratorio
+     * @param nome_lab
+     * @return
+     */
     @Override
     public int getReferente_Lab(String nome_lab){
         int id_dip = 0;
@@ -183,6 +234,11 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
         return id_dip;
     }
 
+    /**
+     * Funzione per ottenere a quale progetto sta lavorando il laboratorio
+     * @param NomeLab
+     * @return
+     */
     @Override
     public int getProgetto(String NomeLab) {
         int cup = 0;
@@ -199,20 +255,5 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
         }
         return cup;
     }
-    @Override
-    public String getNomeLab(int cup){
-        String NomeLab = null;
-        String sql = ("Select nome_lab from laboratorio where laboratorio.progetto = " + cup);
-        try{
-            con = controller.ConnectionController();
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while(rs.next()){
-                NomeLab = rs.getString("nome_lab");
-            }
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
-        return NomeLab;
-    }
+
 }

@@ -5,9 +5,18 @@ import com.sun.jdi.event.ExceptionEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+
 public class Connectiondb {
     Connection conn = null;
-public Connection connect_to_db(String db_name,String user, String pass) {
+
+    /**
+     * Funzione per connettersi al database
+     * @param db_name
+     * @param user
+     * @param pass
+     * @return
+     */
+    public Connection connect_to_db(String db_name,String user, String pass) {
 
     try {
         Class.forName("org.postgresql.Driver");

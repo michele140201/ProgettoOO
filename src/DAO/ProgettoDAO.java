@@ -8,7 +8,6 @@ public interface ProgettoDAO {
     List<Progetto> ottieniprogetti();
     int InserisciProgetto(Progetto p);
     int GeneraCup();
-    Progetto NuovoInserito();
     int EliminaProgetto(int cup);
     int conta_progetti();
     int set_referente(int id_dip , int cup);
