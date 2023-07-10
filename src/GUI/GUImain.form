@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GUI.GUImain">
+  <tabbedpane id="ca472" binding="pannello">
+    <constraints>
+      <xy x="20" y="20" width="626" height="400"/>
+    </constraints>
+    <properties>
+      <background color="-16442373"/>
+      <foreground color="-1"/>
+      <toolTipText value="Assumi"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <grid id="c809e" binding="Assumi" layout-manager="GridLayoutManager" row-count="7" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <tabbedpane title="Assumi"/>
+        </constraints>
+        <properties>
+          <autoscrolls value="true"/>
+          <background color="-1392"/>
+          <enabled value="false"/>
+          <foreground color="-6653"/>
+          <toolTipText value="Assumi"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="5d65e" class="javax.swing.JTextField" binding="nomeTextField" default-binding="true">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-3801096"/>
+              <caretColor color="-4473925"/>
+              <disabledTextColor color="-16777216"/>
+              <editable value="false"/>
+              <enabled value="true"/>
+              <foreground color="-4520192"/>
+              <opaque value="true"/>
+              <requestFocusEnabled value="false"/>
+              <selectedTextColor color="-16777216"/>
+              <text value="Nome"/>
+            </properties>
+          </component>
+          <component id="4fe22" class="javax.swing.JTextField" binding="cognomeTextField" default-binding="true">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-3801096"/>
+              <disabledTextColor color="-16777216"/>
+              <editable value="false"/>
+              <enabled value="true"/>
+              <foreground color="-4520192"/>
+              <selectedTextColor color="-16777216"/>
+              <text value="Cognome"/>
+            </properties>
+          </component>
+          <component id="2c8db" class="javax.swing.JTextField" binding="dirigenteTextField" default-binding="true">
+            <constraints>
+              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-3801096"/>
+              <editable value="false"/>
+              <enabled value="true"/>
+              <foreground color="-4520192"/>
+              <text value="Dirigente"/>
+            </properties>
+          </component>
+          <component id="9cbe0" class="javax.swing.JComboBox" binding="DirigenteBox">
+            <constraints>
+              <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-3801096"/>
+            </properties>
+          </component>
+          <component id="a2802" class="javax.swing.JTextField" binding="CognomeInserito">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-3801096"/>
+            </properties>
+          </component>
+          <component id="5ca48" class="javax.swing.JButton" binding="confermaButton" default-binding="true">
+            <constraints>
+              <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="124" height="30"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-16442373"/>
+              <foreground color="-1"/>
+              <text value="Conferma"/>
+            </properties>
+          </component>
+          <component id="b3e3a" class="javax.swing.JTextField" binding="giornoDiNascitaTextField" default-binding="true">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-3801096"/>
+              <editable value="false"/>
+              <enabled value="true"/>
+              <foreground color="-4520192"/>
+              <text value="Giorno di Nascita"/>
+            </properties>
+          </component>
+          <component id="cf114" class="javax.swing.JTextField" binding="meseDiNascitaTextField" default-binding="true">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-3801096"/>
+              <editable value="false"/>
+              <enabled value="true"/>
+              <foreground color="-4520192"/>
+              <text value="Mese di Nascita"/>
+            </properties>
+          </component>
+          <component id="a289b" class="javax.swing.JTextField" binding="annoDiNascitaTextField" default-binding="true">
+            <constraints>
+              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-3801096"/>
+              <editable value="false"/>
+              <enabled value="true"/>
+              <foreground color="-4520192"/>
+              <text value="Anno di Nascita"/>
+            </properties>
+          </component>
+          <component id="a40b2" class="javax.swing.JComboBox" binding="MesiNascita">
+            <constraints>
+              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+              <editable value="true"/>
+              <foreground color="-16777216"/>
+              <opaque value="false"/>
+              <popupVisible value="false"/>
+              <visible value="true"/>
+            </properties>
+          </component>
+          <component id="53728" class="javax.swing.JSpinner" binding="GiornoNascita">
+            <constraints>
+              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-3801096"/>
+            </properties>
+          </component>
+          <component id="7be3a" class="javax.swing.JSpinner" binding="AnnoNascita">
+            <constraints>
+              <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-3801096"/>
+              <foreground color="-3801096"/>
+            </properties>
+          </component>
+          <component id="221d2" class="javax.swing.JTextField" binding="NomeInserito">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-3801096"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="c6a45" binding="Visual" layout-manager="GridLayoutManager" row-count="3" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <tabbedpane title="Visualizza Dipendenti"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="3ed0e" class="javax.swing.JButton" binding="tuttiIDipendentiButton" default-binding="true">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Tutti i Dipendenti"/>
+            </properties>
+          </component>
+          <scrollpane id="221ae" binding="PannelloDipendenti">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="5" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="4a763" class="javax.swing.JTable" binding="TabellaDipendenti">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
+          </scrollpane>
+          <component id="569f3" class="javax.swing.JButton" binding="assegnaButton" default-binding="true">
+            <constraints>
+              <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Assegna"/>
+            </properties>
+          </component>
+          <component id="5059e" class="javax.swing.JButton" binding="licenziaButton" default-binding="true">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Licenzia"/>
+            </properties>
+          </component>
+          <component id="c28c0" class="javax.swing.JButton" binding="promuoviButton" default-binding="true">
+            <constraints>
+              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Promuovi"/>
+            </properties>
+          </component>
+          <component id="85fda" class="javax.swing.JButton" binding="degradaButton" default-binding="true">
+            <constraints>
+              <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Degrada"/>
+            </properties>
+          </component>
+          <component id="89c53" class="javax.swing.JButton" binding="dipendentiDaAssegnareButton" default-binding="true">
+            <constraints>
+              <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Dipendenti da Assegnare"/>
+            </properties>
+          </component>
+          <component id="85eeb" class="javax.swing.JButton" binding="visualizzaCarrieraButton" default-binding="true">
+            <constraints>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Visualizza Carriera"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="e3a5a" binding="Progetti" layout-manager="GridLayoutManager" row-count="2" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <tabbedpane title="Progetti"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <scrollpane id="1ebcb" binding="PannelloProgetti">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="4" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="2769e" class="javax.swing.JTable" binding="TabellaProgetti">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
+          </scrollpane>
+          <component id="6a5c9" class="javax.swing.JButton" binding="nuovoProgettoButton" default-binding="true">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Nuovo Progetto"/>
+            </properties>
+          </component>
+          <component id="9f3c5" class="javax.swing.JButton" binding="eliminaProgettoButton" default-binding="true">
+            <constraints>
+              <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Elimina Progetto"/>
+            </properties>
+          </component>
+          <component id="36558" class="javax.swing.JButton" binding="assegnaResponsabileButton" default-binding="true">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Assegna Responsabile"/>
+            </properties>
+          </component>
+          <component id="22754" class="javax.swing.JButton" binding="DialogoReferenteProgettiButton">
+            <constraints>
+              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Assegna Referente"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="7cb0f" binding="Laboratori" layout-manager="GridLayoutManager" row-count="2" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <tabbedpane title="Laboratori"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <scrollpane id="96724" binding="Tabella3">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="4" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="d413f" class="javax.swing.JTable" binding="table3" default-binding="true">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
+          </scrollpane>
+          <component id="ad948" class="javax.swing.JButton" binding="nuovoLaboratorioButton" default-binding="true">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Nuovo Laboratorio"/>
+            </properties>
+          </component>
+          <component id="768aa" class="javax.swing.JButton" binding="eliminaSedeButton" default-binding="true">
+            <constraints>
+              <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Elimina Sede"/>
+            </properties>
+          </component>
+          <component id="aa284" class="javax.swing.JButton" binding="assegnaProgettoButton" default-binding="true">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Assegna Progetto"/>
+            </properties>
+          </component>
+          <component id="ca140" class="javax.swing.JButton" binding="assegnaReferenteButton" default-binding="true">
+            <constraints>
+              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Assegna Referente"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+    </children>
+  </tabbedpane>
+  <inspectionSuppressions>
+    <suppress inspection="NoLabelFor" id="221ae"/>
+  </inspectionSuppressions>
+</form>

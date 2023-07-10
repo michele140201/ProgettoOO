@@ -1,0 +1,955 @@
+package GUI;
+
+import DAO.*;
+import Model.Dipendente;
+import Model.Laboratorio;
+import Model.Progetto;
+import java.sql.Date;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+
+public class GUImain extends JFrame {
+    DefaultTableModel modelloDipendenti;
+
+    private JTabbedPane pannello;
+    private JPanel Assumi;
+    private JPanel Visual;
+    private JPanel Progetti;
+    private JPanel Laboratori;
+    private JTextField nomeTextField;
+    private JTextField cognomeTextField;
+    private JTextField CognomeInserito;
+    private JComboBox MesiNascita;
+    private JTextField dirigenteTextField;
+    private JComboBox DirigenteBox;
+    private JButton confermaButton;
+    private JSpinner GiornoNascita;
+    private JTextField giornoDiNascitaTextField;
+    private JTextField meseDiNascitaTextField;
+    private JTextField annoDiNascitaTextField;
+    private JSpinner AnnoNascita;
+    private JTextField NomeInserito;
+    private JButton dipendentiDaAssegnareButton;
+    private JButton tuttiIDipendentiButton;
+    private JTable TabellaDipendenti;
+    private JScrollPane PannelloDipendenti;
+    private JScrollPane PannelloProgetti;
+    private JButton licenziaButton;
+    private JButton assegnaButton;
+    private JButton promuoviButton;
+    private JButton degradaButton;
+    private JButton visualizzaCarrieraButton;
+    private JTable TabellaProgetti;
+    private JButton nuovoProgettoButton;
+    private JButton eliminaProgettoButton;
+    private DipendenteDAO dipendenteDAO = new DipendenteDAOimpl();
+    private Dipendente dip;
+    String[] ValoriDirigenteBox = {"NO", "SI"};
+    String[] Mesi = {"Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"};
+    private boolean Dir;
+    private int currentYear = LocalDate.now().getYear();
+    private SpinnerNumberModel YearModel;
+    private SpinnerNumberModel GiorniModel28;
+    private SpinnerNumberModel GiorniModel30;
+    private SpinnerNumberModel GiorniModel31;
+    private JComboBox Lab;
+    private String[] NomiLab;
+    private List<Dipendente> DIR = new ArrayList<>();
+    private LaboratorioDAO laboratorioDAO = new LaboratorioDAOImpl();
+    private CambioRuoloDAO cambioRuoloDAO = new CambioRuoloDAOImpl();
+    private ProgettoDAO progettoDao = new ProgettoDAOImpl();
+    private Nuovo_Prog InterfacciaProgetto = new Nuovo_Prog();
+    private ProgettoDAO progettoDAO = new ProgettoDAOImpl();
+    private DefaultTableModel modelloProgetti = new DefaultTableModel();
+    private DefaultTableModel modelloLaboratori = new DefaultTableModel();
+    private JButton AssegnaReferenteProgettiButton = new JButton("Inserisci");
+    private JButton InserimentoProgettoButton = new JButton("Inserisci");
+    private JButton CreaNuovoLaboratorioButton = new JButton("Inserisci");
+    private JTable table3;
+    private JScrollPane Tabella3;
+    private JButton nuovoLaboratorioButton;
+    private JButton eliminaSedeButton;
+    private JButton assegnaProgettoButton;
+    private JButton assegnaReferenteButton;
+    private JButton assegnaResponsabileButton;
+    private JButton DialogoReferenteProgettiButton;
+    private Nuovo_Lab nuovoLab = new Nuovo_Lab();
+    private JComboBox ComboBox;
+    private JButton AssegnazioneProgettoButton = new JButton("Conferma");
+    private JButton ConfermaResponsabileButton = new JButton("Conferma");
+
+    public GUImain() {
+
+        for (int i = 0; i < 12; i++) {
+            MesiNascita.addItem(Mesi[i]);
+
+        }
+
+        setContentPane(pannello);
+        setSize(1000, 300);
+        setLocationRelativeTo(null);
+        setBackground(Color.CYAN);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        DirigenteBox.setEditable(true);
+        DirigenteBox.addItem(ValoriDirigenteBox[0]);
+        DirigenteBox.addItem(ValoriDirigenteBox[1]);
+        YearModel = new SpinnerNumberModel(currentYear - 30, currentYear - 80, currentYear - 18, 1);
+        AnnoNascita.setModel(YearModel);
+        GiorniModel28 = new SpinnerNumberModel(1, 1, 28, 1);
+        GiorniModel30 = new SpinnerNumberModel(1, 1, 30, 1);
+        GiorniModel31 = new SpinnerNumberModel(1, 1, 31, 1);
+        GiornoNascita.setModel(GiorniModel31);
+
+//FINE DEFINIZIONE AGGIUNGI DIPENDENTE
+
+        ArrayList<Dipendente> data = new ArrayList<>();
+        modelloDipendenti = new DefaultTableModel();
+        modelloDipendenti.addColumn("Nome");
+        modelloDipendenti.addColumn("Cognome");
+        modelloDipendenti.addColumn("id_Dip");
+        modelloDipendenti.addColumn("Data di Nascita");
+        modelloDipendenti.addColumn("Laboratorio");
+        modelloDipendenti.addColumn("Dirigente");
+        modelloDipendenti.addColumn("Data di Assunzione");
+        modelloDipendenti.fireTableDataChanged();
+        TabellaDipendenti = new JTable(modelloDipendenti) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+
+            ;
+
+        };
+        CreaTabella(TabellaDipendenti, PannelloDipendenti, modelloDipendenti, "Dipendenti");
+        fetch_dipendenti(modelloDipendenti);
+
+        //SCHERMATA DI DIALOGO DI ASSEGNAZIONE AD UN NUOVO LABORATORIO
+
+        JDialog dialogoLaboratorio = new JDialog();
+        JButton ConfermaAssegnazioneLaboratorio = new JButton("Conferma");
+        JTextField DomandaLaboratorio = new JTextField("A quale laboratorio vuoi assegnarlo?");
+        DomandaLaboratorio.setEnabled(false);DomandaLaboratorio.setDisabledTextColor(Color.black);
+        CreaDialogo(dialogoLaboratorio , ConfermaAssegnazioneLaboratorio , DomandaLaboratorio);
+        Lab = new JComboBox<>();
+
+        //INSERIMENTO PROGETTO
+
+        JDialog dialogoInserimentoProgetto = new JDialog();
+        dialogoInserimentoProgetto.setLayout(new BorderLayout());
+        dialogoInserimentoProgetto.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+        dialogoInserimentoProgetto.add(InterfacciaProgetto);
+        dialogoInserimentoProgetto.add(InserimentoProgettoButton , BorderLayout.PAGE_END);
+        dialogoInserimentoProgetto.pack();
+        dialogoInserimentoProgetto.setLocationRelativeTo(null);
+
+        //INSERIMENTO LABORATORIO
+
+        JDialog DialogoNuovoLaboratorio = new JDialog();
+        DialogoNuovoLaboratorio.setLayout(new BorderLayout());
+        DialogoNuovoLaboratorio.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+        DialogoNuovoLaboratorio.add(nuovoLab);
+        DialogoNuovoLaboratorio.add(CreaNuovoLaboratorioButton, BorderLayout.PAGE_END);
+        DialogoNuovoLaboratorio.pack();
+        DialogoNuovoLaboratorio.setLocationRelativeTo(null);
+
+        //Definizione modello della tabella progetti
+
+        modelloProgetti.addColumn("Nome Progetto");
+        modelloProgetti.addColumn("CUP");
+        modelloProgetti.addColumn("Topic");
+        modelloProgetti.addColumn("Referente");
+        modelloProgetti.addColumn("Responsabile");
+        modelloProgetti.fireTableDataChanged();
+        TabellaProgetti = new JTable(modelloProgetti) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            };
+        };
+        CreaTabella(TabellaProgetti, PannelloProgetti, modelloProgetti, "Laboratori");
+        fetch_progetti(modelloProgetti);
+
+        JButton ConfermaReferenteButton = new JButton("Conferma");
+        JTextField DomandaReferente = new JTextField("Quale referente vuoi assegnare?");
+        JDialog dialogoAssegnazioneReferente = new JDialog();
+        CreaDialogo(dialogoAssegnazioneReferente, ConfermaReferenteButton, DomandaReferente);
+
+        ComboBox = new JComboBox<>();
+        modelloLaboratori.addColumn("Nome Laboratorio");
+        modelloLaboratori.addColumn("Topic");
+        modelloLaboratori.addColumn("Nome Progetto");
+        modelloLaboratori.addColumn("Referente");
+        table3 = new JTable(modelloLaboratori) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            };
+        };
+        CreaTabella(table3, Tabella3, modelloLaboratori, "Progetti");
+        fetch_laboratorio(modelloLaboratori);
+
+        JDialog DialogoAssegnazioneProgetto = new JDialog();
+        JTextField DOMANDA3 = new JTextField("Quale progetto vuoi assegnare?");
+        CreaDialogo(DialogoAssegnazioneProgetto, AssegnazioneProgettoButton, DOMANDA3);
+
+        JDialog dialogoProgetti = new JDialog();
+        JTextField AssegnaReferente = new JTextField("AssegnaReferente");
+        dialogoProgetti.setLocationRelativeTo(null);
+        dialogoProgetti.setModal(true);
+        dialogoProgetti.add(new JLabel());
+        dialogoProgetti.pack();
+        dialogoProgetti.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+        dialogoProgetti.setLayout(new BorderLayout());
+        dialogoProgetti.setSize(300, 150);
+        dialogoProgetti.add(AssegnaReferenteProgettiButton, BorderLayout.PAGE_END);
+
+        JDialog dialogoAssegnazioneResponabile = new JDialog();
+        dialogoAssegnazioneResponabile.setLocationRelativeTo(null);
+        dialogoAssegnazioneResponabile.setModal(true);
+        dialogoAssegnazioneResponabile.add(new JLabel());
+        dialogoAssegnazioneResponabile.pack();
+        dialogoAssegnazioneResponabile.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+        dialogoAssegnazioneResponabile.setLayout(new BorderLayout());
+        dialogoAssegnazioneResponabile.setSize(300, 150);
+        dialogoAssegnazioneResponabile.add(ConfermaResponsabileButton, BorderLayout.PAGE_END);
+        //LISTENER
+        MesiNascita.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SceltaMese();
+            }
+        });
+        DirigenteBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DirigFunction();
+            }
+        });
+        confermaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ButtonConferma(modelloDipendenti);
+            }
+        });
+        //Action Listener del Pannello Visual
+        licenziaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ButtonLicenzia(modelloDipendenti);
+            }
+        });
+        assegnaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ButtonAssegna(dialogoLaboratorio);
+            }
+        });
+        promuoviButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ButtonPromuovi(modelloDipendenti);
+            }
+        });
+        ConfermaAssegnazioneLaboratorio.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AssegnazioneLaboratorio(dialogoLaboratorio , modelloDipendenti);
+            }
+
+        });
+        degradaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               ButtonDegrada(modelloDipendenti);
+            }
+        });
+        tuttiIDipendentiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ButtonTuttiIDipendenti(modelloDipendenti);
+            }
+        });
+        dipendentiDaAssegnareButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ButtonDipendentiDaAssegnare(modelloDipendenti);
+            }
+        });
+        visualizzaCarrieraButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ButtonVisualizzaCarriera();
+            }
+        });
+        //ACTION LISTENER DI PROGETTO
+        nuovoProgettoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dialogoInserimentoProgetto.setVisible(true);
+            }
+        });
+        eliminaProgettoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ButtonEliminaProgetto();
+            }
+        });
+        InserimentoProgettoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ButtonInserimentoProgetto(dialogoInserimentoProgetto);
+            }
+        });
+        //ACTION LISTENER DI LABORATORIO
+        nuovoLaboratorioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DialogoNuovoLaboratorio.setVisible(true);
+            }
+        });
+        CreaNuovoLaboratorioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ButtonCreaNuovoLaboratorio(DialogoNuovoLaboratorio);
+            }
+        });
+        eliminaSedeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ButtonEliminaSede();
+            }
+        });
+        assegnaReferenteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ButtonAssegnaReferente(dialogoAssegnazioneReferente);
+            }
+        });
+        ConfermaReferenteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ButtonConfermaReferente(dialogoAssegnazioneReferente);
+            }
+        });
+        AssegnazioneProgettoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ButtonAssegnazioneProgetto(DialogoAssegnazioneProgetto);
+            }
+        });
+        DialogoReferenteProgettiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ButtonDialogoReferenteProgetti(dialogoProgetti);
+
+            }
+        });
+        assegnaProgettoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ButtonAssegnaProgettoLaboratorio(DialogoAssegnazioneProgetto);
+            }
+        });
+        AssegnaReferenteProgettiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               ButtonAssegnaReferenteProgetti(dialogoProgetti);
+            }
+        });
+        assegnaResponsabileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               ButtonAssegnaResponsabile(dialogoAssegnazioneResponabile);
+            }
+        });
+        ConfermaResponsabileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ButtonConfermaResponsabile(dialogoAssegnazioneResponabile);
+            }
+        });
+    }
+
+
+    //FUNZIONI
+
+
+    public void fetch_progetti(DefaultTableModel model) {
+        while(model.getRowCount()>0){
+            model.removeRow(0);
+        }
+        List<Progetto> Progetti = progettoDao.ottieniprogetti();
+        for (int i = 0; i < Progetti.size(); i++) {
+            Progetto p = Progetti.get(i);
+            String nome_p, referente, dirigente, topic;
+            nome_p = p.getNome_Prog();
+            referente = p.getReferente();
+            dirigente = p.getDirigente();
+            topic = p.getTopic();
+            String cup = String.valueOf(p.getCUP());
+            String[] row = {nome_p, cup, topic, referente, dirigente};
+            model.addRow(row);
+        }
+        PannelloProgetti.setViewportView(TabellaProgetti);
+    }
+
+    public void fetch_laboratorio(DefaultTableModel model) {
+        while(model.getRowCount()>0){
+            model.removeRow(0);
+        }
+        List<Laboratorio> Laboratori = laboratorioDAO.ottieniLabs();
+        for (int i = 0; i < Laboratori.size(); i++) {
+            Laboratorio l = Laboratori.get(i);
+            String nome_lab, topic;
+            String progetto = String.valueOf(l.getProgetto());
+            if (progetto.equals("0")) progetto = "Non Assegnato";
+            String responsabile = String.valueOf(l.getResponsabile());
+            nome_lab = l.getNome_Lab();
+            topic = l.getTopic();
+            if (responsabile.equals("0")) responsabile = "Non Assegnato";
+            String[] row = {nome_lab, topic, progetto, responsabile};
+            model.addRow(row);
+        }
+        Tabella3.setViewportView(table3);
+    }
+
+    public void fetch_dipendenti(DefaultTableModel model) {
+        while(model.getRowCount()>0){
+            model.removeRow(0);
+        }
+        List<Dipendente> Lista = dipendenteDAO.getDipendente();
+        for (int i = 0; i < Lista.size(); i++) {
+            Dipendente d = Lista.get(i);
+            String nome, cognome, Data_N, Laboratorio, DataA;
+            nome = d.getNome();
+            cognome = d.getCognome();
+            Data_N = d.getData_nascita().toString();
+            String id_dip = Integer.toString(d.getId_dip());
+            Laboratorio = d.getLaboratorio();
+            String Dirigente;
+            DataA = d.getAssunzione().toString();
+            if (d.isDirigente()) Dirigente = "SI";
+            else Dirigente = "NO";
+            String[] row = {nome, cognome, id_dip, Data_N, Laboratorio, Dirigente, DataA};
+            model.addRow(row);
+        }
+        PannelloDipendenti.setViewportView(TabellaDipendenti);
+    }
+
+    public void ButtonLicenzia(DefaultTableModel model) {
+        int row = TabellaDipendenti.getSelectedRow();
+        int column = 2; //numero della colonna id_dip che è chiave esterna nel database
+        String value = TabellaDipendenti.getModel().getValueAt(row, column).toString();
+        String NomeLab = TabellaDipendenti.getModel().getValueAt(row , 4).toString();
+
+        int id_dip = Integer.valueOf(value);
+        int i;
+        if(id_dip != laboratorioDAO.getReferente_Lab(NomeLab)){
+            i = dipendenteDAO.remove_dip(id_dip);
+            if (i > 0) {
+                JOptionPane.showMessageDialog(null, "Dipendente Licenziato! Poverino :(");
+                fetch_progetti(modelloProgetti);
+            } else JOptionPane.showMessageDialog(null, "Qualcosa è andato storto!");
+            model.removeRow(row);
+        }else{
+            JOptionPane.showMessageDialog(null , "Il Dipendente è Responsabile di Laboratorio");
+        }
+
+    }
+
+    public void AssegnazioneLaboratorio(JDialog dialogo , DefaultTableModel modello){
+        String Nuovo_Lab = (String) Lab.getSelectedItem();
+        int row = TabellaDipendenti.getSelectedRow();
+        String value = TabellaDipendenti.getModel().getValueAt(row, 2).toString();
+        int id_dip = Integer.valueOf(value);
+        String NomeLab = TabellaDipendenti.getModel().getValueAt(row , 4).toString();
+        if(id_dip!=laboratorioDAO.getReferente_Lab(NomeLab)){
+            dipendenteDAO.set_lab(Nuovo_Lab, id_dip);
+            JOptionPane.showMessageDialog(null, "Dipendente Assegnato");
+            dialogo.setVisible(false);
+            modello.setValueAt(Nuovo_Lab, row, 4);
+        }else{
+            JOptionPane.showMessageDialog(null , "Il Dipendente è Responsabile di Laboratorio");
+        }
+
+        PannelloDipendenti.setViewportView(TabellaDipendenti);
+    }
+
+    public void ButtonEliminaSede(){
+        int row = table3.getSelectedRow();
+        String nome = String.valueOf(table3.getValueAt(row, 0));//ottengo il nome del laboratorio
+        int i = laboratorioDAO.remove(nome);
+        if (i > 0) {
+            JOptionPane.showMessageDialog(null, "Sede Eliminata");
+            modelloLaboratori.removeRow(row);
+            fetch_dipendenti(modelloDipendenti);
+        } else {
+            JOptionPane.showMessageDialog(null, "OPS, Qualcosa è andato storto!");
+
+        }
+    }
+
+    public void ButtonConferma(DefaultTableModel model) {
+        String Nome = (String) NomeInserito.getText();
+        String Cognome = (String) CognomeInserito.getText();
+        String dir = (String) DirigenteBox.getSelectedItem();
+        Boolean Dir;
+        if (dir.equals("SI")) Dir = true;
+        else Dir = false;
+        Date data = Date.valueOf(LocalDate.now());
+        int Giorno = (int) GiornoNascita.getValue();
+        String mese = (String) MesiNascita.getSelectedItem();
+        int Anno = (int) AnnoNascita.getValue();
+        Anno = Anno - 1900;
+        Date DatadiN = Converti(Giorno, mese, Anno);
+        try {
+            if (!Nome.matches("[A-Za-z]+") || !Cognome.matches("[A-Za-z]+")) throw new Exception();
+            int id_dip = dipendenteDAO.Id_dip();
+            dip = new Dipendente(Nome, Cognome, id_dip, Dir, data, DatadiN);
+            dipendenteDAO.add_dip(dip);
+            String nome, cognome, Data_N, Laboratorio;
+            nome = dip.getNome();
+            cognome = dip.getCognome();
+            Data_N = dip.getData_nascita().toString();
+            String ID = Integer.toString(dip.getId_dip());
+            Laboratorio = dip.getLaboratorio();
+            String Dirigente;
+            String DataA = dip.getAssunzione().toString();
+            if (dip.isDirigente()) Dirigente = "SI";
+            else Dirigente = "NO";
+            String[] row = {nome, cognome, ID, Data_N, Laboratorio, Dirigente, DataA};
+            model.addRow(row);
+            JOptionPane.showMessageDialog(null, "Dipendente Assunto!");
+        } catch (Exception e1) {
+            NomeInserito.setText("");
+            CognomeInserito.setText("");
+            JOptionPane.showMessageDialog(null, "Inserisci le Credenziali Corrette!");
+        }
+    }
+
+    public void CreaTabella(JTable tabella, JScrollPane Tab, DefaultTableModel modello, String Nome) {
+        tabella = new JTable(modello) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+
+            ;
+
+        };
+        tabella.setName(Nome);
+        tabella.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tabella.setFocusable(false);
+        tabella.setModel(modello);
+        tabella.setFillsViewportHeight(true);
+        tabella.setPreferredScrollableViewportSize(tabella.getPreferredSize());
+        Tab.add(tabella.getTableHeader());
+        Tab.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        Tab.setBounds(446, 50, 450, 490);
+        Tab.setViewportView(tabella);
+        Tab.setVisible(true);
+    }
+
+
+    public void CreaDialogo(JDialog dialogo, JButton conferma, JTextField domanda) {
+
+        dialogo.setLocationRelativeTo(null);
+        dialogo.setModal(true);
+        dialogo.add(new JLabel());
+        dialogo.pack();
+        dialogo.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+        dialogo.setLayout(new BorderLayout());
+        dialogo.setSize(300, 150);
+
+        domanda.setEnabled(false);
+        domanda.setDisabledTextColor(Color.black);
+        dialogo.setResizable(false);
+        dialogo.add(domanda , BorderLayout.PAGE_START);
+        dialogo.add(conferma , BorderLayout.PAGE_END);
+    }
+
+    public void ButtonCreaNuovoLaboratorio(JDialog dialogo){
+        Laboratorio l = new Laboratorio((String) nuovoLab.Nomelabor.getText(), (String) nuovoLab.topiccombo.getSelectedItem());
+        int c = laboratorioDAO.Inserisci(l.getNome_Lab(), l.getTopic());
+        if (c > 0) {
+            dialogo.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Inserimento riuscito!");
+            String[] row = {l.getNome_Lab(), l.getTopic(), "Non Assegnato", "Non Assegnato"};
+            modelloLaboratori.addRow(row);
+            nuovoLab.Nomelabor.setText(" ");
+        }
+    }
+
+    public void ButtonEliminaProgetto(){
+        int row = TabellaProgetti.getSelectedRow();
+        int cup = Integer.valueOf(TabellaProgetti.getValueAt(row, 1).toString());//prendo il cup dalla tabella
+        String NomeLab = laboratorioDAO.getNomeLab(cup);
+
+        int ritorno = progettoDao.EliminaProgetto(cup);
+        if (ritorno == 1) {
+            modelloProgetti.removeRow(row);
+            JOptionPane.showMessageDialog(null, "Progetto Eliminato!");
+            fetch_laboratorio(modelloLaboratori);
+        } else {
+            JOptionPane.showMessageDialog(null, "Ops, Qualcosa è andato storto!");
+        }
+
+
+    }
+    public void ButtonDegrada(DefaultTableModel modello){
+        int row = TabellaDipendenti.getSelectedRow();
+        String value = (String) TabellaDipendenti.getModel().getValueAt(row, 5);
+        int id_dip = Integer.valueOf(TabellaDipendenti.getValueAt(row, 2).toString());//prendendo id_dip dalla tabella
+        if (value.equals("SI")) {
+            dipendenteDAO.degrada(row);
+            modello.setValueAt("NO", row, 5);
+            cambioRuoloDAO.delete_promozione(id_dip);
+        } else {
+            JOptionPane.showMessageDialog(null, "IMPOSSIBILE DEGRADARE!");
+        }
+    }
+
+    public void ButtonDipendentiDaAssegnare(DefaultTableModel modello){
+        int i = 0;
+        while (i < modello.getRowCount()) {
+            String cmp = (String) modello.getValueAt(i, 4);
+            if ((!cmp.equals("Non Assegnato"))) {
+                modello.removeRow(i);
+            } else {
+                i++;
+            }
+        }
+    }
+
+    public void ButtonConfermaResponsabile(JDialog dialogo){
+        String values = (String) ComboBox.getSelectedItem();
+        String[] id = values.split(" ");
+        int row = TabellaProgetti.getSelectedRow();
+        int cup = Integer.valueOf((String) TabellaProgetti.getValueAt(row, 1));
+        progettoDAO.set_referente(Integer.valueOf(id[0]), cup);
+        modelloProgetti.setValueAt(id[0], row, 4);
+        dialogo.setVisible(false);
+    }
+
+    public void ButtonAssegnaReferenteProgetti(JDialog dialogo){
+        String values = (String) ComboBox.getSelectedItem();
+        String[] id = values.split(" ");
+        int row = TabellaProgetti.getSelectedRow();
+        int cup = Integer.valueOf((String) TabellaProgetti.getValueAt(row, 1));
+        progettoDAO.set_referente(Integer.valueOf(id[0]), cup);
+        modelloProgetti.setValueAt(id[0], row, 3);
+        dialogo.setVisible(false);
+    }
+
+    public void ButtonAssegnaProgettoLaboratorio(JDialog dialogo){
+        ComboBox.removeAllItems();
+        int row = table3.getSelectedRow();
+        String Nome_lab = (String) table3.getValueAt(row, 0);
+        String Topic = (String) table3.getValueAt(row, 1);
+        List<Progetto> progettos = new ArrayList<>();
+        int lung = progettoDAO.conta_progetti();
+        progettos = progettoDAO.ottieniprogetti();
+        ArrayList<Progetto> progettos1 = new ArrayList<>();
+        int i = 0;
+        while (i < lung) {
+            Progetto p = progettos.get(i);
+            if (laboratorioDAO.conta_prog(p.getCUP()) < 3) {
+                {
+                    if (p.getTopic().equals(Topic)) {
+                        progettos1.add(p);
+                    }
+                }
+            }
+            i++;
+        }
+        i = 0;
+        lung = progettos1.size();
+        while (i < lung) {
+            Progetto p = progettos1.get(i);
+            ComboBox.addItem(p.getCUP() + " " + p.getNome_Prog());
+            i++;
+        }
+
+
+        dialogo.add(ComboBox, BorderLayout.CENTER);
+
+        dialogo.setVisible(true);
+    }
+
+    public void ButtonAssegnaReferente(JDialog dialogo){
+        ComboBox.removeAllItems();
+        int row = table3.getSelectedRow();
+        System.out.println(row);
+        String Nome_lab = (String) table3.getValueAt(row, 0);
+
+        DIR = dipendenteDAO.dipendente_senior(Nome_lab);
+        int lung = dipendenteDAO.conta_senior(Nome_lab);
+        for (int i = 0; i < lung; i++) {
+
+            ComboBox.addItem("" + DIR.get(i).getId_dip() + " " + DIR.get(i).getCognome() + " " + DIR.get(i).getNome());
+        }
+
+        dialogo.add(ComboBox, BorderLayout.CENTER);
+        dialogo.setVisible(true);
+    }
+
+    public void ButtonVisualizzaCarriera(){
+        int row = TabellaDipendenti.getSelectedRow();
+        String DataA = (String) TabellaDipendenti.getValueAt(row, 6);
+        String Nome = (String) TabellaDipendenti.getValueAt(row, 0);
+        String Cognome = (String) TabellaDipendenti.getValueAt(row, 1);
+        Date A = Date.valueOf(DataA);
+        Date ora = Date.valueOf(LocalDate.now());
+        long diff = (long) (ora.getTime() - A.getTime());
+        long ORE = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+        long Anni = ORE / 365;
+        LocalDate prova = A.toLocalDate();
+        prova = prova.plusYears(3);
+        LocalDate senior = A.toLocalDate();
+        senior = senior.plusYears(7);
+        Date data_cambio = cambioRuoloDAO.data_cambio(Integer.valueOf(TabellaDipendenti.getValueAt(row, 2).toString()));
+        if (data_cambio != null) {
+            if (Anni < 3) {
+                JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDirigente : " + data_cambio);
+            } else if (Anni >= 3 && Anni < 7) {
+                JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova + "\nDirigente : " + data_cambio);
+
+            } else {
+                JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova + "\nDipendente Senior : " + senior + "\nDirigente : " + data_cambio);
+
+            }
+        } else {
+            if (Anni < 3) {
+                JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA);
+            } else if (Anni >= 3 && Anni < 7) {
+                JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova);
+
+            } else {
+                JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova + "\nDipendente Senior : " + senior);
+
+            }
+        }
+    }
+
+    public void ButtonPromuovi(DefaultTableModel modello){
+        int row = TabellaDipendenti.getSelectedRow();
+        String value = (String) TabellaDipendenti.getModel().getValueAt(row, 5);
+        int id = Integer.valueOf(TabellaDipendenti.getValueAt(row, 2).toString());//prendendo id dip dalla tabella
+        if (value.equals("NO")) {
+            dipendenteDAO.promuovi(id);
+            modello.setValueAt("SI", row, 5);
+            cambioRuoloDAO.inserisci_data_promozione(id);
+        } else {
+            JOptionPane.showMessageDialog(null, "IMPOSSIBILE PROMUOVERE!");
+        }
+    }
+
+    public void ButtonDialogoReferenteProgetti(JDialog dialogo){
+        ComboBox.removeAllItems();
+        int row = TabellaProgetti.getSelectedRow();
+        int cup = Integer.valueOf((String) TabellaProgetti.getValueAt(row, 1));
+        List<Laboratorio> labs = new ArrayList<>();
+        labs = laboratorioDAO.lab_prog(cup);
+        int i = 0;
+        List<Dipendente> dips = new ArrayList<>();
+        while (i < labs.size()) {
+            dips.addAll(dipendenteDAO.dipendente_senior(labs.get(i).getNome_Lab()));
+            i++;
+        }
+        i = 0;
+        while (i < dips.size()) {
+            ComboBox.addItem(String.valueOf(dips.get(i).getId_dip() + " " + dips.get(i).getNome() + " " + dips.get(i).getCognome()));
+            i++;
+        }
+        dialogo.add(ComboBox, BorderLayout.CENTER);
+        dialogo.setVisible(true);
+    }
+
+    public void ButtonTuttiIDipendenti(DefaultTableModel modello){
+        if (!(modello.getRowCount() == dipendenteDAO.count())) {
+            List<Dipendente> Lista = dipendenteDAO.getDir();
+            for (int i = 0; i < Lista.size(); i++) {
+
+                Dipendente d = Lista.get(i);
+                String nome, cognome, Data_N, Laboratorio, DataA;
+                nome = d.getNome();
+                cognome = d.getCognome();
+                Data_N = d.getData_nascita().toString();
+                String id_dip = Integer.toString(d.getId_dip());
+                Laboratorio = d.getLaboratorio();
+                String Dirigente;
+                DataA = d.getAssunzione().toString();
+                if (d.isDirigente()) Dirigente = "SI";
+                else Dirigente = "NO";
+                String[] row = {nome, cognome, id_dip, Data_N, Laboratorio, Dirigente, DataA};
+                modello.addRow(row);
+            }
+        }
+    }
+
+    public void ButtonConfermaReferente(JDialog dialogo){
+        String dirig = (String) ComboBox.getSelectedItem();
+        String[] split = dirig.split(" ");
+        int i = 0;
+        int row = table3.getSelectedRow();
+        String Nome_Lab = (String) table3.getValueAt(row, 0);
+        laboratorioDAO.riassegna(Nome_Lab, Integer.valueOf(split[0]));
+        modelloLaboratori.setValueAt((String) split[0], row, 3);
+        dialogo.setVisible(false);
+    }
+
+    public void ButtonInserimentoProgetto(JDialog dialogo){
+        Progetto p = new Progetto();
+        p.setNome_Prog(InterfacciaProgetto.textField2.getText());
+        p.setTopic((String) InterfacciaProgetto.TopicBox.getSelectedItem());
+        p.setCUP(progettoDAO.GeneraCup());
+        int c = progettoDAO.InserisciProgetto(p);
+        if (c > 0) {
+            dialogo.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Inserimento riuscito!");
+            String Nome_Prog = p.getNome_Prog();
+            String Topic = (String) p.getTopic();
+            String cup = String.valueOf(p.getCUP());
+            String[] row = {Nome_Prog, cup, Topic};
+            modelloProgetti.addRow(row);
+            InterfacciaProgetto.textField2.setText("");
+        } else {
+            JOptionPane.showMessageDialog(null, "Qualcosa è andato storto!");
+        }
+    }
+
+    public void ButtonAssegnazioneProgetto(JDialog dialogo){
+        String progs = (String) ComboBox.getSelectedItem();
+        String[] prog = progs.split(" ");
+        int row = table3.getSelectedRow();
+        String Nome_Lab = (String) table3.getValueAt(row, 0);
+        laboratorioDAO.riassegna_id(Nome_Lab, Integer.valueOf(prog[0]));
+        modelloLaboratori.setValueAt((String) prog[0], row, 2);
+        dialogo.setVisible(false);
+    }
+
+    public void ButtonAssegnaResponsabile(JDialog dialogo){
+        ComboBox.removeAllItems();
+        int row = TabellaProgetti.getSelectedRow();
+        int cup = Integer.valueOf((String) TabellaProgetti.getValueAt(row, 1));
+        List<Laboratorio> labs = new ArrayList<>();
+        labs = laboratorioDAO.lab_prog(cup);
+        int i = 0;
+        List<Dipendente> dips = new ArrayList<>();
+        while (i < labs.size()) {
+            dips.addAll(dipendenteDAO.dipendentes(labs.get(i).getNome_Lab()));
+            i++;
+        }
+        i = 0;
+        while (i < dips.size()) {
+            ComboBox.addItem(String.valueOf(dips.get(i).getId_dip() + " " + dips.get(i).getNome() + " " + dips.get(i).getCognome()));
+            i++;
+        }
+        dialogo.add(ComboBox, BorderLayout.CENTER);
+        dialogo.setVisible(true);
+    }
+
+    public void DirigFunction(){
+        String bool = (String) DirigenteBox.getSelectedItem();
+        if (bool.equals("SI")) {
+            Dir = true;
+        } else {
+            Dir = false;
+        }
+    }
+
+
+    public void ButtonAssegna(JDialog dialog) {
+        Lab.removeAllItems();
+        NomiLab = laboratorioDAO.NomeLab();
+        for (int i = 0; i < laboratorioDAO.countLab(); i++) {
+            Lab.addItem(NomiLab[i]);
+        }
+
+        int row = TabellaDipendenti.getSelectedRow();
+        int column = 2;//numero della colonna id_dip che è chiave esterna nel database
+        int columnlab = 4;//numero della colonna del laboratorio
+        String value = TabellaDipendenti.getModel().getValueAt(row, column).toString();
+        String nomeLaboratorio = TabellaDipendenti.getModel().getValueAt(row, columnlab).toString();
+        int index = Integer.valueOf(value);
+        dialog.add(Lab, BorderLayout.CENTER);
+        dialog.setVisible(true);
+    }
+
+    public java.sql.Date Converti(int Giorno, String Mese, int Anno) {
+        int month = ConvertiInNumero(Mese);
+
+        java.sql.Date gdn = new java.sql.Date(Anno, month, Giorno);
+        return gdn;
+    }
+
+    public int ConvertiInNumero(String mese) {
+        int i = 0;
+        switch (mese) {
+            case "Gennaio":
+                i = 0;
+                break;
+            case "Febbraio":
+                i = 1;
+                break;
+            case "Marzo":
+                i = 2;
+                break;
+            case "Aprile":
+                i = 3;
+                break;
+            case "Maggio":
+                i = 4;
+                break;
+            case "Giugno":
+                i = 5;
+                break;
+            case "Luglio":
+                i = 6;
+                break;
+            case "Agosto":
+                i = 7;
+                break;
+            case "Settembre":
+                i = 8;
+                break;
+            case "Ottobre":
+                i = 9;
+                break;
+            case "Novembre":
+                i = 10;
+                break;
+            case "Dicembre":
+                i = 11;
+                break;
+        }
+        return i;
+    }
+    public void SceltaMese(){
+        int i = 0;
+        String MeseScelto = (String) MesiNascita.getSelectedItem();
+        if (MeseScelto.equals("Febbraio")) {
+            i = (int) GiornoNascita.getValue();
+            if (i > 28) i = 28;
+            GiornoNascita.setModel(GiorniModel28);
+            GiorniModel28.setValue(i);
+        } else if (MeseScelto.equals("Novembre") || MeseScelto.equals("Giugno") || MeseScelto.equals("Aprile") || MeseScelto.equals("Settembre")) {
+            i = (int) GiornoNascita.getValue();
+            if (i > 30) i = 30;
+            GiornoNascita.setModel(GiorniModel30);
+            GiorniModel30.setValue(i);
+        } else {
+            GiornoNascita.setModel(GiorniModel31);
+        }
+    }
+
+
+
+}
+
+
