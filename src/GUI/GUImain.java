@@ -30,7 +30,7 @@ public class GUImain extends JFrame {
     private JComboBox MesiNascita;
     private JTextField dirigenteTextField;
     private JComboBox DirigenteBox;
-    private JButton confermaButton;
+    private JButton assumiButton;
     private JSpinner GiornoNascita;
     private JTextField giornoDiNascitaTextField;
     private JTextField meseDiNascitaTextField;
@@ -227,7 +227,7 @@ public class GUImain extends JFrame {
                 DirigFunction();
             }
         });
-        confermaButton.addActionListener(new ActionListener() {
+        assumiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ButtonConferma(modelloDipendenti);
