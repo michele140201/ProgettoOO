@@ -6,28 +6,29 @@ import java.sql.*;
 import java.time.LocalDate;
 
 
-public class CambioRuoloDAOImpl implements CambioRuoloDAO{
+public class CambioRuoloDAOImpl implements CambioRuoloDAO {
     ConnectionController controller = new ConnectionController();
     Connection con;
 
     /**
      * Funzione per vedere quando un dipendente è
      * stato promosso a dirigente
+     *
      * @param id_dip
      * @return
      */
     @Override
-    public Date getDataCambio(int id_dip) throws Exception{
+    public Date getDataCambio(int id_dip) throws Exception {
         Date data = null;
         String sql = ("Select * from Ruolo where Ruolo.id_dip = " + id_dip);
-        try{
+        try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-            while(rs.next()){
+            while (rs.next()) {
                 data = rs.getDate("data_cambio");
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return data;
@@ -36,6 +37,7 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO{
     /**
      * funzione per inserire la data in cui un dipendente
      * è stato promosso a dirigente
+     *
      * @param id_dip
      * @return
      */
@@ -45,12 +47,12 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO{
         Date ora = Date.valueOf(data);
         String sql = ("Insert into Ruolo(id_dip,data_cambio) values ('" + id_dip + "','" + data + "')");
 
-        try{
+        try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
             stmt.executeUpdate(sql);
             return 0;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             throw new Exception(e);
         }
 
@@ -58,18 +60,19 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO{
 
     /**
      * Funzione per rimuovere la promozione di un dipendente, quando viene degradato
+     *
      * @param id_dip
      * @return
      */
     @Override
     public int removePromozione(int id_dip) throws Exception {
-        String sql = ("Delete from Ruolo where ruolo.id_dip = "+id_dip);
-        try{
+        String sql = ("Delete from Ruolo where ruolo.id_dip = " + id_dip);
+        try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
             stmt.executeUpdate(sql);
             return 0;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             throw new Exception(e);
         }
     }

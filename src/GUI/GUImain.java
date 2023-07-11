@@ -1,6 +1,6 @@
 package GUI;
 
-import DAO.*;
+import Controller.ControllerMainPage;
 import Model.Dipendente;
 import Model.Laboratorio;
 import Model.Progetto;
@@ -19,8 +19,23 @@ import java.util.concurrent.TimeUnit;
 
 
 public class GUImain extends JFrame {
+    private final int currentYear = LocalDate.now().getYear();
+    private final SpinnerNumberModel YearModel;
+    private final SpinnerNumberModel GiorniModel28;
+    private final SpinnerNumberModel GiorniModel30;
+    private final SpinnerNumberModel GiorniModel31;
+    private final JComboBox Lab;
+    private final Nuovo_Prog InterfacciaProgetto = new Nuovo_Prog();
+    private final JButton AssegnaReferenteProgettiButton = new JButton("Inserisci");
+    private final JButton InserimentoProgettoButton = new JButton("Inserisci");
+    private final JButton CreaNuovoLaboratorioButton = new JButton("Inserisci");
+    private final Nuovo_Lab nuovoLab = new Nuovo_Lab();
+    private final JComboBox ComboBox;
+    private final JButton AssegnazioneProgettoButton = new JButton("Conferma");
+    private final JButton ConfermaResponsabileButton = new JButton("Conferma");
     DefaultTableModel modelloDipendenti;
-    private final ProgettoDAO progettoDAO;
+    String[] ValoriDirigenteBox = {"NO", "SI"};
+    String[] Mesi = {"Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"};
     private JTabbedPane PannelloPrincipale;
     private JPanel Assumi;
     private JPanel Visual;
@@ -34,6 +49,7 @@ public class GUImain extends JFrame {
     private JComboBox DirigenteBox;
     private JButton assumiButton;
     private JSpinner GiornoNascita;
+    private final ControllerMainPage controller = new ControllerMainPage();
     private JTextField giornoDiNascitaTextField;
     private JTextField meseDiNascitaTextField;
     private JTextField annoDiNascitaTextField;
@@ -52,27 +68,12 @@ public class GUImain extends JFrame {
     private JTable TabellaProgetti;
     private JButton nuovoProgettoButton;
     private JButton eliminaProgettoButton;
-    private final DipendenteDAO dipendenteDAO;
     private Dipendente dip;
-    String[] ValoriDirigenteBox = {"NO", "SI"};
-    String[] Mesi = {"Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"};
     private boolean Dir;
-    private final int currentYear = LocalDate.now().getYear();
-    private final SpinnerNumberModel YearModel;
-    private final SpinnerNumberModel GiorniModel28;
-    private final SpinnerNumberModel GiorniModel30;
-    private final SpinnerNumberModel GiorniModel31;
-    private final JComboBox Lab;
     private String[] NomiLab;
-    private List<Dipendente> DIR = new ArrayList<>();
-    private final LaboratorioDAO laboratorioDAO;
-    private final CambioRuoloDAO cambioRuoloDAO;
-    private final Nuovo_Prog InterfacciaProgetto = new Nuovo_Prog();
+    private final List<Dipendente> DIR = new ArrayList<>();
     private DefaultTableModel modelloProgetti = new DefaultTableModel();
     private DefaultTableModel modelloLaboratori = new DefaultTableModel();
-    private final JButton AssegnaReferenteProgettiButton = new JButton("Inserisci");
-    private final JButton InserimentoProgettoButton = new JButton("Inserisci");
-    private final JButton CreaNuovoLaboratorioButton = new JButton("Inserisci");
     private JTable table3;
     private JScrollPane Tabella3;
     private JButton nuovoLaboratorioButton;
@@ -81,16 +82,8 @@ public class GUImain extends JFrame {
     private JButton assegnaReferenteButton;
     private JButton assegnaResponsabileButton;
     private JButton DialogoReferenteProgettiButton;
-    private final Nuovo_Lab nuovoLab = new Nuovo_Lab();
-    private final JComboBox ComboBox;
-    private final JButton AssegnazioneProgettoButton = new JButton("Conferma");
-    private final JButton ConfermaResponsabileButton = new JButton("Conferma");
 
-    public GUImain(ProgettoDAO progettoDAO, DipendenteDAO dipendenteDAO, LaboratorioDAO laboratorioDAO, CambioRuoloDAO cambioRuoloDAO) {
-        this.progettoDAO = progettoDAO;
-        this.dipendenteDAO = dipendenteDAO;
-        this.laboratorioDAO = laboratorioDAO;
-        this.cambioRuoloDAO = cambioRuoloDAO;
+    public GUImain() {
 /**
  *
  * Aggiunta dei mesi alla combobox di inserimento
@@ -235,14 +228,32 @@ public class GUImain extends JFrame {
         assumiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ButtonConferma(modelloDipendenti);
+                String Nome = NomeInserito.getText();
+                String Cognome = CognomeInserito.getText();
+                String dir = (String) DirigenteBox.getSelectedItem();
+                Boolean Dir;
+                Dir = dir.equals("SI");
+                Date data = Date.valueOf(LocalDate.now());
+                int Giorno = (int) GiornoNascita.getValue();
+                String mese = (String) MesiNascita.getSelectedItem();
+                int Anno = (int) AnnoNascita.getValue();
+                Anno = Anno - 1900;
+                Date DatadiN = Converti(Giorno, mese, Anno);
+                controller.ButtonConferma(modelloDipendenti, Nome, Cognome, Dir, Date.valueOf(LocalDate.now()), DatadiN);
+                NomeInserito.setText("");
+                CognomeInserito.setText("");
             }
         });
         //Action Listener del Pannello Visual
         licenziaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ButtonLicenzia(modelloDipendenti);
+                int row = TabellaDipendenti.getSelectedRow();
+                int column = 2; //numero della colonna id_dip che è chiave esterna nel database
+                String id_dip = TabellaDipendenti.getModel().getValueAt(row, column).toString();
+                String NomeLab = TabellaDipendenti.getModel().getValueAt(row, 4).toString();
+                int i = controller.ButtonLicenzia(modelloDipendenti, id_dip, NomeLab, row);
+                if (i > 0) modelloDipendenti.removeRow(row);
             }
         });
         assegnaButton.addActionListener(new ActionListener() {
@@ -390,24 +401,20 @@ public class GUImain extends JFrame {
         while (model.getRowCount() > 0) {
             model.removeRow(0);
         }
-        try {
-            List<Progetto> Progetti = progettoDAO.ottieniprogetti();
-            for (int i = 0; i < Progetti.size(); i++) {
-                Progetto p = Progetti.get(i);
-                String nome_p, referente, dirigente, topic;
-                nome_p = p.getNome_Prog();
-                referente = p.getReferente();
-                dirigente = p.getDirigente();
-                topic = p.getTopic();
-                String cup = String.valueOf(p.getCUP());
-                String[] row = {nome_p, cup, topic, referente, dirigente};
-                model.addRow(row);
-            }
-            PannelloProgetti.setViewportView(TabellaProgetti);
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore nel Database");
+        List<Progetto> Progetti = controller.getProgetti();
+        for (int i = 0; i < Progetti.size(); i++) {
+            Progetto p = Progetti.get(i);
+            String nome_p, referente, dirigente, topic;
+            nome_p = p.getNome_Prog();
+            referente = p.getReferente();
+            dirigente = p.getDirigente();
+            topic = p.getTopic();
+            String cup = String.valueOf(p.getCUP());
+            String[] row = {nome_p, cup, topic, referente, dirigente};
+            model.addRow(row);
         }
+        PannelloProgetti.setViewportView(TabellaProgetti);
+
 
     }
 
@@ -420,25 +427,21 @@ public class GUImain extends JFrame {
         while (model.getRowCount() > 0) {
             model.removeRow(0);
         }
-        try {
-            List<Laboratorio> Laboratori = laboratorioDAO.getLabs();
-            for (int i = 0; i < Laboratori.size(); i++) {
-                Laboratorio l = Laboratori.get(i);
-                String nome_lab, topic;
-                String progetto = String.valueOf(l.getProgetto());
-                if (progetto.equals("0")) progetto = "Non Assegnato";
-                String responsabile = String.valueOf(l.getResponsabile());
-                nome_lab = l.getNome_Lab();
-                topic = l.getTopic();
-                if (responsabile.equals("0")) responsabile = "Non Assegnato";
-                String[] row = {nome_lab, topic, progetto, responsabile};
-                model.addRow(row);
-            }
-            Tabella3.setViewportView(table3);
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore di Darabase");
+        List<Laboratorio> Laboratori = controller.getLaboratori();
+        for (int i = 0; i < Laboratori.size(); i++) {
+            Laboratorio l = Laboratori.get(i);
+            String nome_lab, topic;
+            String progetto = String.valueOf(l.getProgetto());
+            if (progetto.equals("0")) progetto = "Non Assegnato";
+            String responsabile = String.valueOf(l.getResponsabile());
+            nome_lab = l.getNome_Lab();
+            topic = l.getTopic();
+            if (responsabile.equals("0")) responsabile = "Non Assegnato";
+            String[] row = {nome_lab, topic, progetto, responsabile};
+            model.addRow(row);
         }
+        Tabella3.setViewportView(table3);
+
 
     }
 
@@ -451,66 +454,27 @@ public class GUImain extends JFrame {
         while (model.getRowCount() > 0) {
             model.removeRow(0);
         }
-        try {
-            List<Dipendente> Lista = dipendenteDAO.getDipendente();
-            for (int i = 0; i < Lista.size(); i++) {
-                Dipendente d = Lista.get(i);
-                String nome, cognome, Data_N, Laboratorio, DataA;
-                nome = d.getNome();
-                cognome = d.getCognome();
-                Data_N = d.getData_nascita().toString();
-                String id_dip = Integer.toString(d.getId_dip());
-                Laboratorio = d.getLaboratorio();
-                String Dirigente;
-                DataA = d.getAssunzione().toString();
-                if (d.isDirigente()) Dirigente = "SI";
-                else Dirigente = "NO";
-                String[] row = {nome, cognome, id_dip, Data_N, Laboratorio, Dirigente, DataA};
-                model.addRow(row);
-            }
-            PannelloDipendenti.setViewportView(TabellaDipendenti);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Errore nel DataBase");
+        List<Dipendente> Lista = controller.getDipendenti();
+        for (int i = 0; i < Lista.size(); i++) {
+            Dipendente d = Lista.get(i);
+            String nome, cognome, Data_N, Laboratorio, DataA;
+            nome = d.getNome();
+            cognome = d.getCognome();
+            Data_N = d.getData_nascita().toString();
+            String id_dip = Integer.toString(d.getId_dip());
+            Laboratorio = d.getLaboratorio();
+            String Dirigente;
+            DataA = d.getAssunzione().toString();
+            if (d.isDirigente()) Dirigente = "SI";
+            else Dirigente = "NO";
+            String[] row = {nome, cognome, id_dip, Data_N, Laboratorio, Dirigente, DataA};
+            model.addRow(row);
         }
+        PannelloDipendenti.setViewportView(TabellaDipendenti);
     }
 
     /**
-     * Questa è la funzione invocata da LicenziaButton
-     * prende il valore selezionato nella tabella
-     * e lo rimuove dalla tabella e dal database
-     * con il vincolo che se è responsabile di laboratorio non viene
-     * eseguita l'azione
-     */
-    public void ButtonLicenzia(DefaultTableModel model) {
-        int row = TabellaDipendenti.getSelectedRow();
-        int column = 2; //numero della colonna id_dip che è chiave esterna nel database
-        String value = TabellaDipendenti.getModel().getValueAt(row, column).toString();
-        String NomeLab = TabellaDipendenti.getModel().getValueAt(row, 4).toString();
-
-        int id_dip = Integer.valueOf(value);
-        int i;
-        try{
-            if (id_dip != laboratorioDAO.getReferenteLab(NomeLab)) {
-                i = dipendenteDAO.removeDipendente(id_dip);
-                if (i > 0) {
-                    JOptionPane.showMessageDialog(null, "Dipendente Licenziato! Poverino :(");
-                    fetch_progetti(modelloProgetti);
-                } else JOptionPane.showMessageDialog(null, "Qualcosa è andato storto!");
-                model.removeRow(row);
-            } else {
-                JOptionPane.showMessageDialog(null, "Il Dipendente è Responsabile di Laboratorio");
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null , "Errore nel Database");
-        }
-
-    }
-
-    /**
-     * Questa funzione prende in ingresso una finestra di dialogo e un modello e effettua l'assegnazione
-     * ad un nuovo laboratorio, ma se il dipendente è gia responsabile del laboratorio in cui si trova
-     * non effettua l'aggiornamento
+     * funzione per assegnare un nuovo laboratorio
      *
      * @param dialogo
      * @param modello
@@ -521,21 +485,13 @@ public class GUImain extends JFrame {
         String value = TabellaDipendenti.getModel().getValueAt(row, 2).toString();
         int id_dip = Integer.valueOf(value);
         String NomeLab = TabellaDipendenti.getModel().getValueAt(row, 4).toString();
-        try{
-            if (id_dip != laboratorioDAO.getReferenteLab(NomeLab)) {
-                dipendenteDAO.setLaboratorio(Nuovo_Lab, id_dip);
-                JOptionPane.showMessageDialog(null, "Dipendente Assegnato");
-                dialogo.setVisible(false);
-                modello.setValueAt(Nuovo_Lab, row, 4);
-            } else {
-                JOptionPane.showMessageDialog(null, "Il Dipendente è Responsabile di Laboratorio");
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null , "Errore nel Database");
+        int i = controller.AssegnaLaboratorio(id_dip, NomeLab, dialogo, Nuovo_Lab);
+        if (i > 0) {
+            PannelloDipendenti.setViewportView(TabellaDipendenti);
+            JOptionPane.showMessageDialog(null, "Dipendente Assegnato");
+            dialogo.setVisible(false);
+            modello.setValueAt(Nuovo_Lab, row, 4);
         }
-
-        PannelloDipendenti.setViewportView(TabellaDipendenti);
     }
 
     /**
@@ -544,21 +500,8 @@ public class GUImain extends JFrame {
     public void ButtonEliminaSede() {
         int row = table3.getSelectedRow();
         String nome = String.valueOf(table3.getValueAt(row, 0));//ottengo il nome del laboratorio
-        try{
-            int i = laboratorioDAO.remove(nome);
-            if (i > 0) {
-                JOptionPane.showMessageDialog(null, "Sede Eliminata");
-                modelloLaboratori.removeRow(row);
-                fetch_dipendenti(modelloDipendenti);
-            } else {
-                JOptionPane.showMessageDialog(null, "OPS, Qualcosa è andato storto!");
-
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null , "Errore nel Database");
-        }
-
+        int i = controller.EliminaSede(nome);
+        if (i > 0) modelloLaboratori.removeRow(row);
     }
 
     /**
@@ -568,43 +511,7 @@ public class GUImain extends JFrame {
      *
      * @param model
      */
-    public void ButtonConferma(DefaultTableModel model) {
-        String Nome = NomeInserito.getText();
-        String Cognome = CognomeInserito.getText();
-        String dir = (String) DirigenteBox.getSelectedItem();
-        Boolean Dir;
-        Dir = dir.equals("SI");
-        Date data = Date.valueOf(LocalDate.now());
-        int Giorno = (int) GiornoNascita.getValue();
-        String mese = (String) MesiNascita.getSelectedItem();
-        int Anno = (int) AnnoNascita.getValue();
-        Anno = Anno - 1900;
-        Date DatadiN = Converti(Giorno, mese, Anno);
-        try {
-            if (!Nome.matches("[A-Za-z]+") || !Cognome.matches("[A-Za-z]+")) throw new Exception();
-            int id_dip = dipendenteDAO.Id_dip();
-            dip = new Dipendente(Nome, Cognome, id_dip, Dir, data, DatadiN);
-            dipendenteDAO.insertDipendente(dip);
-            String nome, cognome, Data_N, Laboratorio;
-            nome = dip.getNome();
-            cognome = dip.getCognome();
-            Data_N = dip.getData_nascita().toString();
-            String ID = Integer.toString(dip.getId_dip());
-            Laboratorio = dip.getLaboratorio();
-            String Dirigente;
-            String DataA = dip.getAssunzione().toString();
-            if (dip.isDirigente()) Dirigente = "SI";
-            else Dirigente = "NO";
-            String[] row = {nome, cognome, ID, Data_N, Laboratorio, Dirigente, DataA};
-            model.addRow(row);
-            JOptionPane.showMessageDialog(null, "Dipendente Assunto!");
-            NomeInserito.setText("");
-            CognomeInserito.setText("");
-        } catch (Exception e1) {
 
-            JOptionPane.showMessageDialog(null, "Inserisci le Credenziali Corrette!");
-        }
-    }
 
     /**
      * Funzione che crea una tabella dati in input il nome della tabella, il modello e la tabella
@@ -659,25 +566,18 @@ public class GUImain extends JFrame {
     }
 
     /**
-     * Bottone di conferma della finestra di dialogo laboratorio
+     * Funzione del bottone di conferma della finestra di dialogo laboratorio
      *
      * @param dialogo
      */
     public void ButtonCreaNuovoLaboratorio(JDialog dialogo) {
         String Topic = nuovoLab.getTopicElement();
-        try{
-            Laboratorio l = new Laboratorio(nuovoLab.getNomeLab(), Topic);
-            int c = laboratorioDAO.Inserisci(l.getNome_Lab(), l.getTopic());
-            if (c > 0) {
-                dialogo.setVisible(false);
-                JOptionPane.showMessageDialog(null, "Inserimento riuscito!");
-                String[] row = {l.getNome_Lab(), l.getTopic(), "Non Assegnato", "Non Assegnato"};
-                modelloLaboratori.addRow(row);
-                nuovoLab.setText();
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null , "Errore nel Database");
+        Laboratorio l = new Laboratorio(nuovoLab.getNomeLab(), Topic);
+        int i = controller.CreaNuovoLab(dialogo, l);
+        if (i > 0) {
+            String[] row = {l.getNome_Lab(), l.getTopic(), "Non Assegnato", "Non Assegnato"};
+            modelloLaboratori.addRow(row);
+            nuovoLab.setText();
         }
 
     }
@@ -689,20 +589,11 @@ public class GUImain extends JFrame {
     public void ButtonEliminaProgetto() {
         int row = TabellaProgetti.getSelectedRow();
         int cup = Integer.valueOf(TabellaProgetti.getValueAt(row, 1).toString());//prendo il cup dalla tabella
-        try{
-            int ritorno = progettoDAO.EliminaProgetto(cup);
-            if (ritorno == 1) {
-                modelloProgetti.removeRow(row);
-                JOptionPane.showMessageDialog(null, "Progetto Eliminato!");
-                fetch_laboratorio(modelloLaboratori);
-            } else {
-                JOptionPane.showMessageDialog(null, "Ops, Qualcosa è andato storto!");
-         }
-        }catch (Exception e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null , "Errore nel Database");
+        int i = controller.EliminaProgetto_(cup);
+        if (i > 0) {
+            modelloProgetti.removeRow(row);
+            fetch_progetti(modelloProgetti);
         }
-
 
     }
 
@@ -715,22 +606,9 @@ public class GUImain extends JFrame {
         int row = TabellaDipendenti.getSelectedRow();
         String value = (String) TabellaDipendenti.getModel().getValueAt(row, 5);
         int id_dip = Integer.valueOf(TabellaDipendenti.getValueAt(row, 2).toString());//prendendo id_dip dalla tabella
-        try{
-            if (value.equals("SI")) {
-                dipendenteDAO.degrada(row);
-                modello.setValueAt("NO", row, 5);
-                try{
-                    cambioRuoloDAO.removePromozione(id_dip);
-                }catch(Exception e){
-                    e.printStackTrace();
-                    JOptionPane.showMessageDialog(null , "Errore nel Database");
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "IMPOSSIBILE DEGRADARE!");
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null , "Errore nel Database");
+        int i = controller.Degrada(value, id_dip);
+        if (i > 0) {
+            modello.setValueAt("NO", row, 5);
         }
     }
 
@@ -752,7 +630,7 @@ public class GUImain extends JFrame {
     }
 
     /**
-     * bottone per inserire nella tabella il responsabile di progetto selezionato
+     * Funzione del bottone per inserire nella tabella il responsabile di progetto selezionato
      *
      * @param dialogo
      */
@@ -762,18 +640,16 @@ public class GUImain extends JFrame {
         String[] id = values.split(" ");
         int row = TabellaProgetti.getSelectedRow();
         int cup = Integer.valueOf((String) TabellaProgetti.getValueAt(row, 1));
-        try{
-            progettoDAO.setResponsabile(Integer.valueOf(id[0]), cup);
-            modelloProgetti.setValueAt(id[0], row, 4);
+        int id_dip = Integer.valueOf(id[0]);
+        int i = controller.setResponsabile(id_dip, cup);
+        if (i > 0) {
+            modelloProgetti.setValueAt(id_dip, row, 4);
             dialogo.setVisible(false);
-        }catch(Exception e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null , "Errore nel Database");
         }
     }
 
     /**
-     * bottone per confermare il referente dei progetti selezionato
+     * Funzione del bottone per confermare il referente dei progetti selezionato
      *
      * @param dialogo
      */
@@ -782,13 +658,10 @@ public class GUImain extends JFrame {
         String[] id = values.split(" ");
         int row = TabellaProgetti.getSelectedRow();
         int cup = Integer.valueOf((String) TabellaProgetti.getValueAt(row, 1));
-        try{
-            progettoDAO.setReferente(Integer.valueOf(id[0]), cup);
+        int i = controller.setReferente(Integer.valueOf(id[0]), cup);
+        if (i > 0) {
             modelloProgetti.setValueAt(id[0], row, 3);
             dialogo.setVisible(false);
-        }catch(Exception e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null , "Errore nel Database");
         }
 
     }
@@ -804,41 +677,23 @@ public class GUImain extends JFrame {
         int row = table3.getSelectedRow();
         String Nome_lab = (String) table3.getValueAt(row, 0);
         String Topic = (String) table3.getValueAt(row, 1);
-        List<Progetto> progettos = new ArrayList<>();
-        try {
-            int lung = progettoDAO.conta_progetti();
-            progettos = progettoDAO.ottieniprogetti();
-            ArrayList<Progetto> progettos1 = new ArrayList<>();
-            int i = 0;
-            while (i < lung) {
-                Progetto p = progettos.get(i);
-                if (laboratorioDAO.countProgetti(p.getCUP()) < 3) {
-                    {
-                        if (p.getTopic().equals(Topic)) {
-                            progettos1.add(p);
-                        }
-                    }
-                }
-                i++;
-            }
-            i = 0;
-            lung = progettos1.size();
-            while (i < lung) {
-                Progetto p = progettos1.get(i);
+        List<Progetto> Progetti = controller.AssegnaProgettoLaboratorio(Topic);
+        int i = 0;
+        if (Progetti.size() > 0) {
+            while (i < Progetti.size()) {
+                Progetto p = Progetti.get(i);
                 ComboBox.addItem(p.getCUP() + " " + p.getNome_Prog());
                 i++;
             }
             dialogo.add(ComboBox, BorderLayout.CENTER);
             dialogo.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore di DataBase");
+        } else {
+            JOptionPane.showMessageDialog(null, "Nessun Progetto con lo stesso Topic");
         }
-
     }
 
     /**
-     * bottone per l'apertura della finestra di dialogo per assegnare un referente
+     * Funzione del bottone per l'apertura della finestra di dialogo per assegnare un referente
      *
      * @param dialogo
      */
@@ -846,26 +701,22 @@ public class GUImain extends JFrame {
         ComboBox.removeAllItems();
         int row = table3.getSelectedRow();
         System.out.println(row);
-        String Nome_lab = (String) table3.getValueAt(row, 0);
+        String NomeLab = (String) table3.getValueAt(row, 0);
+        List<Dipendente> Referenti = controller.getSenior(NomeLab);
+        if (Referenti.size() > 0) {
+            for (int i = 0; i < Referenti.size(); i++) {
 
-        try{
-            DIR = dipendenteDAO.getSenior(Nome_lab);
-            int lung = dipendenteDAO.countSenior(Nome_lab);
-            for (int i = 0; i < lung; i++) {
-
-                ComboBox.addItem(DIR.get(i).getId_dip() + " " + DIR.get(i).getCognome() + " " + DIR.get(i).getNome());
+                ComboBox.addItem(Referenti.get(i).getId_dip() + " " + Referenti.get(i).getCognome() + " " + Referenti.get(i).getNome());
             }
             dialogo.add(ComboBox, BorderLayout.CENTER);
             dialogo.setVisible(true);
-        }catch(Exception e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null , "Errore nel Database");
+        } else {
+            JOptionPane.showMessageDialog(null, "Nessun referente da assegnare");
         }
-
     }
 
     /**
-     * bottone per visualizzare gli scatti di carriera di un dipendente
+     * Funzione del bottone per visualizzare gli scatti di carriera di un dipendente
      */
     public void ButtonVisualizzaCarriera() {
         int row = TabellaDipendenti.getSelectedRow();
@@ -881,38 +732,34 @@ public class GUImain extends JFrame {
         prova = prova.plusYears(3);
         LocalDate senior = A.toLocalDate();
         senior = senior.plusYears(7);
-        try{
-            Date data_cambio = cambioRuoloDAO.getDataCambio(Integer.valueOf(TabellaDipendenti.getValueAt(row, 2).toString()));
-            if (data_cambio != null) {
-                if (Anni < 3) {
-                    JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDirigente : " + data_cambio);
-                } else if (Anni >= 3 && Anni < 7) {
-                    JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova + "\nDirigente : " + data_cambio);
+        Date dataCambio = controller.DataCambio(Integer.valueOf(TabellaDipendenti.getValueAt(row, 2).toString()));
+        if (dataCambio != null) {
+            if (Anni < 3) {
+                JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDirigente : " + dataCambio);
+            } else if (Anni >= 3 && Anni < 7) {
+                JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova + "\nDirigente : " + dataCambio);
 
-                } else {
-                    JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova + "\nDipendente Senior : " + senior + "\nDirigente : " + data_cambio);
-
-                }
             } else {
-                if (Anni < 3) {
-                    JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA);
-                } else if (Anni >= 3 && Anni < 7) {
-                    JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova);
+                JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova + "\nDipendente Senior : " + senior + "\nDirigente : " + dataCambio);
 
-                } else {
-                    JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova + "\nDipendente Senior : " + senior);
-
-                }
             }
-        }catch(Exception e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null , "Errore nel Database");
+        } else {
+            if (Anni < 3) {
+                JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA);
+            } else if (Anni >= 3 && Anni < 7) {
+                JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova);
+
+            } else {
+                JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova + "\nDipendente Senior : " + senior);
+
+            }
         }
+
 
     }
 
     /**
-     * bottone per promuovere un dipendente
+     * Funzione del bottone per promuovere un dipendente
      * ovviamente se si prova a promuovere un dipendente gia dirigente si
      * ha un errore
      *
@@ -922,23 +769,12 @@ public class GUImain extends JFrame {
         int row = TabellaDipendenti.getSelectedRow();
         String value = (String) TabellaDipendenti.getModel().getValueAt(row, 5);
         int id = Integer.valueOf(TabellaDipendenti.getValueAt(row, 2).toString());//prendendo id dip dalla tabella
-        try{
-            if (value.equals("NO")) {
-                dipendenteDAO.promuovi(id);
-                modello.setValueAt("SI", row, 5);
-                cambioRuoloDAO.setDataPromozione(id);
-            } else {
-                JOptionPane.showMessageDialog(null, "IMPOSSIBILE PROMUOVERE!");
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null , "Errore nel Database");
-        }
-
+        int i = controller.Promuovi(id, value);
+        if (i > 0) modello.setValueAt("SI", row, 5);
     }
 
     /**
-     * Bottone per la creazione della finestra di dialogo per assegnare
+     * Funzione del bottone per la creazione della finestra di dialogo per assegnare
      * il referente del progetto
      *
      * @param dialogo
@@ -947,87 +783,65 @@ public class GUImain extends JFrame {
         ComboBox.removeAllItems();
         int row = TabellaProgetti.getSelectedRow();
         int cup = Integer.valueOf((String) TabellaProgetti.getValueAt(row, 1));
-        List<Laboratorio> labs = new ArrayList<>();
-        try{
-            labs = laboratorioDAO.getLaboratori(cup);
-            int i = 0;
-            List<Dipendente> dips = new ArrayList<>();
-            while (i < labs.size()) {
-                try{
-                    dips.addAll(dipendenteDAO.getSenior(labs.get(i).getNome_Lab()));
-                }catch(Exception e){
-                    JOptionPane.showMessageDialog(null , "Errore nel Database");
-                }
-                i++;
-            }
-            i = 0;
+        List<Dipendente> dips = controller.getReferenti(cup);
+        int i = 0;
+        if (dips.size() > 0) {
             while (i < dips.size()) {
                 ComboBox.addItem(dips.get(i).getId_dip() + " " + dips.get(i).getNome() + " " + dips.get(i).getCognome());
                 i++;
             }
             dialogo.add(ComboBox, BorderLayout.CENTER);
             dialogo.setVisible(true);
-        }catch (Exception e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null , "Errore nel Database");
+        } else {
+            JOptionPane.showMessageDialog(null, "Nessun Referente da Assegnare");
         }
-
     }
 
     /**
      * Filtro per visualizzare tutti i dipendenti
      */
     public void ButtonTuttiIDipendenti(DefaultTableModel modello) {
-        try{
-            if (!(modello.getRowCount() == dipendenteDAO.count())) {
-                List<Dipendente> Lista = dipendenteDAO.getDir();
-                for (int i = 0; i < Lista.size(); i++) {
-
-                    Dipendente d = Lista.get(i);
-                    String nome, cognome, Data_N, Laboratorio, DataA;
-                    nome = d.getNome();
-                    cognome = d.getCognome();
-                    Data_N = d.getData_nascita().toString();
-                    String id_dip = Integer.toString(d.getId_dip());
-                    Laboratorio = d.getLaboratorio();
-                    String Dirigente;
-                    DataA = d.getAssunzione().toString();
-                    if (d.isDirigente()) Dirigente = "SI";
-                    else Dirigente = "NO";
-                    String[] row = {nome, cognome, id_dip, Data_N, Laboratorio, Dirigente, DataA};
-                    modello.addRow(row);
-                }
+        List<Dipendente> Lista = controller.getDipendentiAssegnare();
+        if (!(modello.getRowCount() == Lista.size())) {
+            for (int i = 0; i < Lista.size(); i++) {
+                Dipendente d = Lista.get(i);
+                String nome, cognome, Data_N, Laboratorio, DataA;
+                nome = d.getNome();
+                cognome = d.getCognome();
+                Data_N = d.getData_nascita().toString();
+                String id_dip = Integer.toString(d.getId_dip());
+                Laboratorio = d.getLaboratorio();
+                String Dirigente;
+                DataA = d.getAssunzione().toString();
+                if (d.isDirigente()) Dirigente = "SI";
+                else Dirigente = "NO";
+                String[] row = {nome, cognome, id_dip, Data_N, Laboratorio, Dirigente, DataA};
+                modello.addRow(row);
             }
-        }catch(Exception e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null , "Errore nel Database");
         }
     }
 
     /**
-     * Bottone per confermare l'assegnazione del referente di laboratorio
+     * Funzione del bottone per confermare l'assegnazione del referente di laboratorio
      *
      * @param dialogo
      */
     public void ButtonConfermaReferente(JDialog dialogo) {
         String dirig = (String) ComboBox.getSelectedItem();
         String[] split = dirig.split(" ");
-        int i = 0;
         int row = table3.getSelectedRow();
-        String Nome_Lab = (String) table3.getValueAt(row, 0);
-        try{
-            laboratorioDAO.riassegnaDipendente(Nome_Lab, Integer.valueOf(split[0]));
+        String NomeLab = (String) table3.getValueAt(row, 0);
+        int idDip = Integer.valueOf(split[0]);
+
+        int i = controller.riassegnaDipendente(NomeLab, idDip);
+        if (i > 0) {
             modelloLaboratori.setValueAt(split[0], row, 3);
             dialogo.setVisible(false);
-        }catch (Exception e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null , "Errore nel Database");
         }
-
     }
 
     /**
-     * Bottone per la creazione di un nuovo progetto
+     * Funzione del bottone per la creazione di un nuovo progetto
      *
      * @param dialogo
      */
@@ -1035,51 +849,42 @@ public class GUImain extends JFrame {
         Progetto p = new Progetto();
         p.setNome_Prog(InterfacciaProgetto.getNomeProgetto());
         p.setTopic(InterfacciaProgetto.getTopicElement());
-        try{
-            p.setCUP(progettoDAO.GeneraCup());
-            int c = progettoDAO.InserisciProgetto(p);
-            if (c > 0) {
-                dialogo.setVisible(false);
-                JOptionPane.showMessageDialog(null, "Inserimento riuscito!");
-                String Nome_Prog = p.getNome_Prog();
-                String Topic = p.getTopic();
-                String cup = String.valueOf(p.getCUP());
-                String[] row = {Nome_Prog, cup, Topic};
-                modelloProgetti.addRow(row);
-                InterfacciaProgetto.setText();
-            } else {
-                JOptionPane.showMessageDialog(null, "Qualcosa è andato storto!");
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null , "Errore nel Database");
+        int i = controller.InserisciProgetto(p);
+        if (i > 0) {
+            dialogo.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Inserimento riuscito!");
+            String Nome_Prog = p.getNome_Prog();
+            String Topic = p.getTopic();
+            String cup = String.valueOf(p.getCUP());
+            String[] row = {Nome_Prog, cup, Topic};
+            modelloProgetti.addRow(row);
+            InterfacciaProgetto.setText();
+        } else {
+            JOptionPane.showMessageDialog(null, "Qualcosa è andato storto!");
         }
-
     }
 
     /**
-     * Bottone per l'assegnazione di un progetto ad un laboratorio
+     * Funzione del bottone per l'assegnazione di un progetto ad un laboratorio
      *
      * @param dialogo
      */
     public void ButtonAssegnazioneProgetto(JDialog dialogo) {
         String progs = (String) ComboBox.getSelectedItem();
         String[] prog = progs.split(" ");
+        int idDip = Integer.valueOf(prog[0]);
         int row = table3.getSelectedRow();
-        String Nome_Lab = (String) table3.getValueAt(row, 0);
-        try{
-            laboratorioDAO.riassegnaProgetto(Nome_Lab, Integer.valueOf(prog[0]));
+        String NomeLab = (String) table3.getValueAt(row, 0);
+        int i = controller.AssegnaProgetto(NomeLab, idDip);
+        if (i > 0) {
             modelloLaboratori.setValueAt(prog[0], row, 2);
             dialogo.setVisible(false);
-        }catch (Exception e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null , "Errore nel Database");
         }
 
     }
 
     /**
-     * Bottone per aprire la finestra di assegnazione del responsabile di progetto
+     * Funzione del bottone per aprire la finestra di assegnazione del responsabile di progetto
      *
      * @param dialogo
      */
@@ -1087,26 +892,19 @@ public class GUImain extends JFrame {
         ComboBox.removeAllItems();
         int row = TabellaProgetti.getSelectedRow();
         int cup = Integer.valueOf((String) TabellaProgetti.getValueAt(row, 1));
-        List<Laboratorio> labs = new ArrayList<>();
-        try {
-            labs = laboratorioDAO.getLaboratori(cup);
+        List<Dipendente> dips = controller.ResponsabiliLaboratorio(cup);
+        if (dips.size() > 0) {
             int i = 0;
-            List<Dipendente> dips = new ArrayList<>();
-            while (i < labs.size()) {
-                dips.addAll(dipendenteDAO.getDirigentiLaboratorio(labs.get(i).getNome_Lab()));
-                i++;
-            }
-            i = 0;
             while (i < dips.size()) {
                 ComboBox.addItem(dips.get(i).getId_dip() + " " + dips.get(i).getNome() + " " + dips.get(i).getCognome());
                 i++;
             }
             dialogo.add(ComboBox, BorderLayout.CENTER);
             dialogo.setVisible(true);
-        }catch(Exception e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null , "Errore nel Database");
+        } else {
+            JOptionPane.showMessageDialog(null, "Nessun Resposnabile da Assegnare");
         }
+
 
     }
 
@@ -1126,15 +924,10 @@ public class GUImain extends JFrame {
      */
     public void ButtonAssegna(JDialog dialog) {
         Lab.removeAllItems();
-        try {
-            NomiLab = laboratorioDAO.getNomeLab();
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore di Database");
-        }
-        try{
-            for (int i = 0; i < laboratorioDAO.countLab(); i++) {
-                Lab.addItem(NomiLab[i]);
+        List<Laboratorio> Laboratori = controller.getLaboratori();
+        if (Laboratori.size() > 0) {
+            for (int i = 0; i < Laboratori.size(); i++) {
+                Lab.addItem(Laboratori.get(i).getNome_Lab());
             }
 
             int row = TabellaDipendenti.getSelectedRow();
@@ -1145,9 +938,8 @@ public class GUImain extends JFrame {
             int index = Integer.valueOf(value);
             dialog.add(Lab, BorderLayout.CENTER);
             dialog.setVisible(true);
-        }catch (Exception e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null , "Errore nel Database");
+        } else {
+            JOptionPane.showMessageDialog(null, "Nessun Laboratorio Disponibile");
         }
 
     }

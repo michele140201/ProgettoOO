@@ -9,6 +9,7 @@ public class ConnectionController {
     String dbname = "Progetto";
     String username = "postgres";
     String password = "Girafarig20";
+
     public Connection ConnectionController() {
         Connection conn = null;
 
@@ -19,13 +20,13 @@ public class ConnectionController {
          * @param pass
          * @return
          */
-            try {
-                Class.forName("org.postgresql.Driver");
-                conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/"+ dbname,username,password);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return conn;
+        try {
+            Class.forName("org.postgresql.Driver");
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/" + dbname, username, password);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return conn;
     }
 
 }
