@@ -6,7 +6,7 @@ import java.util.*;
  */
 public class Progetto {
     private int CUP;
-    private String Nome_Prog;
+    private String NomeProg;
     private String Referente;
     private String Dirigente;
     private String Topic;
@@ -14,7 +14,7 @@ public class Progetto {
 
     public Progetto(int CUP, String nome_Prog, String referente, String dirigente, String topic) {
         this.CUP = CUP;
-        Nome_Prog = nome_Prog;
+        NomeProg = nome_Prog;
         Referente = referente;
         Dirigente = dirigente;
         Topic = topic;
@@ -32,12 +32,12 @@ public class Progetto {
         this.CUP = CUP;
     }
 
-    public String getNome_Prog() {
-        return Nome_Prog;
+    public String getNomeProg() {
+        return NomeProg;
     }
 
-    public void setNome_Prog(String nome_Prog) {
-        Nome_Prog = nome_Prog;
+    public void setNomeProg(String nome_Prog) {
+        NomeProg = nome_Prog;
     }
 
     public String getReferente() {

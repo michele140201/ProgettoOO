@@ -31,8 +31,8 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                String Giorgio = rs.getString("nome_lab");
-                Labs[i] = Giorgio;
+                String NomeLab = rs.getString("nome_lab");
+                Labs[i] = NomeLab;
 
                 i++;
             }
@@ -97,14 +97,14 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
     /**
      * Inserimento di un nuovo laboratorio
      *
-     * @param Nome_Lab
+     * @param NomeLab
      * @param Topic
      * @return
      */
     @Override
-    public int Inserisci(String Nome_Lab, String Topic) {
+    public int Inserisci(String NomeLab, String Topic) {
         int i = 0;
-        String sql = ("Insert into laboratorio(nome_lab , topic) values('" + Nome_Lab + "','" + Topic + "')");
+        String sql = ("Insert into laboratorio(nome_lab , topic) values('" + NomeLab + "','" + Topic + "')");
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
@@ -139,14 +139,14 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
     /**
      * Assegnazione di un nuovo Referente
      *
-     * @param Nome_Lab
-     * @param id_dip
+     * @param NomeLab
+     * @param idDip
      * @return
      */
     @Override
-    public int riassegnaDipendente(String Nome_Lab, int id_dip) throws Exception {
+    public int riassegnaDipendente(String NomeLab, int idDip) throws Exception {
         int c = 0;
-        String sql = ("update Laboratorio set referente = " + id_dip + "where laboratorio.nome_lab = '" + Nome_Lab + "'");
+        String sql = ("update Laboratorio set referente = " + idDip + "where laboratorio.nome_lab = '" + NomeLab + "'");
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
@@ -161,14 +161,14 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
     /**
      * Riassegnazione di un nuovo progetto
      *
-     * @param Nome_Lab
+     * @param NomeLab
      * @param Progetto
      * @return
      */
     @Override
-    public int riassegnaProgetto(String Nome_Lab, int Progetto) throws Exception {
+    public int riassegnaProgetto(String NomeLab, int Progetto) throws Exception {
         int c = 0;
-        String sql = ("update Laboratorio set progetto = " + Progetto + " where nome_lab = '" + Nome_Lab + "'");
+        String sql = ("update Laboratorio set progetto = " + Progetto + " where nome_lab = '" + NomeLab + "'");
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
@@ -232,21 +232,21 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
     /**
      * Funzione per ottenere il referente del laboratorio
      *
-     * @param nome_lab
+     * @param NomeLab
      * @return
      */
     @Override
-    public int getReferenteLab(String nome_lab) throws Exception {
-        int id_dip = 0;
-        String sql = ("Select referente from laboratorio where laboratorio.nome_lab = '" + nome_lab + "'");
+    public int getReferenteLab(String NomeLab) throws Exception {
+        int idDip = 0;
+        String sql = ("Select referente from laboratorio where laboratorio.nome_lab = '" + NomeLab + "'");
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                id_dip = rs.getInt("referente");
+                idDip = rs.getInt("referente");
             }
-            return id_dip;
+            return idDip;
         } catch (SQLException e) {
             throw new Exception(e);
         }

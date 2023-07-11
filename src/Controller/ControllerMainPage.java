@@ -38,20 +38,20 @@ public class ControllerMainPage {
     public void ButtonConferma(DefaultTableModel model, String Nome, String Cognome, boolean Dir, Date data, Date DatadiN) {
         try {
             if (!Nome.matches("[A-Za-z]+") || !Cognome.matches("[A-Za-z]+")) throw new Exception();
-            int id_dip = dipendenteDAO.Id_dip();
-            Dipendente dip = new Dipendente(Nome, Cognome, id_dip, Dir, data, DatadiN);
+            int idDip = dipendenteDAO.IdDip();
+            Dipendente dip = new Dipendente(Nome, Cognome, idDip, Dir, data, DatadiN);
             dipendenteDAO.insertDipendente(dip);
-            String nome, cognome, Data_N, Laboratorio;
+            String nome, cognome, DataN, Laboratorio;
             nome = dip.getNome();
             cognome = dip.getCognome();
-            Data_N = dip.getData_nascita().toString();
-            String ID = Integer.toString(dip.getId_dip());
+            DataN = dip.getData_nascita().toString();
+            String ID = Integer.toString(dip.getidDip());
             Laboratorio = dip.getLaboratorio();
             String Dirigente;
             String DataA = dip.getAssunzione().toString();
             if (dip.isDirigente()) Dirigente = "SI";
             else Dirigente = "NO";
-            String[] row = {nome, cognome, ID, Data_N, Laboratorio, Dirigente, DataA};
+            String[] row = {nome, cognome, ID, DataN, Laboratorio, Dirigente, DataA};
             model.addRow(row);
             JOptionPane.showMessageDialog(null, "Dipendente Assunto!");
         } catch (Exception e1) {
@@ -71,11 +71,11 @@ public class ControllerMainPage {
      * @return
      */
     public int ButtonLicenzia(DefaultTableModel model, String id, String NomeLab, int row) {
-        int id_dip = Integer.valueOf(id);
+        int idDip = Integer.valueOf(id);
         int i;
         try {
-            if (id_dip != laboratorioDAO.getReferenteLab(NomeLab)) {
-                i = dipendenteDAO.removeDipendente(id_dip);
+            if (idDip != laboratorioDAO.getReferenteLab(NomeLab)) {
+                i = dipendenteDAO.removeDipendente(idDip);
                 if (i > 0) {
                     JOptionPane.showMessageDialog(null, "Dipendente Licenziato! Poverino :(");
                     return 1;
@@ -111,15 +111,15 @@ public class ControllerMainPage {
     /**
      * Funzione per assegnare un dipendente ad un laboratorio
      *
-     * @param id_dip
+     * @param idDip
      * @param NomeLab
      * @param dialogo
-     * @param Nuovo_Lab
+     * @param NuovoLab
      */
-    public int AssegnaLaboratorio(int id_dip, String NomeLab, JDialog dialogo, String Nuovo_Lab) {
+    public int AssegnaLaboratorio(int idDip, String NomeLab, JDialog dialogo, String NuovoLab) {
         try {
-            if (id_dip != laboratorioDAO.getReferenteLab(NomeLab)) {
-                dipendenteDAO.setLaboratorio(Nuovo_Lab, id_dip);
+            if (idDip != laboratorioDAO.getReferenteLab(NomeLab)) {
+                dipendenteDAO.setLaboratorio(NuovoLab, idDip);
                 return 1;
             } else {
                 JOptionPane.showMessageDialog(null, "Il Dipendente è Responsabile di Laboratorio");
@@ -164,7 +164,7 @@ public class ControllerMainPage {
      */
     public int CreaNuovoLab(JDialog dialogo, Laboratorio l) {
         try {
-            laboratorioDAO.Inserisci(l.getNome_Lab(), l.getTopic());
+            laboratorioDAO.Inserisci(l.getNomeLab(), l.getTopic());
             dialogo.setVisible(false);
             JOptionPane.showMessageDialog(null, "Inserimento riuscito!");
             return 1;
@@ -178,7 +178,7 @@ public class ControllerMainPage {
     /**
      * elimina un progetto
      */
-    public int EliminaProgetto_(int cup) {
+    public int EliminaProgetto(int cup) {
         try {
             int ritorno = progettoDAO.EliminaProgetto(cup);
             if (ritorno == 1) {
@@ -199,15 +199,15 @@ public class ControllerMainPage {
      * degrada un dipendente
      *
      * @param value
-     * @param id_dip
+     * @param idDip
      * @return
      */
-    public int Degrada(String value, int id_dip) {
+    public int Degrada(String value, int idDip) {
         try {
             if (value.equals("SI")) {
-                dipendenteDAO.degrada(id_dip);
+                dipendenteDAO.degrada(idDip);
                 try {
-                    cambioRuoloDAO.removePromozione(id_dip);
+                    cambioRuoloDAO.removePromozione(idDip);
                     return 1;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -246,13 +246,13 @@ public class ControllerMainPage {
     /**
      * imposta il nuovo referente
      *
-     * @param id_dip
+     * @param idDip
      * @param cup
      * @return
      */
-    public int setReferente(int id_dip, int cup) {
+    public int setReferente(int idDip, int cup) {
         try {
-            progettoDAO.setReferente(id_dip, cup);
+            progettoDAO.setReferente(idDip, cup);
             return 1;
         } catch (Exception e) {
             e.printStackTrace();
@@ -269,7 +269,7 @@ public class ControllerMainPage {
      */
     public List<Progetto> AssegnaProgettoLaboratorio(String Topic) {
         try {
-            int lung = progettoDAO.conta_progetti();
+            int lung = progettoDAO.countProgetti();
             List<Progetto> Progetti = progettoDAO.ottieniprogetti();
             ArrayList<Progetto> ProgettiScelti = new ArrayList<>();
             int i = 0;
@@ -297,12 +297,12 @@ public class ControllerMainPage {
     /**
      * trova quando un dipendente è stato promosso a dirigente
      *
-     * @param id_dip
+     * @param idDip
      * @return
      */
-    public Date DataCambio(int id_dip) {
+    public Date DataCambio(int idDip) {
         try {
-            Date dataCambio = cambioRuoloDAO.getDataCambio(id_dip);
+            Date dataCambio = cambioRuoloDAO.getDataCambio(idDip);
             return dataCambio;
         } catch (Exception e) {
             e.printStackTrace();
@@ -348,7 +348,7 @@ public class ControllerMainPage {
             List<Dipendente> dips = new ArrayList<>();
             while (i < labs.size()) {
                 try {
-                    dips.addAll(dipendenteDAO.getSenior(labs.get(i).getNome_Lab()));
+                    dips.addAll(dipendenteDAO.getSenior(labs.get(i).getNomeLab()));
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "Errore nel Database");
                 }
@@ -494,7 +494,7 @@ public class ControllerMainPage {
             int i = 0;
             List<Dipendente> dips = new ArrayList<>();
             while (i < labs.size()) {
-                dips.addAll(dipendenteDAO.getDirigentiLaboratorio(labs.get(i).getNome_Lab()));
+                dips.addAll(dipendenteDAO.getDirigentiLaboratorio(labs.get(i).getNomeLab()));
                 i++;
             }
             return dips;

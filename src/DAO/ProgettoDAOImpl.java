@@ -71,7 +71,7 @@ public class ProgettoDAOImpl implements ProgettoDAO {
      */
     @Override
     public int InserisciProgetto(Progetto p) throws Exception {
-        String sql = ("Insert into Progetto(CUP,Nome_p,topic) values ('" + p.getCUP() + "','" + p.getNome_Prog() + "','" + p.getTopic() + "')");
+        String sql = ("Insert into Progetto(CUP,Nome_p,topic) values ('" + p.getCUP() + "','" + p.getNomeProg() + "','" + p.getTopic() + "')");
         int i = 0;
         try {
             con = controller.ConnectionController();
@@ -111,7 +111,7 @@ public class ProgettoDAOImpl implements ProgettoDAO {
      * @return
      */
     @Override
-    public int conta_progetti() throws Exception {
+    public int countProgetti() throws Exception {
         int i = 0;
         String sql = ("Select COUNT(*) as conto from progetto");
         try {
@@ -130,14 +130,14 @@ public class ProgettoDAOImpl implements ProgettoDAO {
     /**
      * Funzione per impostare il nuovo referente di un progetto
      *
-     * @param id_dip
+     * @param idDip
      * @param cup
      * @return
      */
     @Override
-    public int setReferente(int id_dip, int cup) throws Exception {
+    public int setReferente(int idDip, int cup) throws Exception {
         int c = 0;
-        String sql = ("Update progetto set referente = " + id_dip + "where cup = " + cup);
+        String sql = ("Update progetto set referente = " + idDip + "where cup = " + cup);
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
@@ -152,14 +152,14 @@ public class ProgettoDAOImpl implements ProgettoDAO {
     /**
      * Funzione per settare un nuovo dirigente di un progetto
      *
-     * @param id_dip
+     * @param idDip
      * @param cup
      * @return
      */
     @Override
-    public int setResponsabile(int id_dip, int cup) throws Exception {
+    public int setResponsabile(int idDip, int cup) throws Exception {
         int c = 0;
-        String sql = ("Update progetto set responsabile = " + id_dip + "where cup = " + cup);
+        String sql = ("Update progetto set responsabile = " + idDip + "where cup = " + cup);
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
@@ -178,16 +178,16 @@ public class ProgettoDAOImpl implements ProgettoDAO {
      */
     @Override
     public int getReferente(int cup) throws Exception {
-        int id_dip = 0;
+        int idDip = 0;
         String sql = ("Select referente from progetto where progetto.cup = " + cup);
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                id_dip = rs.getInt("referente");
+                idDip = rs.getInt("referente");
             }
-            return id_dip;
+            return idDip;
         } catch (SQLException e) {
             throw new Exception(e);
         }
@@ -202,16 +202,16 @@ public class ProgettoDAOImpl implements ProgettoDAO {
      */
     @Override
     public int getResponsabile(int cup) throws Exception {
-        int id_dip = 0;
+        int idDip = 0;
         String sql = ("Select responsabile from progetto where progetto.cup = " + cup);
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                id_dip = rs.getInt("responsabile");
+                idDip = rs.getInt("responsabile");
             }
-            return id_dip;
+            return idDip;
         } catch (SQLException e) {
             throw new Exception(e);
         }

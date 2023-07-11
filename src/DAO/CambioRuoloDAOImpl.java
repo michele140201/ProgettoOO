@@ -14,13 +14,13 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO {
      * Funzione per vedere quando un dipendente è
      * stato promosso a dirigente
      *
-     * @param id_dip
+     * @param idDip
      * @return
      */
     @Override
-    public Date getDataCambio(int id_dip) throws Exception {
+    public Date getDataCambio(int idDip) throws Exception {
         Date data = null;
-        String sql = ("Select * from Ruolo where Ruolo.id_dip = " + id_dip);
+        String sql = ("Select * from Ruolo where Ruolo.id_dip = " + idDip);
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
@@ -38,14 +38,14 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO {
      * funzione per inserire la data in cui un dipendente
      * è stato promosso a dirigente
      *
-     * @param id_dip
+     * @param idDip
      * @return
      */
     @Override
-    public int setDataPromozione(int id_dip) throws Exception {
+    public int setDataPromozione(int idDip) throws Exception {
         String data = LocalDate.now().toString();
         Date ora = Date.valueOf(data);
-        String sql = ("Insert into Ruolo(id_dip,data_cambio) values ('" + id_dip + "','" + data + "')");
+        String sql = ("Insert into Ruolo(id_dip,data_cambio) values ('" + idDip + "','" + data + "')");
 
         try {
             con = controller.ConnectionController();
@@ -61,12 +61,12 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO {
     /**
      * Funzione per rimuovere la promozione di un dipendente, quando viene degradato
      *
-     * @param id_dip
+     * @param idDip
      * @return
      */
     @Override
-    public int removePromozione(int id_dip) throws Exception {
-        String sql = ("Delete from Ruolo where ruolo.id_dip = " + id_dip);
+    public int removePromozione(int idDip) throws Exception {
+        String sql = ("Delete from Ruolo where ruolo.id_dip = " + idDip);
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();

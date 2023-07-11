@@ -405,7 +405,7 @@ public class GUImain extends JFrame {
         for (int i = 0; i < Progetti.size(); i++) {
             Progetto p = Progetti.get(i);
             String nome_p, referente, dirigente, topic;
-            nome_p = p.getNome_Prog();
+            nome_p = p.getNomeProg();
             referente = p.getReferente();
             dirigente = p.getDirigente();
             topic = p.getTopic();
@@ -434,7 +434,7 @@ public class GUImain extends JFrame {
             String progetto = String.valueOf(l.getProgetto());
             if (progetto.equals("0")) progetto = "Non Assegnato";
             String responsabile = String.valueOf(l.getResponsabile());
-            nome_lab = l.getNome_Lab();
+            nome_lab = l.getNomeLab();
             topic = l.getTopic();
             if (responsabile.equals("0")) responsabile = "Non Assegnato";
             String[] row = {nome_lab, topic, progetto, responsabile};
@@ -461,7 +461,7 @@ public class GUImain extends JFrame {
             nome = d.getNome();
             cognome = d.getCognome();
             Data_N = d.getData_nascita().toString();
-            String id_dip = Integer.toString(d.getId_dip());
+            String id_dip = Integer.toString(d.getidDip());
             Laboratorio = d.getLaboratorio();
             String Dirigente;
             DataA = d.getAssunzione().toString();
@@ -575,7 +575,7 @@ public class GUImain extends JFrame {
         Laboratorio l = new Laboratorio(nuovoLab.getNomeLab(), Topic);
         int i = controller.CreaNuovoLab(dialogo, l);
         if (i > 0) {
-            String[] row = {l.getNome_Lab(), l.getTopic(), "Non Assegnato", "Non Assegnato"};
+            String[] row = {l.getNomeLab(), l.getTopic(), "Non Assegnato", "Non Assegnato"};
             modelloLaboratori.addRow(row);
             nuovoLab.setText();
         }
@@ -589,7 +589,7 @@ public class GUImain extends JFrame {
     public void ButtonEliminaProgetto() {
         int row = TabellaProgetti.getSelectedRow();
         int cup = Integer.valueOf(TabellaProgetti.getValueAt(row, 1).toString());//prendo il cup dalla tabella
-        int i = controller.EliminaProgetto_(cup);
+        int i = controller.EliminaProgetto(cup);
         if (i > 0) {
             modelloProgetti.removeRow(row);
             fetch_progetti(modelloProgetti);
@@ -682,7 +682,7 @@ public class GUImain extends JFrame {
         if (Progetti.size() > 0) {
             while (i < Progetti.size()) {
                 Progetto p = Progetti.get(i);
-                ComboBox.addItem(p.getCUP() + " " + p.getNome_Prog());
+                ComboBox.addItem(p.getCUP() + " " + p.getNomeProg());
                 i++;
             }
             dialogo.add(ComboBox, BorderLayout.CENTER);
@@ -706,7 +706,7 @@ public class GUImain extends JFrame {
         if (Referenti.size() > 0) {
             for (int i = 0; i < Referenti.size(); i++) {
 
-                ComboBox.addItem(Referenti.get(i).getId_dip() + " " + Referenti.get(i).getCognome() + " " + Referenti.get(i).getNome());
+                ComboBox.addItem(Referenti.get(i).getidDip() + " " + Referenti.get(i).getCognome() + " " + Referenti.get(i).getNome());
             }
             dialogo.add(ComboBox, BorderLayout.CENTER);
             dialogo.setVisible(true);
@@ -787,7 +787,7 @@ public class GUImain extends JFrame {
         int i = 0;
         if (dips.size() > 0) {
             while (i < dips.size()) {
-                ComboBox.addItem(dips.get(i).getId_dip() + " " + dips.get(i).getNome() + " " + dips.get(i).getCognome());
+                ComboBox.addItem(dips.get(i).getidDip() + " " + dips.get(i).getNome() + " " + dips.get(i).getCognome());
                 i++;
             }
             dialogo.add(ComboBox, BorderLayout.CENTER);
@@ -809,7 +809,7 @@ public class GUImain extends JFrame {
                 nome = d.getNome();
                 cognome = d.getCognome();
                 Data_N = d.getData_nascita().toString();
-                String id_dip = Integer.toString(d.getId_dip());
+                String id_dip = Integer.toString(d.getidDip());
                 Laboratorio = d.getLaboratorio();
                 String Dirigente;
                 DataA = d.getAssunzione().toString();
@@ -847,13 +847,13 @@ public class GUImain extends JFrame {
      */
     public void ButtonInserimentoProgetto(JDialog dialogo) {
         Progetto p = new Progetto();
-        p.setNome_Prog(InterfacciaProgetto.getNomeProgetto());
+        p.setNomeProg(InterfacciaProgetto.getNomeProgetto());
         p.setTopic(InterfacciaProgetto.getTopicElement());
         int i = controller.InserisciProgetto(p);
         if (i > 0) {
             dialogo.setVisible(false);
             JOptionPane.showMessageDialog(null, "Inserimento riuscito!");
-            String Nome_Prog = p.getNome_Prog();
+            String Nome_Prog = p.getNomeProg();
             String Topic = p.getTopic();
             String cup = String.valueOf(p.getCUP());
             String[] row = {Nome_Prog, cup, Topic};
@@ -896,7 +896,7 @@ public class GUImain extends JFrame {
         if (dips.size() > 0) {
             int i = 0;
             while (i < dips.size()) {
-                ComboBox.addItem(dips.get(i).getId_dip() + " " + dips.get(i).getNome() + " " + dips.get(i).getCognome());
+                ComboBox.addItem(dips.get(i).getidDip() + " " + dips.get(i).getNome() + " " + dips.get(i).getCognome());
                 i++;
             }
             dialogo.add(ComboBox, BorderLayout.CENTER);
@@ -927,7 +927,7 @@ public class GUImain extends JFrame {
         List<Laboratorio> Laboratori = controller.getLaboratori();
         if (Laboratori.size() > 0) {
             for (int i = 0; i < Laboratori.size(); i++) {
-                Lab.addItem(Laboratori.get(i).getNome_Lab());
+                Lab.addItem(Laboratori.get(i).getNomeLab());
             }
 
             int row = TabellaDipendenti.getSelectedRow();

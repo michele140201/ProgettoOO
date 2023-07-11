@@ -9,7 +9,7 @@ public interface DipendenteDAO {
     int removeDipendente(int id_dip) throws Exception ;
     int insertDipendente(Dipendente nuovodip)throws Exception;
     int count()throws Exception;
-    int Id_dip()throws Exception;
+    int IdDip()throws Exception;
     int setLaboratorio(String nome_lab , int id)throws Exception;
     int promuovi(int id_dip)throws Exception;
     int degrada(int id_dip)throws Exception;

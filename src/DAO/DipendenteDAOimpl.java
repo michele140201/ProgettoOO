@@ -46,12 +46,12 @@ public class DipendenteDAOimpl implements DipendenteDAO {
     /**
      * Funzione per rimuovere un dipendente
      *
-     * @param id_dip
+     * @param idDip
      * @return
      */
     @Override
-    public int removeDipendente(int id_dip) throws Exception {
-        String sql = ("delete from Dipendente where Dipendente.id_dip = " + id_dip);
+    public int removeDipendente(int idDip) throws Exception {
+        String sql = ("delete from Dipendente where Dipendente.id_dip = " + idDip);
         int i = 0;
         try {
             con = controller.ConnectionController();
@@ -72,7 +72,7 @@ public class DipendenteDAOimpl implements DipendenteDAO {
      */
     @Override
     public int insertDipendente(Dipendente nuovodip) throws Exception {
-        String sql = "insert into Dipendente(nome,cognome,data_n, id_dip,dirigente, data_assunzione)  values('" + nuovodip.getNome() + "','" + nuovodip.getCognome() + "','" + nuovodip.getData_nascita() + "','" + nuovodip.getId_dip() + "','" + nuovodip.isDirigente() + "','" + nuovodip.getAssunzione() + "')";
+        String sql = "insert into Dipendente(nome,cognome,data_n, id_dip,dirigente, data_assunzione)  values('" + nuovodip.getNome() + "','" + nuovodip.getCognome() + "','" + nuovodip.getData_nascita() + "','" + nuovodip.getidDip() + "','" + nuovodip.isDirigente() + "','" + nuovodip.getAssunzione() + "')";
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
@@ -112,16 +112,16 @@ public class DipendenteDAOimpl implements DipendenteDAO {
      *
      * @return
      */
-    public int Id_dip() throws Exception {
+    public int IdDip() throws Exception {
         String sql = ("select MAX(id_dip) as Max from dipendente ");
-        int i = 0;
+        int idDip = 0;
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) i = rs.getInt("Max");
-            i++;
-            return i;
+            while (rs.next()) idDip = rs.getInt("Max");
+            idDip++;
+            return idDip;
         } catch (SQLException e) {
             throw new Exception(e);
         }
@@ -131,13 +131,13 @@ public class DipendenteDAOimpl implements DipendenteDAO {
     /**
      * Funzione per impostare il laboratorio di un dipendente
      *
-     * @param nome_lab
-     * @param id
+     * @param NomeLab
+     * @param idDip
      * @return
      */
     @Override
-    public int setLaboratorio(String nome_lab, int id) throws Exception {
-        String sql = ("update Dipendente set nome_lab = '" + nome_lab + "' where Dipendente.id_dip = " + id);
+    public int setLaboratorio(String NomeLab, int idDip) throws Exception {
+        String sql = ("update Dipendente set nome_lab = '" + NomeLab + "' where Dipendente.id_dip = " + idDip);
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
@@ -152,12 +152,12 @@ public class DipendenteDAOimpl implements DipendenteDAO {
     /**
      * Funzione per la promozione di un dipendente
      *
-     * @param id_dip
+     * @param idDip
      * @return
      */
     @Override
-    public int promuovi(int id_dip) throws Exception {
-        String sql = ("update Dipendente set Dirigente = 'yes' where Dipendente.id_dip = " + id_dip);
+    public int promuovi(int idDip) throws Exception {
+        String sql = ("update Dipendente set Dirigente = 'yes' where Dipendente.id_dip = " + idDip);
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
@@ -171,12 +171,12 @@ public class DipendenteDAOimpl implements DipendenteDAO {
     /**
      * Funzione per degradare un dipendente
      *
-     * @param id_dip
+     * @param idDip
      * @return
      */
     @Override
-    public int degrada(int id_dip) throws Exception {
-        String sql = ("update Dipendente set Dirigente = 'no' where Dipendente.id_dip = " + id_dip);
+    public int degrada(int idDip) throws Exception {
+        String sql = ("update Dipendente set Dirigente = 'no' where Dipendente.id_dip = " + idDip);
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
@@ -215,13 +215,13 @@ public class DipendenteDAOimpl implements DipendenteDAO {
     /**
      * Funzione per avere la data in cui è stato assunto un dipendente
      *
-     * @param id_dip
+     * @param idDip
      * @return
      */
     @Override
-    public Date DataAssunzione(int id_dip) throws Exception {
+    public Date DataAssunzione(int idDip) throws Exception {
         Date data = null;
-        String sql = ("select data_assunzione as assunzione from dipendente where dipendente.id_dip = " + id_dip);
+        String sql = ("select data_assunzione as assunzione from dipendente where dipendente.id_dip = " + idDip);
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
@@ -239,13 +239,13 @@ public class DipendenteDAOimpl implements DipendenteDAO {
     /**
      * Funzione per avere tutti i dipendenti senior
      *
-     * @param Nome_lab
+     * @param NomeLab
      * @return
      */
     @Override
-    public List<Dipendente> getSenior(String Nome_lab) throws Exception {
+    public List<Dipendente> getSenior(String NomeLab) throws Exception {
         List<Dipendente> Dipendenti = new ArrayList<>();
-        String sql = ("Select * from dipendente where (current_date-dipendente.data_assunzione)/365>=7 and dipendente.nome_lab = '" + Nome_lab + "'");
+        String sql = ("Select * from dipendente where (current_date-dipendente.data_assunzione)/365>=7 and dipendente.nome_lab = '" + NomeLab + "'");
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
@@ -264,13 +264,13 @@ public class DipendenteDAOimpl implements DipendenteDAO {
     /**
      * Funzione per contare tutti i dipendenti senior
      *
-     * @param Nome_lab
+     * @param NomeLab
      * @return
      */
     @Override
-    public int countSenior(String Nome_lab) throws Exception {
+    public int countSenior(String NomeLab) throws Exception {
         int i = 0;
-        String sql = ("select count(*) as conto from dipendente where (current_date-dipendente.data_assunzione)/365>=7 and dipendente.nome_lab = '" + Nome_lab + "'");
+        String sql = ("select count(*) as conto from dipendente where (current_date-dipendente.data_assunzione)/365>=7 and dipendente.nome_lab = '" + NomeLab + "'");
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
@@ -286,13 +286,13 @@ public class DipendenteDAOimpl implements DipendenteDAO {
     /**
      * Funzione per avere tutti dirigenti di un laboratorio
      *
-     * @param Nome_lab
+     * @param NomeLab
      * @return
      */
     @Override
-    public List<Dipendente> getDirigentiLaboratorio(String Nome_lab) throws Exception {
+    public List<Dipendente> getDirigentiLaboratorio(String NomeLab) throws Exception {
         List<Dipendente> DirigentiLabiratorio = new ArrayList<>();
-        String sql = ("Select * from dipendente where dipendente.nome_lab = '" + Nome_lab + "' and dirigente = 'yes'");
+        String sql = ("Select * from dipendente where dipendente.nome_lab = '" + NomeLab + "' and dirigente = 'yes'");
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();

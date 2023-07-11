@@ -10,15 +10,15 @@ public class Dipendente {
 
         private String nome ;
         private String cognome ;
-        private int id_dip ;
+        private int idDip ;
         private boolean Dirigente;
         private Date Assunzione ;
         private Date Data_nascita;
         private String Laboratorio;
-        public Dipendente(String nome, String cognome, int id_dip, boolean dirigente, Date assunzione, Date data_nascita) {
+        public Dipendente(String nome, String cognome, int idDip, boolean dirigente, Date assunzione, Date data_nascita) {
                 this.nome = nome;
                 this.cognome = cognome;
-                this.id_dip = id_dip;
+                this.idDip = idDip;
                 Dirigente = dirigente;
                 Assunzione = assunzione;
                 Data_nascita = data_nascita;
@@ -26,10 +26,10 @@ public class Dipendente {
         }
 
 
-        public Dipendente(String nome, String cognome, int id_dip, boolean dirigente, Date assunzione, Date data_nascita, String laboratorio) {
+        public Dipendente(String nome, String cognome, int idDip, boolean dirigente, Date assunzione, Date data_nascita, String laboratorio) {
                 this.nome = nome;
                 this.cognome = cognome;
-                this.id_dip = id_dip;
+                this.idDip = idDip;
                 Dirigente = dirigente;
                 Assunzione = assunzione;
                 Data_nascita = data_nascita;
@@ -77,12 +77,12 @@ public class Dipendente {
                 Dirigente = dirigente;
         }
 
-        public int getId_dip() {
-                return id_dip;
+        public int getidDip() {
+                return idDip;
         }
 
-        public void setId_dip(int id_dip) {
-                this.id_dip = id_dip;
+        public void setIdDip(int idDip) {
+                this.idDip = idDip;
         }
 
         public String getNome() {
