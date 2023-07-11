@@ -24,7 +24,7 @@ public class DipendenteDAOimpl implements DipendenteDAO{
      * @return
      */
     @Override
-    public List<Dipendente> getDipendente() {
+    public List<Dipendente> getDipendente() throws Exception {
         String sql = ("SELECT * FROM DIPENDENTE");
         try{
             con = controller.ConnectionController();
@@ -33,12 +33,13 @@ public class DipendenteDAOimpl implements DipendenteDAO{
             while(rs.next()){
                 dip = new Dipendente(rs.getString("Nome"), rs.getString("Cognome"),rs.getInt("id_dip"), rs.getBoolean("dirigente"), rs.getDate("Data_assunzione"), rs.getDate("Data_N"), rs.getString("nome_lab") );
                 dipendenti.add(dip);
+
             }
+            return dipendenti;
         }catch(SQLException e){
-                e.printStackTrace();
+            throw new Exception(e);
         }
 
-        return dipendenti;
     }
 
     /**
@@ -47,7 +48,7 @@ public class DipendenteDAOimpl implements DipendenteDAO{
      * @return
      */
     @Override
-    public int remove_dip(int id_dip) {
+    public int removeDipendente(int id_dip) {
         String sql = ("delete from Dipendente where Dipendente.id_dip = "+ id_dip);
         int i = 0;
         try{
@@ -66,7 +67,7 @@ public class DipendenteDAOimpl implements DipendenteDAO{
      * @return
      */
     @Override
-    public int add_dip(Dipendente nuovodip) {
+    public int insertDipendente(Dipendente nuovodip) {
         String sql = "insert into Dipendente(nome,cognome,data_n, id_dip,dirigente, data_assunzione)  values('"+nuovodip.getNome()+"','" + nuovodip.getCognome()+"','"+nuovodip.getData_nascita()+"','"+nuovodip.getId_dip()+"','"+nuovodip.isDirigente()+"','"+nuovodip.getAssunzione()+"')";
         try{
             con = controller.ConnectionController();
@@ -127,7 +128,7 @@ public class DipendenteDAOimpl implements DipendenteDAO{
      * @return
      */
     @Override
-    public int set_lab(String nome_lab , int id) {
+    public int setLaboratorio(String nome_lab , int id) {
         String sql = ("update Dipendente set nome_lab = '" + nome_lab + "' where Dipendente.id_dip = " + id);
         try{
             con = controller.ConnectionController();
@@ -226,7 +227,7 @@ public class DipendenteDAOimpl implements DipendenteDAO{
      * @return
      */
     @Override
-    public List<Dipendente> dipendente_senior(String Nome_lab) {
+    public List<Dipendente> getSenior(String Nome_lab) {
         List<Dipendente> Dipendenti = new ArrayList<>();
         String sql = ("Select * from dipendente where (current_date-dipendente.data_assunzione)/365>=7 and dipendente.nome_lab = '" + Nome_lab + "'");
         try{
@@ -250,7 +251,7 @@ public class DipendenteDAOimpl implements DipendenteDAO{
      * @return
      */
     @Override
-    public int conta_senior(String Nome_lab) {
+    public int countSenior(String Nome_lab) {
         int i = 0;
         String sql = ("select count(*) as conto from dipendente where (current_date-dipendente.data_assunzione)/365>=7 and dipendente.nome_lab = '" + Nome_lab + "'");
         try{
@@ -271,7 +272,7 @@ public class DipendenteDAOimpl implements DipendenteDAO{
      * @return
      */
     @Override
-    public List<Dipendente> Dirigenti_Laboratorio(String Nome_lab) {
+    public List<Dipendente> getDirigentiLaboratorio(String Nome_lab) {
         List<Dipendente> DirigentiLabiratorio = new ArrayList<>();
         String sql = ("Select * from dipendente where dipendente.nome_lab = '" + Nome_lab + "' and dirigente = 'yes'");
         try{

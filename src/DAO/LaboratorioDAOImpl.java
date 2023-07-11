@@ -17,7 +17,7 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
      * @return
      */
     @Override
-    public String[] NomeLab() {
+    public String[] getNomeLab() throws Exception {
         String[] Labs;
         int i = 0;
         String sql = "Select * from Laboratorio";
@@ -34,10 +34,11 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
 
                 i++;
             }
+            return Labs;
         }catch(SQLException e){
-            e.printStackTrace();
+            throw new Exception(e);
         }
-        return Labs;
+
     }
 
     /**
@@ -67,7 +68,7 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
      * @return
      */
     @Override
-    public List<Laboratorio> ottieniLabs() {
+    public List<Laboratorio> getLabs() throws Exception{
         List<Laboratorio> Laboratori = new ArrayList<>();
         String sql = ("Select * from Laboratorio");
         int i = 0;
@@ -79,13 +80,14 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
             while(rs.next()){
                 if(rs.getString("progetto") == null) progetto = 0;
                 else progetto = rs.getInt("progetto");
-                Laboratorio lab = new Laboratorio(rs.getString("nome_lab") ,(String) rs.getString("topic") ,progetto , rs.getInt("referente"));
+                Laboratorio lab = new Laboratorio(rs.getString("nome_lab") , rs.getString("topic") ,progetto , rs.getInt("referente"));
                 Laboratori.add(lab);
             }
+            return Laboratori;
         }catch(SQLException e){
-            e.printStackTrace();
+            throw new Exception(e);
         }
-        return Laboratori;
+
     }
 
     /**
@@ -134,7 +136,7 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
      * @return
      */
     @Override
-    public int riassegna(String Nome_Lab, int id_dip) {
+    public int riassegnaDipendente(String Nome_Lab, int id_dip) {
         int c = 0;
         String sql = ("update Laboratorio set referente = " + id_dip + "where laboratorio.nome_lab = '" + Nome_Lab + "'");
         try{
@@ -154,7 +156,7 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
      * @return
      */
     @Override
-    public int riassegna_progetto(String Nome_Lab, int Progetto) {
+    public int riassegnaProgetto(String Nome_Lab, int Progetto) {
         int c = 0;
         String sql = ("update Laboratorio set progetto = " + Progetto + " where nome_lab = '" + Nome_Lab + "'");
         try{
@@ -173,7 +175,7 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
      * @return
      */
     @Override
-    public int conta_prog(int progetto) {
+    public int countProgetti(int progetto) {
         int c = 0;
         String sql = ("Select count(*) as conto from laboratorio where laboratorio.progetto = " + progetto);
         try{
@@ -195,7 +197,7 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
      * @return
      */
     @Override
-    public List<Laboratorio> lab_prog(int cup) {
+    public List<Laboratorio> getLaboratori(int cup) {
         List<Laboratorio> labs = new ArrayList<>();
         String sql = ("Select * from laboratorio where laboratorio.progetto = " + cup);
         try{
@@ -218,7 +220,7 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
      * @return
      */
     @Override
-    public int getReferente_Lab(String nome_lab){
+    public int getReferenteLab(String nome_lab){
         int id_dip = 0;
         String sql = ("Select referente from laboratorio where laboratorio.nome_lab = '" + nome_lab + "'");
         try{

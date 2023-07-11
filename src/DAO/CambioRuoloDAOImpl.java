@@ -17,7 +17,7 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO{
      * @return
      */
     @Override
-    public Date data_cambio(int id_dip) {
+    public Date getDataCambio(int id_dip) {
         Date data = null;
         String sql = ("Select * from Ruolo where Ruolo.id_dip = " + id_dip);
         try{
@@ -40,7 +40,7 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO{
      * @return
      */
     @Override
-    public int inserisci_data_promozione(int id_dip) {
+    public int setDataPromozione(int id_dip) {
         String data = LocalDate.now().toString();
         Date ora = Date.valueOf(data);
         String sql = ("Insert into Ruolo(id_dip,data_cambio) values ('" + id_dip + "','" + data + "')");
@@ -61,7 +61,7 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO{
      * @return
      */
     @Override
-    public int delete_promozione(int id_dip) {
+    public int removePromozione(int id_dip) {
         String sql = ("Delete from Ruolo where ruolo.id_dip = "+id_dip);
         try{
             con = controller.ConnectionController();

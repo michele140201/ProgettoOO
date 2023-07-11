@@ -5,15 +5,15 @@ import Model.Progetto;
 import java.util.*;
 
 public interface LaboratorioDAO {
-    public String[] NomeLab();
+    public String[] getNomeLab() throws Exception;
     public int countLab();
-    List<Laboratorio> ottieniLabs();
+    List<Laboratorio> getLabs()throws Exception;
     int Inserisci(String Nome_Lab , String Topic);
     int remove(String Nome);
-    int riassegna(String Nome_Lab , int id_dip);
-    int riassegna_progetto(String Nome_Lab , int Progetto);
-    int conta_prog(int progetto);
-    List<Laboratorio> lab_prog(int cup);
-    int getReferente_Lab(String nome_lab);
+    int riassegnaDipendente(String Nome_Lab , int id_dip);
+    int riassegnaProgetto(String Nome_Lab , int Progetto);
+    int countProgetti(int progetto);
+    List<Laboratorio> getLaboratori(int cup);
+    int getReferenteLab(String nome_lab);
     int getProgetto(String NomeLab);
 }

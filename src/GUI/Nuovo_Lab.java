@@ -4,10 +4,10 @@ import javax.swing.*;
 
 public class Nuovo_Lab extends JPanel{
     private JTextField nomeLaboratorioTextField;
-    public JTextField Nomelabor;
+    private JTextField Nomelabor;
     private JTextField topicTextField;
     private JTextField creaLaboratorioTextField;
-    public JComboBox topiccombo;
+    private JComboBox topiccombo;
     private JPanel panel1;
     private String[] topic = {"chimica" , "fisica" , "matematica" , "informatica" , "biologia"};
 
@@ -24,6 +24,16 @@ public class Nuovo_Lab extends JPanel{
             topiccombo.addItem(topic[i]);
         }
 
-
+    }
+    public String getTopicElement(){
+        String Topic = (String) topiccombo.getSelectedItem();
+        return Topic;
+    }
+    public String getNomeLab(){
+        String NomeLab = Nomelabor.getText();
+        return NomeLab;
+    }
+    public void setText(){
+        Nomelabor.setText(" ");
     }
 }

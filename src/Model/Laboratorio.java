@@ -6,7 +6,7 @@ import java.util.ArrayList;
  */
 public class Laboratorio {
     private String Nome_Lab;
-    private String topic;
+    public String topic;
     private int Progetto;
     private int Responsabile;
 
@@ -15,10 +15,6 @@ public class Laboratorio {
         this.topic = topic;
         Progetto = progetto;
         Responsabile = responsabile;
-    }
-
-    public Laboratorio() {
-
     }
 
     public Laboratorio(String nome_Lab, String topic) {

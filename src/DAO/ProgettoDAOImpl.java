@@ -16,7 +16,7 @@ public class ProgettoDAOImpl implements ProgettoDAO{
      * @return
      */
     @Override
-    public List<Progetto> ottieniprogetti() {
+    public List<Progetto> ottieniprogetti() throws Exception {
         List<Progetto> Lista;
         Lista = new ArrayList<>();
         Progetto p;
@@ -29,11 +29,12 @@ public class ProgettoDAOImpl implements ProgettoDAO{
                 p = new Progetto(rs.getInt("CUP"), rs.getString("nome_p"),rs.getString("referente"),rs.getString("responsabile"), rs.getString("topic"));
                 Lista.add(p);
             }
+            return Lista;
         }catch(SQLException e){
-            e.printStackTrace();
+            throw new Exception(e);
         }
 
-        return Lista;
+
     }
 
     /**
@@ -122,7 +123,7 @@ public class ProgettoDAOImpl implements ProgettoDAO{
      * @return
      */
     @Override
-    public int set_referente(int id_dip, int cup) {
+    public int setReferente(int id_dip, int cup) {
         int c = 0;
         String sql = ("Update progetto set referente = " + id_dip + "where cup = " + cup);
         try{
@@ -142,7 +143,7 @@ public class ProgettoDAOImpl implements ProgettoDAO{
      * @return
      */
     @Override
-    public int set_dirigente(int id_dip, int cup) {
+    public int setResponsabile(int id_dip, int cup) {
         int c = 0;
         String sql = ("Update progetto set responsabile = " + id_dip + "where cup = " + cup);
         try{
@@ -161,7 +162,7 @@ public class ProgettoDAOImpl implements ProgettoDAO{
      * @return
      */
     @Override
-    public int get_referente(int cup) {
+    public int getReferente(int cup) {
         int id_dip = 0;
         String sql = ("Select referente from progetto where progetto.cup = " + cup);
         try{
@@ -183,7 +184,7 @@ public class ProgettoDAOImpl implements ProgettoDAO{
      * @return
      */
     @Override
-    public int get_responsabile(int cup) {
+    public int getResponsabile(int cup) {
         int id_dip = 0;
         String sql = ("Select responsabile from progetto where progetto.cup = " + cup);
         try{
