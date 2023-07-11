@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -488,15 +489,20 @@ public class GUImain extends JFrame {
 
         int id_dip = Integer.valueOf(value);
         int i;
-        if (id_dip != laboratorioDAO.getReferenteLab(NomeLab)) {
-            i = dipendenteDAO.removeDipendente(id_dip);
-            if (i > 0) {
-                JOptionPane.showMessageDialog(null, "Dipendente Licenziato! Poverino :(");
-                fetch_progetti(modelloProgetti);
-            } else JOptionPane.showMessageDialog(null, "Qualcosa è andato storto!");
-            model.removeRow(row);
-        } else {
-            JOptionPane.showMessageDialog(null, "Il Dipendente è Responsabile di Laboratorio");
+        try{
+            if (id_dip != laboratorioDAO.getReferenteLab(NomeLab)) {
+                i = dipendenteDAO.removeDipendente(id_dip);
+                if (i > 0) {
+                    JOptionPane.showMessageDialog(null, "Dipendente Licenziato! Poverino :(");
+                    fetch_progetti(modelloProgetti);
+                } else JOptionPane.showMessageDialog(null, "Qualcosa è andato storto!");
+                model.removeRow(row);
+            } else {
+                JOptionPane.showMessageDialog(null, "Il Dipendente è Responsabile di Laboratorio");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null , "Errore nel Database");
         }
 
     }
@@ -515,13 +521,18 @@ public class GUImain extends JFrame {
         String value = TabellaDipendenti.getModel().getValueAt(row, 2).toString();
         int id_dip = Integer.valueOf(value);
         String NomeLab = TabellaDipendenti.getModel().getValueAt(row, 4).toString();
-        if (id_dip != laboratorioDAO.getReferenteLab(NomeLab)) {
-            dipendenteDAO.setLaboratorio(Nuovo_Lab, id_dip);
-            JOptionPane.showMessageDialog(null, "Dipendente Assegnato");
-            dialogo.setVisible(false);
-            modello.setValueAt(Nuovo_Lab, row, 4);
-        } else {
-            JOptionPane.showMessageDialog(null, "Il Dipendente è Responsabile di Laboratorio");
+        try{
+            if (id_dip != laboratorioDAO.getReferenteLab(NomeLab)) {
+                dipendenteDAO.setLaboratorio(Nuovo_Lab, id_dip);
+                JOptionPane.showMessageDialog(null, "Dipendente Assegnato");
+                dialogo.setVisible(false);
+                modello.setValueAt(Nuovo_Lab, row, 4);
+            } else {
+                JOptionPane.showMessageDialog(null, "Il Dipendente è Responsabile di Laboratorio");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null , "Errore nel Database");
         }
 
         PannelloDipendenti.setViewportView(TabellaDipendenti);
@@ -533,15 +544,21 @@ public class GUImain extends JFrame {
     public void ButtonEliminaSede() {
         int row = table3.getSelectedRow();
         String nome = String.valueOf(table3.getValueAt(row, 0));//ottengo il nome del laboratorio
-        int i = laboratorioDAO.remove(nome);
-        if (i > 0) {
-            JOptionPane.showMessageDialog(null, "Sede Eliminata");
-            modelloLaboratori.removeRow(row);
-            fetch_dipendenti(modelloDipendenti);
-        } else {
-            JOptionPane.showMessageDialog(null, "OPS, Qualcosa è andato storto!");
+        try{
+            int i = laboratorioDAO.remove(nome);
+            if (i > 0) {
+                JOptionPane.showMessageDialog(null, "Sede Eliminata");
+                modelloLaboratori.removeRow(row);
+                fetch_dipendenti(modelloDipendenti);
+            } else {
+                JOptionPane.showMessageDialog(null, "OPS, Qualcosa è andato storto!");
 
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null , "Errore nel Database");
         }
+
     }
 
     /**
@@ -648,15 +665,21 @@ public class GUImain extends JFrame {
      */
     public void ButtonCreaNuovoLaboratorio(JDialog dialogo) {
         String Topic = nuovoLab.getTopicElement();
-        Laboratorio l = new Laboratorio(nuovoLab.getNomeLab(), Topic);
-        int c = laboratorioDAO.Inserisci(l.getNome_Lab(), l.getTopic());
-        if (c > 0) {
-            dialogo.setVisible(false);
-            JOptionPane.showMessageDialog(null, "Inserimento riuscito!");
-            String[] row = {l.getNome_Lab(), l.getTopic(), "Non Assegnato", "Non Assegnato"};
-            modelloLaboratori.addRow(row);
-            nuovoLab.setText();
+        try{
+            Laboratorio l = new Laboratorio(nuovoLab.getNomeLab(), Topic);
+            int c = laboratorioDAO.Inserisci(l.getNome_Lab(), l.getTopic());
+            if (c > 0) {
+                dialogo.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Inserimento riuscito!");
+                String[] row = {l.getNome_Lab(), l.getTopic(), "Non Assegnato", "Non Assegnato"};
+                modelloLaboratori.addRow(row);
+                nuovoLab.setText();
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null , "Errore nel Database");
         }
+
     }
 
     /**
@@ -666,14 +689,18 @@ public class GUImain extends JFrame {
     public void ButtonEliminaProgetto() {
         int row = TabellaProgetti.getSelectedRow();
         int cup = Integer.valueOf(TabellaProgetti.getValueAt(row, 1).toString());//prendo il cup dalla tabella
-
-        int ritorno = progettoDAO.EliminaProgetto(cup);
-        if (ritorno == 1) {
-            modelloProgetti.removeRow(row);
-            JOptionPane.showMessageDialog(null, "Progetto Eliminato!");
-            fetch_laboratorio(modelloLaboratori);
-        } else {
-            JOptionPane.showMessageDialog(null, "Ops, Qualcosa è andato storto!");
+        try{
+            int ritorno = progettoDAO.EliminaProgetto(cup);
+            if (ritorno == 1) {
+                modelloProgetti.removeRow(row);
+                JOptionPane.showMessageDialog(null, "Progetto Eliminato!");
+                fetch_laboratorio(modelloLaboratori);
+            } else {
+                JOptionPane.showMessageDialog(null, "Ops, Qualcosa è andato storto!");
+         }
+        }catch (Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null , "Errore nel Database");
         }
 
 
@@ -688,12 +715,22 @@ public class GUImain extends JFrame {
         int row = TabellaDipendenti.getSelectedRow();
         String value = (String) TabellaDipendenti.getModel().getValueAt(row, 5);
         int id_dip = Integer.valueOf(TabellaDipendenti.getValueAt(row, 2).toString());//prendendo id_dip dalla tabella
-        if (value.equals("SI")) {
-            dipendenteDAO.degrada(row);
-            modello.setValueAt("NO", row, 5);
-            cambioRuoloDAO.removePromozione(id_dip);
-        } else {
-            JOptionPane.showMessageDialog(null, "IMPOSSIBILE DEGRADARE!");
+        try{
+            if (value.equals("SI")) {
+                dipendenteDAO.degrada(row);
+                modello.setValueAt("NO", row, 5);
+                try{
+                    cambioRuoloDAO.removePromozione(id_dip);
+                }catch(Exception e){
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null , "Errore nel Database");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "IMPOSSIBILE DEGRADARE!");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null , "Errore nel Database");
         }
     }
 
@@ -725,9 +762,14 @@ public class GUImain extends JFrame {
         String[] id = values.split(" ");
         int row = TabellaProgetti.getSelectedRow();
         int cup = Integer.valueOf((String) TabellaProgetti.getValueAt(row, 1));
-        progettoDAO.setResponsabile(Integer.valueOf(id[0]), cup);
-        modelloProgetti.setValueAt(id[0], row, 4);
-        dialogo.setVisible(false);
+        try{
+            progettoDAO.setResponsabile(Integer.valueOf(id[0]), cup);
+            modelloProgetti.setValueAt(id[0], row, 4);
+            dialogo.setVisible(false);
+        }catch(Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null , "Errore nel Database");
+        }
     }
 
     /**
@@ -740,9 +782,15 @@ public class GUImain extends JFrame {
         String[] id = values.split(" ");
         int row = TabellaProgetti.getSelectedRow();
         int cup = Integer.valueOf((String) TabellaProgetti.getValueAt(row, 1));
-        progettoDAO.setReferente(Integer.valueOf(id[0]), cup);
-        modelloProgetti.setValueAt(id[0], row, 3);
-        dialogo.setVisible(false);
+        try{
+            progettoDAO.setReferente(Integer.valueOf(id[0]), cup);
+            modelloProgetti.setValueAt(id[0], row, 3);
+            dialogo.setVisible(false);
+        }catch(Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null , "Errore nel Database");
+        }
+
     }
 
     /**
@@ -800,15 +848,20 @@ public class GUImain extends JFrame {
         System.out.println(row);
         String Nome_lab = (String) table3.getValueAt(row, 0);
 
-        DIR = dipendenteDAO.getSenior(Nome_lab);
-        int lung = dipendenteDAO.countSenior(Nome_lab);
-        for (int i = 0; i < lung; i++) {
+        try{
+            DIR = dipendenteDAO.getSenior(Nome_lab);
+            int lung = dipendenteDAO.countSenior(Nome_lab);
+            for (int i = 0; i < lung; i++) {
 
-            ComboBox.addItem(DIR.get(i).getId_dip() + " " + DIR.get(i).getCognome() + " " + DIR.get(i).getNome());
+                ComboBox.addItem(DIR.get(i).getId_dip() + " " + DIR.get(i).getCognome() + " " + DIR.get(i).getNome());
+            }
+            dialogo.add(ComboBox, BorderLayout.CENTER);
+            dialogo.setVisible(true);
+        }catch(Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null , "Errore nel Database");
         }
 
-        dialogo.add(ComboBox, BorderLayout.CENTER);
-        dialogo.setVisible(true);
     }
 
     /**
@@ -828,28 +881,34 @@ public class GUImain extends JFrame {
         prova = prova.plusYears(3);
         LocalDate senior = A.toLocalDate();
         senior = senior.plusYears(7);
-        Date data_cambio = cambioRuoloDAO.getDataCambio(Integer.valueOf(TabellaDipendenti.getValueAt(row, 2).toString()));
-        if (data_cambio != null) {
-            if (Anni < 3) {
-                JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDirigente : " + data_cambio);
-            } else if (Anni >= 3 && Anni < 7) {
-                JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova + "\nDirigente : " + data_cambio);
+        try{
+            Date data_cambio = cambioRuoloDAO.getDataCambio(Integer.valueOf(TabellaDipendenti.getValueAt(row, 2).toString()));
+            if (data_cambio != null) {
+                if (Anni < 3) {
+                    JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDirigente : " + data_cambio);
+                } else if (Anni >= 3 && Anni < 7) {
+                    JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova + "\nDirigente : " + data_cambio);
 
+                } else {
+                    JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova + "\nDipendente Senior : " + senior + "\nDirigente : " + data_cambio);
+
+                }
             } else {
-                JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova + "\nDipendente Senior : " + senior + "\nDirigente : " + data_cambio);
+                if (Anni < 3) {
+                    JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA);
+                } else if (Anni >= 3 && Anni < 7) {
+                    JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova);
 
+                } else {
+                    JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova + "\nDipendente Senior : " + senior);
+
+                }
             }
-        } else {
-            if (Anni < 3) {
-                JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA);
-            } else if (Anni >= 3 && Anni < 7) {
-                JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova);
-
-            } else {
-                JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDipendente Middle : " + prova + "\nDipendente Senior : " + senior);
-
-            }
+        }catch(Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null , "Errore nel Database");
         }
+
     }
 
     /**
@@ -863,13 +922,19 @@ public class GUImain extends JFrame {
         int row = TabellaDipendenti.getSelectedRow();
         String value = (String) TabellaDipendenti.getModel().getValueAt(row, 5);
         int id = Integer.valueOf(TabellaDipendenti.getValueAt(row, 2).toString());//prendendo id dip dalla tabella
-        if (value.equals("NO")) {
-            dipendenteDAO.promuovi(id);
-            modello.setValueAt("SI", row, 5);
-            cambioRuoloDAO.setDataPromozione(id);
-        } else {
-            JOptionPane.showMessageDialog(null, "IMPOSSIBILE PROMUOVERE!");
+        try{
+            if (value.equals("NO")) {
+                dipendenteDAO.promuovi(id);
+                modello.setValueAt("SI", row, 5);
+                cambioRuoloDAO.setDataPromozione(id);
+            } else {
+                JOptionPane.showMessageDialog(null, "IMPOSSIBILE PROMUOVERE!");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null , "Errore nel Database");
         }
+
     }
 
     /**
@@ -883,44 +948,59 @@ public class GUImain extends JFrame {
         int row = TabellaProgetti.getSelectedRow();
         int cup = Integer.valueOf((String) TabellaProgetti.getValueAt(row, 1));
         List<Laboratorio> labs = new ArrayList<>();
-        labs = laboratorioDAO.getLaboratori(cup);
-        int i = 0;
-        List<Dipendente> dips = new ArrayList<>();
-        while (i < labs.size()) {
-            dips.addAll(dipendenteDAO.getSenior(labs.get(i).getNome_Lab()));
-            i++;
+        try{
+            labs = laboratorioDAO.getLaboratori(cup);
+            int i = 0;
+            List<Dipendente> dips = new ArrayList<>();
+            while (i < labs.size()) {
+                try{
+                    dips.addAll(dipendenteDAO.getSenior(labs.get(i).getNome_Lab()));
+                }catch(Exception e){
+                    JOptionPane.showMessageDialog(null , "Errore nel Database");
+                }
+                i++;
+            }
+            i = 0;
+            while (i < dips.size()) {
+                ComboBox.addItem(dips.get(i).getId_dip() + " " + dips.get(i).getNome() + " " + dips.get(i).getCognome());
+                i++;
+            }
+            dialogo.add(ComboBox, BorderLayout.CENTER);
+            dialogo.setVisible(true);
+        }catch (Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null , "Errore nel Database");
         }
-        i = 0;
-        while (i < dips.size()) {
-            ComboBox.addItem(dips.get(i).getId_dip() + " " + dips.get(i).getNome() + " " + dips.get(i).getCognome());
-            i++;
-        }
-        dialogo.add(ComboBox, BorderLayout.CENTER);
-        dialogo.setVisible(true);
+
     }
 
     /**
      * Filtro per visualizzare tutti i dipendenti
      */
     public void ButtonTuttiIDipendenti(DefaultTableModel modello) {
-        if (!(modello.getRowCount() == dipendenteDAO.count())) {
-            List<Dipendente> Lista = dipendenteDAO.getDir();
-            for (int i = 0; i < Lista.size(); i++) {
+        try{
+            if (!(modello.getRowCount() == dipendenteDAO.count())) {
+                List<Dipendente> Lista = dipendenteDAO.getDir();
+                for (int i = 0; i < Lista.size(); i++) {
 
-                Dipendente d = Lista.get(i);
-                String nome, cognome, Data_N, Laboratorio, DataA;
-                nome = d.getNome();
-                cognome = d.getCognome();
-                Data_N = d.getData_nascita().toString();
-                String id_dip = Integer.toString(d.getId_dip());
-                Laboratorio = d.getLaboratorio();
-                String Dirigente;
-                DataA = d.getAssunzione().toString();
-                if (d.isDirigente()) Dirigente = "SI";
-                else Dirigente = "NO";
-                String[] row = {nome, cognome, id_dip, Data_N, Laboratorio, Dirigente, DataA};
-                modello.addRow(row);
+                    Dipendente d = Lista.get(i);
+                    String nome, cognome, Data_N, Laboratorio, DataA;
+                    nome = d.getNome();
+                    cognome = d.getCognome();
+                    Data_N = d.getData_nascita().toString();
+                    String id_dip = Integer.toString(d.getId_dip());
+                    Laboratorio = d.getLaboratorio();
+                    String Dirigente;
+                    DataA = d.getAssunzione().toString();
+                    if (d.isDirigente()) Dirigente = "SI";
+                    else Dirigente = "NO";
+                    String[] row = {nome, cognome, id_dip, Data_N, Laboratorio, Dirigente, DataA};
+                    modello.addRow(row);
+                }
             }
+        }catch(Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null , "Errore nel Database");
         }
     }
 
@@ -935,9 +1015,15 @@ public class GUImain extends JFrame {
         int i = 0;
         int row = table3.getSelectedRow();
         String Nome_Lab = (String) table3.getValueAt(row, 0);
-        laboratorioDAO.riassegnaDipendente(Nome_Lab, Integer.valueOf(split[0]));
-        modelloLaboratori.setValueAt(split[0], row, 3);
-        dialogo.setVisible(false);
+        try{
+            laboratorioDAO.riassegnaDipendente(Nome_Lab, Integer.valueOf(split[0]));
+            modelloLaboratori.setValueAt(split[0], row, 3);
+            dialogo.setVisible(false);
+        }catch (Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null , "Errore nel Database");
+        }
+
     }
 
     /**
@@ -949,20 +1035,26 @@ public class GUImain extends JFrame {
         Progetto p = new Progetto();
         p.setNome_Prog(InterfacciaProgetto.getNomeProgetto());
         p.setTopic(InterfacciaProgetto.getTopicElement());
-        p.setCUP(progettoDAO.GeneraCup());
-        int c = progettoDAO.InserisciProgetto(p);
-        if (c > 0) {
-            dialogo.setVisible(false);
-            JOptionPane.showMessageDialog(null, "Inserimento riuscito!");
-            String Nome_Prog = p.getNome_Prog();
-            String Topic = p.getTopic();
-            String cup = String.valueOf(p.getCUP());
-            String[] row = {Nome_Prog, cup, Topic};
-            modelloProgetti.addRow(row);
-            InterfacciaProgetto.setText();
-        } else {
-            JOptionPane.showMessageDialog(null, "Qualcosa è andato storto!");
+        try{
+            p.setCUP(progettoDAO.GeneraCup());
+            int c = progettoDAO.InserisciProgetto(p);
+            if (c > 0) {
+                dialogo.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Inserimento riuscito!");
+                String Nome_Prog = p.getNome_Prog();
+                String Topic = p.getTopic();
+                String cup = String.valueOf(p.getCUP());
+                String[] row = {Nome_Prog, cup, Topic};
+                modelloProgetti.addRow(row);
+                InterfacciaProgetto.setText();
+            } else {
+                JOptionPane.showMessageDialog(null, "Qualcosa è andato storto!");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null , "Errore nel Database");
         }
+
     }
 
     /**
@@ -975,9 +1067,15 @@ public class GUImain extends JFrame {
         String[] prog = progs.split(" ");
         int row = table3.getSelectedRow();
         String Nome_Lab = (String) table3.getValueAt(row, 0);
-        laboratorioDAO.riassegnaProgetto(Nome_Lab, Integer.valueOf(prog[0]));
-        modelloLaboratori.setValueAt(prog[0], row, 2);
-        dialogo.setVisible(false);
+        try{
+            laboratorioDAO.riassegnaProgetto(Nome_Lab, Integer.valueOf(prog[0]));
+            modelloLaboratori.setValueAt(prog[0], row, 2);
+            dialogo.setVisible(false);
+        }catch (Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null , "Errore nel Database");
+        }
+
     }
 
     /**
@@ -990,20 +1088,26 @@ public class GUImain extends JFrame {
         int row = TabellaProgetti.getSelectedRow();
         int cup = Integer.valueOf((String) TabellaProgetti.getValueAt(row, 1));
         List<Laboratorio> labs = new ArrayList<>();
-        labs = laboratorioDAO.getLaboratori(cup);
-        int i = 0;
-        List<Dipendente> dips = new ArrayList<>();
-        while (i < labs.size()) {
-            dips.addAll(dipendenteDAO.getDirigentiLaboratorio(labs.get(i).getNome_Lab()));
-            i++;
+        try {
+            labs = laboratorioDAO.getLaboratori(cup);
+            int i = 0;
+            List<Dipendente> dips = new ArrayList<>();
+            while (i < labs.size()) {
+                dips.addAll(dipendenteDAO.getDirigentiLaboratorio(labs.get(i).getNome_Lab()));
+                i++;
+            }
+            i = 0;
+            while (i < dips.size()) {
+                ComboBox.addItem(dips.get(i).getId_dip() + " " + dips.get(i).getNome() + " " + dips.get(i).getCognome());
+                i++;
+            }
+            dialogo.add(ComboBox, BorderLayout.CENTER);
+            dialogo.setVisible(true);
+        }catch(Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null , "Errore nel Database");
         }
-        i = 0;
-        while (i < dips.size()) {
-            ComboBox.addItem(dips.get(i).getId_dip() + " " + dips.get(i).getNome() + " " + dips.get(i).getCognome());
-            i++;
-        }
-        dialogo.add(ComboBox, BorderLayout.CENTER);
-        dialogo.setVisible(true);
+
     }
 
     /**
@@ -1028,18 +1132,24 @@ public class GUImain extends JFrame {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Errore di Database");
         }
-        for (int i = 0; i < laboratorioDAO.countLab(); i++) {
-            Lab.addItem(NomiLab[i]);
+        try{
+            for (int i = 0; i < laboratorioDAO.countLab(); i++) {
+                Lab.addItem(NomiLab[i]);
+            }
+
+            int row = TabellaDipendenti.getSelectedRow();
+            int column = 2;//numero della colonna id_dip che è chiave esterna nel database
+            int columnlab = 4;//numero della colonna del laboratorio
+            String value = TabellaDipendenti.getModel().getValueAt(row, column).toString();
+            String nomeLaboratorio = TabellaDipendenti.getModel().getValueAt(row, columnlab).toString();
+            int index = Integer.valueOf(value);
+            dialog.add(Lab, BorderLayout.CENTER);
+            dialog.setVisible(true);
+        }catch (Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null , "Errore nel Database");
         }
 
-        int row = TabellaDipendenti.getSelectedRow();
-        int column = 2;//numero della colonna id_dip che è chiave esterna nel database
-        int columnlab = 4;//numero della colonna del laboratorio
-        String value = TabellaDipendenti.getModel().getValueAt(row, column).toString();
-        String nomeLaboratorio = TabellaDipendenti.getModel().getValueAt(row, columnlab).toString();
-        int index = Integer.valueOf(value);
-        dialog.add(Lab, BorderLayout.CENTER);
-        dialog.setVisible(true);
     }
 
     /**

@@ -7,6 +7,7 @@ import Model.Progetto;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class LaboratorioDAOImpl implements LaboratorioDAO{
     ConnectionController controller = new ConnectionController();
@@ -116,17 +117,18 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
      * @return
      */
     @Override
-    public int remove(String Nome) {
+    public int remove(String Nome) throws Exception{
         String sql = ("delete from laboratorio where laboratorio.nome_lab = '" + Nome + "'");
         int i = 0;
         try{
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
             i = stmt.executeUpdate(sql);
+            return i;
         }catch (SQLException e){
-            e.printStackTrace();
+           throw new Exception(e);
         }
-        return i;
+
     }
 
     /**
@@ -136,17 +138,18 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
      * @return
      */
     @Override
-    public int riassegnaDipendente(String Nome_Lab, int id_dip) {
+    public int riassegnaDipendente(String Nome_Lab, int id_dip) throws Exception{
         int c = 0;
         String sql = ("update Laboratorio set referente = " + id_dip + "where laboratorio.nome_lab = '" + Nome_Lab + "'");
         try{
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
             c = stmt.executeUpdate(sql);
+            return c;
         }catch(SQLException e){
-            e.printStackTrace();
+            throw new Exception(e);
         }
-        return c;
+
     }
 
     /**
@@ -156,17 +159,18 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
      * @return
      */
     @Override
-    public int riassegnaProgetto(String Nome_Lab, int Progetto) {
+    public int riassegnaProgetto(String Nome_Lab, int Progetto) throws Exception{
         int c = 0;
         String sql = ("update Laboratorio set progetto = " + Progetto + " where nome_lab = '" + Nome_Lab + "'");
         try{
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
             c = stmt.executeUpdate(sql);
+            return c;
         }catch(SQLException e){
-            e.printStackTrace();
+            throw new Exception(e);
         }
-        return c;
+
     }
 
     /**
@@ -175,7 +179,7 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
      * @return
      */
     @Override
-    public int countProgetti(int progetto) {
+    public int countProgetti(int progetto)throws Exception{
         int c = 0;
         String sql = ("Select count(*) as conto from laboratorio where laboratorio.progetto = " + progetto);
         try{
@@ -185,10 +189,11 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
             while (rs.next()){
                 c = rs.getInt("conto");
             }
+            return c;
         }catch(SQLException e){
-            e.printStackTrace();
+            throw new Exception(e);
         }
-        return c;
+
     }
 
     /**
@@ -197,7 +202,7 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
      * @return
      */
     @Override
-    public List<Laboratorio> getLaboratori(int cup) {
+    public List<Laboratorio> getLaboratori(int cup) throws Exception{
         List<Laboratorio> labs = new ArrayList<>();
         String sql = ("Select * from laboratorio where laboratorio.progetto = " + cup);
         try{
@@ -208,10 +213,11 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
                 Laboratorio lab = new Laboratorio(rs.getString("nome_lab"), rs.getString("topic") , rs.getInt("progetto"), rs.getInt("Referente") );
                 labs.add(lab);
             }
+            return labs;
         }catch (SQLException e){
-            e.printStackTrace();
+            throw new Exception(e);
         }
-        return labs;
+
     }
 
     /**
@@ -220,7 +226,7 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
      * @return
      */
     @Override
-    public int getReferenteLab(String nome_lab){
+    public int getReferenteLab(String nome_lab)throws Exception{
         int id_dip = 0;
         String sql = ("Select referente from laboratorio where laboratorio.nome_lab = '" + nome_lab + "'");
         try{
@@ -230,10 +236,11 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
             while(rs.next()){
                 id_dip = rs.getInt("referente");
             }
+            return id_dip;
         }catch(SQLException e){
-            e.printStackTrace();
+            throw new Exception(e);
         }
-        return id_dip;
+
     }
 
     /**
@@ -242,7 +249,7 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
      * @return
      */
     @Override
-    public int getProgetto(String NomeLab) {
+    public int getProgetto(String NomeLab) throws Exception{
         int cup = 0;
         String sql = ("Select progetto from laboratorio where laboratorio.nome_lab = '" + NomeLab + "'");
         try{
@@ -252,10 +259,11 @@ public class LaboratorioDAOImpl implements LaboratorioDAO{
             while (rs.next()){
                 cup = rs.getInt(cup);
             }
+            return cup;
         }catch(SQLException e){
-            e.printStackTrace();
+            throw new Exception(e);
         }
-        return cup;
+
     }
 
 }

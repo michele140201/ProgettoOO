@@ -42,7 +42,7 @@ public class ProgettoDAOImpl implements ProgettoDAO{
      * @return
      */
     @Override
-    public int GeneraCup() {
+    public int GeneraCup() throws Exception{
         int cup = 1;
         String sql = ("SELECT max(cup) as massimo from progetto");
         try{
@@ -52,9 +52,11 @@ public class ProgettoDAOImpl implements ProgettoDAO{
            while(rs.next()){
                cup = rs.getInt("massimo") + 1;
            }
+           return cup;
         }catch(SQLException e){
-            e.printStackTrace();        }
-        return cup;
+            throw new Exception(e);
+        }
+
     }
 
     /**
@@ -63,17 +65,18 @@ public class ProgettoDAOImpl implements ProgettoDAO{
      * @return
      */
     @Override
-    public int InserisciProgetto(Progetto p) {
+    public int InserisciProgetto(Progetto p)throws Exception {
         String sql = ("Insert into Progetto(CUP,Nome_p,topic) values ('"  + p.getCUP() + "','" + p.getNome_Prog() + "','" + p.getTopic() + "')");
         int i = 0;
         try {
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
             i = stmt.executeUpdate(sql);
+            return i;
         }catch (SQLException e){
-            e.printStackTrace();
+            throw new Exception(e);
         }
-        return i;
+
     }
     /**
      * Funzione per eliminare un progetto
@@ -81,17 +84,18 @@ public class ProgettoDAOImpl implements ProgettoDAO{
      * @return
      */
     @Override
-    public int EliminaProgetto(int cup) {
+    public int EliminaProgetto(int cup) throws Exception{
         String sql = ("Delete from progetto where progetto.cup = " + cup);
         int i = 0;
         try{
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
             i = stmt.executeUpdate(sql);
+            return i;
         }catch(SQLException e){
-            e.printStackTrace();
+           throw new Exception(e);
         }
-        return i;
+
     }
 
     /**
@@ -99,7 +103,7 @@ public class ProgettoDAOImpl implements ProgettoDAO{
      * @return
      */
     @Override
-    public int conta_progetti() {
+    public int conta_progetti()throws Exception {
         int i = 0;
         String sql = ("Select COUNT(*) as conto from progetto");
         try{
@@ -109,11 +113,10 @@ public class ProgettoDAOImpl implements ProgettoDAO{
             while(rs.next()){
                 i = rs.getInt("conto");
             }
-
+            return i;
         }catch(SQLException e){
-            e.printStackTrace();
+            throw new Exception(e);
         }
-        return i;
     }
 
     /**
@@ -123,17 +126,18 @@ public class ProgettoDAOImpl implements ProgettoDAO{
      * @return
      */
     @Override
-    public int setReferente(int id_dip, int cup) {
+    public int setReferente(int id_dip, int cup)throws Exception {
         int c = 0;
         String sql = ("Update progetto set referente = " + id_dip + "where cup = " + cup);
         try{
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
             c = stmt.executeUpdate(sql);
+            return c;
         }catch(SQLException e){
-            e.printStackTrace();
+            throw new Exception(e);
         }
-        return c;
+
     }
 
     /**
@@ -143,17 +147,17 @@ public class ProgettoDAOImpl implements ProgettoDAO{
      * @return
      */
     @Override
-    public int setResponsabile(int id_dip, int cup) {
+    public int setResponsabile(int id_dip, int cup) throws Exception{
         int c = 0;
         String sql = ("Update progetto set responsabile = " + id_dip + "where cup = " + cup);
         try{
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
             c = stmt.executeUpdate(sql);
+            return c;
         }catch(SQLException e){
-            e.printStackTrace();
+            throw new Exception(e);
         }
-        return c;
     }
 
     /**
@@ -162,7 +166,7 @@ public class ProgettoDAOImpl implements ProgettoDAO{
      * @return
      */
     @Override
-    public int getReferente(int cup) {
+    public int getReferente(int cup) throws Exception{
         int id_dip = 0;
         String sql = ("Select referente from progetto where progetto.cup = " + cup);
         try{
@@ -172,10 +176,11 @@ public class ProgettoDAOImpl implements ProgettoDAO{
             while(rs.next()){
                 id_dip = rs.getInt("referente");
             }
+            return id_dip;
         }catch(SQLException e){
-            e.printStackTrace();
+            throw new Exception(e);
         }
-        return id_dip;
+
     }
 
     /**
@@ -184,7 +189,7 @@ public class ProgettoDAOImpl implements ProgettoDAO{
      * @return
      */
     @Override
-    public int getResponsabile(int cup) {
+    public int getResponsabile(int cup)throws Exception {
         int id_dip = 0;
         String sql = ("Select responsabile from progetto where progetto.cup = " + cup);
         try{
@@ -194,9 +199,10 @@ public class ProgettoDAOImpl implements ProgettoDAO{
             while(rs.next()){
                 id_dip = rs.getInt("responsabile");
             }
+            return id_dip;
         }catch(SQLException e){
-            e.printStackTrace();
+            throw new Exception(e);
         }
-        return id_dip;
+
     }
 }

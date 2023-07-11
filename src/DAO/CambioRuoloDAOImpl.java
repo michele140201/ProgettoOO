@@ -17,7 +17,7 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO{
      * @return
      */
     @Override
-    public Date getDataCambio(int id_dip) {
+    public Date getDataCambio(int id_dip) throws Exception{
         Date data = null;
         String sql = ("Select * from Ruolo where Ruolo.id_dip = " + id_dip);
         try{
@@ -40,7 +40,7 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO{
      * @return
      */
     @Override
-    public int setDataPromozione(int id_dip) {
+    public int setDataPromozione(int id_dip) throws Exception {
         String data = LocalDate.now().toString();
         Date ora = Date.valueOf(data);
         String sql = ("Insert into Ruolo(id_dip,data_cambio) values ('" + id_dip + "','" + data + "')");
@@ -49,10 +49,11 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO{
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
             stmt.executeUpdate(sql);
+            return 0;
         }catch(SQLException e){
-            e.printStackTrace();
+            throw new Exception(e);
         }
-        return 0;
+
     }
 
     /**
@@ -61,16 +62,16 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO{
      * @return
      */
     @Override
-    public int removePromozione(int id_dip) {
+    public int removePromozione(int id_dip) throws Exception {
         String sql = ("Delete from Ruolo where ruolo.id_dip = "+id_dip);
         try{
             con = controller.ConnectionController();
             Statement stmt = con.createStatement();
             stmt.executeUpdate(sql);
+            return 0;
         }catch(SQLException e){
-            e.printStackTrace();
+            throw new Exception(e);
         }
-        return 0;
     }
 
 }
