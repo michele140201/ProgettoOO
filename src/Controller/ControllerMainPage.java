@@ -23,12 +23,12 @@ public class ControllerMainPage {
     private final CambioRuoloDAO cambioRuoloDAO;
     private GUImain guImain;
 
-    public ControllerMainPage(DipendenteDAO dipendenteDAO, ProgettoDAO progettoDAO, LaboratorioDAO laboratorioDAO, CambioRuoloDAO cambioRuoloDAO) throws Exception{
+    public ControllerMainPage(DipendenteDAO dipendenteDAO, ProgettoDAO progettoDAO, LaboratorioDAO laboratorioDAO, CambioRuoloDAO cambioRuoloDAO , GUImain guImain) throws Exception{
         this.dipendenteDAO = dipendenteDAO;
         this.cambioRuoloDAO = cambioRuoloDAO;
         this.laboratorioDAO = laboratorioDAO;
         this.progettoDAO = progettoDAO;
-
+        this.guImain = guImain;
         guImain.setDipendenti(dipendenteDAO.getDipendenti());
         //todo setlaboratori e set progetti
 

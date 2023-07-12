@@ -9,8 +9,9 @@ public class Applicazione {
         DipendenteDAO dipendenteDAO = new DipendenteDAOimpl(connectionController);
         LaboratorioDAO laboratorioDAO = new LaboratorioDAOImpl(connectionController);
         CambioRuoloDAO cambioRuoloDAO = new CambioRuoloDAOImpl(connectionController);
-        ControllerMainPage controllerMainPage  = new ControllerMainPage(dipendenteDAO, progettoDAO, laboratorioDAO, cambioRuoloDAO);
-        GUImain guimain = new GUImain(controllerMainPage);
+        GUImain guimain = new GUImain();
+        ControllerMainPage controllerMainPage  = new ControllerMainPage(dipendenteDAO, progettoDAO, laboratorioDAO, cambioRuoloDAO , guimain);
+        guimain.setController(controllerMainPage);
         guimain.setVisible(true);
     }
 }

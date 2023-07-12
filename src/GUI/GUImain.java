@@ -76,9 +76,7 @@ public class GUImain extends JFrame {
     private ControllerMainPage controllerMainPage;
     private JDialog dialogoAssegnazioneDipendenteLaboratorio;
 
-    public GUImain(ControllerMainPage controllerMainPage) {
-        this.controllerMainPage = controllerMainPage;
-
+    public GUImain() {
         setContentPane(PannelloPrincipale);
         setSize(1000, 300);
         setLocationRelativeTo(null);
@@ -613,6 +611,9 @@ public class GUImain extends JFrame {
             });
     }
 
+    public void setController(ControllerMainPage controller){
+        this.controllerMainPage = controller;
+    }
     private List<Progetto> getProgettiIdonei(){
         //todo
         return null;
