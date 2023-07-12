@@ -4,7 +4,6 @@ import GUI.GUImain;
 import Model.Dipendente;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,294 +17,133 @@ import Model.Progetto;
  * i DAO e l'interfaccia grafica
  */
 public class ControllerMainPage {
-    private ProgettoDAO progettoDAO;
-    private DipendenteDAO dipendenteDAO;
-    private LaboratorioDAO laboratorioDAO;
-    private CambioRuoloDAO cambioRuoloDAO;
+    private final ProgettoDAO progettoDAO;
+    private final DipendenteDAO dipendenteDAO;
+    private final LaboratorioDAO laboratorioDAO;
+    private final CambioRuoloDAO cambioRuoloDAO;
     private GUImain guImain;
-    public ControllerMainPage(DipendenteDAO dipendenteDAO ,ProgettoDAO progettoDAO , LaboratorioDAO laboratorioDAO , CambioRuoloDAO cambioRuoloDAO){
+
+    public ControllerMainPage(DipendenteDAO dipendenteDAO, ProgettoDAO progettoDAO, LaboratorioDAO laboratorioDAO, CambioRuoloDAO cambioRuoloDAO) throws Exception{
         this.dipendenteDAO = dipendenteDAO;
         this.cambioRuoloDAO = cambioRuoloDAO;
         this.laboratorioDAO = laboratorioDAO;
         this.progettoDAO = progettoDAO;
+
+        guImain.setDipendenti(dipendenteDAO.getDipendenti());
+        //todo setlaboratori e set progetti
+
+
     }
 
-    /**
-     * Funzione che si occupa della gestione dell'inserimento di un nuovo dipendente
-     *
-     * @param model
-     * @param Nome
-     * @param Cognome
-     * @param Dir
-     * @param data
-     * @param DatadiN
-     */
-    public void ButtonConferma(DefaultTableModel model, String Nome, String Cognome, boolean Dir, Date data, Date DatadiN) {
+    public void aggiungiDipendente(Dipendente dipendente) {
+
         try {
-            if (!Nome.matches("[A-Za-z]+") || !Cognome.matches("[A-Za-z]+")) throw new Exception();
-
-            Dipendente dip = new Dipendente(Nome, Cognome , Dir, data, DatadiN);
-            dipendenteDAO.insertDipendente(dip);
-            String nome, cognome, DataN, Laboratorio;
-            nome = dip.getNome();
-            cognome = dip.getCognome();
-            DataN = dip.getDataNascita().toString();
-            String ID = Integer.toString(dip.getId());
-            Laboratorio = dip.getLaboratorio();
-            String Dirigente;
-            String DataA = dip.getDataAssunzione().toString();
-            if (dip.isDirigente()) Dirigente = "SI";
-            else Dirigente = "NO";
-            String[] row = {nome, cognome, ID, DataN, Laboratorio, Dirigente, DataA};
-            model.addRow(row);
-            JOptionPane.showMessageDialog(null, "Dipendente Assunto!");
-        } catch (Exception e1) {
-
-            JOptionPane.showMessageDialog(null, "Inserisci le Credenziali Corrette!");
+            dipendenteDAO.insertDipendente(dipendente);
+            guImain.aggiungiDipendente(dipendente);
+            guImain.showInfoMessage("Dipendente Assunto!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            guImain.showErrorMessage("OPS! Qualcosa è andato storto");
         }
     }
 
-    /**
-     * funzione che si occupa del licenziamento di un dipendente
-     * ritorna 1 se avviene , 0 altrimenti
-     *
-     * @param model
-     * @param id
-     * @param NomeLab
-     * @param row
-     * @return
-     */
-    public int ButtonLicenzia(DefaultTableModel model, String id, String NomeLab, int row) {
-        int idDip = Integer.valueOf(id);
-        int i;
+    public void licenziaDipendente(Dipendente dipendente) {
         try {
-            if (idDip != laboratorioDAO.getIdReferente(NomeLab)) {
-                i = dipendenteDAO.removeDipendente(idDip);
-                if (i > 0) {
-                    JOptionPane.showMessageDialog(null, "Dipendente Licenziato! Poverino :(");
-                    return 1;
-                } else JOptionPane.showMessageDialog(null, "Qualcosa è andato storto!");
-                return 0;
+            if (dipendente.getId() != laboratorioDAO.getIdReferente(dipendente.getLaboratorio())) {
+                dipendenteDAO.removeDipendente(dipendente.getId());
+               guImain.showInfoMessage("Dipendente Licenziato! Poverino :(");
             } else {
-                JOptionPane.showMessageDialog(null, "Il Dipendente è Responsabile di Laboratorio");
-                return 0;
+                guImain.showErrorMessage("Il Dipendente è Responsabile di Laboratorio");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore nel Database");
-            return 0;
+            guImain.showErrorMessage("Errore nel Database");
         }
     }
 
-    /**
-     * funzione che permette il recupero di tutti i dipendenti
-     *
-     * @return
-     */
-    public List<Dipendente> getDipendenti() {
+    public void AssegnaLaboratorio(Dipendente dipendente ,String NuovoLab) {
         try {
-            List<Dipendente> Lista = dipendenteDAO.getDipendenti();
-            return Lista;
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore nel Database");
-            return null;
-        }
-    }
-
-    /**
-     * Funzione per assegnare un dipendente ad un laboratorio
-     *
-     * @param idDip
-     * @param NomeLab
-     * @param dialogo
-     * @param NuovoLab
-     */
-    public int AssegnaLaboratorio(int idDip, String NomeLab, JDialog dialogo, String NuovoLab) {
-        try {
-            if (idDip != laboratorioDAO.getIdReferente(NomeLab)) {
-                dipendenteDAO.setLaboratorio(NuovoLab, idDip);
-                return 1;
+            if (dipendente.getId() != laboratorioDAO.getIdReferente(dipendente.getLaboratorio())){
+                dipendenteDAO.setLaboratorio(NuovoLab, dipendente.getId());
             } else {
-                JOptionPane.showMessageDialog(null, "Il Dipendente è Responsabile di Laboratorio");
-                return 0;
+                guImain.showErrorMessage( "Il Dipendente è Responsabile di Laboratorio");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore nel Database");
-            return 0;
+            guImain.showErrorMessage("Errore nel Database");
         }
     }
 
-    /**
-     * elimina un laboratorio
-     *
-     * @param nome
-     * @return
-     */
-    public int EliminaSede(String nome) {
+    public void rimuovoLaboratorio(Laboratorio laboratorio) {
         try {
-            int i = laboratorioDAO.rimuovi(nome);
-            if (i > 0) {
-                JOptionPane.showMessageDialog(null, "Sede Eliminata");
-                return 1;
-            } else {
-                JOptionPane.showMessageDialog(null, "OPS, Qualcosa è andato storto!");
-                return 0;
-            }
+            laboratorioDAO.rimuovi(laboratorio.getNome());
+            guImain.showInfoMessage("Laboratorio Eliminato");
         } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore nel Database");
-            return 0;
+            guImain.showErrorMessage("Errore nel Database");
         }
+        //todo chiama la gui per aggiungere
     }
 
-    /**
-     * crea un laboratorio
-     *
-     * @param dialogo
-     * @param l
-     * @return
-     */
-    public int CreaNuovoLab(JDialog dialogo, Laboratorio laboratorio) {
+    public void creaLaboratorio(Laboratorio laboratorio) {
         try {
             laboratorioDAO.inserisci(laboratorio);
-            dialogo.setVisible(false);
-            JOptionPane.showMessageDialog(null, "Inserimento riuscito!");
-            return 1;
+            guImain.showInfoMessage("Inserimento Riuscito!");
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore nel Database");
-            return 0;
+            guImain.showErrorMessage("Errore nel Database");
         }
+        //todo chiama la gui per aggiungere
     }
 
     /**
      * elimina un progetto
      */
-    public int EliminaProgetto(int cup) {
+    public void EliminaProgetto(Progetto progetto) {
         try {
-            int ritorno = progettoDAO.rimuovi(cup);
-            if (ritorno == 1) {
-                JOptionPane.showMessageDialog(null, "Progetto Eliminato!");
-                return 1;
-            } else {
-                JOptionPane.showMessageDialog(null, "Ops, Qualcosa è andato storto!");
-                return 0;
-            }
+            progettoDAO.rimuovi(progetto.getCup());
+            guImain.showInfoMessage("Progetto Eliminato");
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore nel Database");
-            return 0;
+            guImain.showErrorMessage("Errore nel Database");
         }
     }
 
-    /**
-     * degrada un dipendente
-     *
-     * @param value
-     * @param idDip
-     * @return
-     */
-    public int Degrada(String value, int idDip) {
+
+    public void Degrada(Dipendente dipendente) {
         try {
-            if (value.equals("SI")) {
-                dipendenteDAO.degrada(idDip);
-                try {
-                    cambioRuoloDAO.removePromozione(idDip);
-                    return 1;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Errore nel Database");
-                    return 0;
-                }
+            if (dipendente.isDirigente()) {
+                dipendenteDAO.degrada(dipendente.getId());
+                cambioRuoloDAO.removePromozione(dipendente.getId());
             } else {
-                JOptionPane.showMessageDialog(null, "IMPOSSIBILE DEGRADARE!");
-                return 0;
+                guImain.showErrorMessage("IMPOSSIBILE DEGRADARE!");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore nel Database");
-            return 0;
+            guImain.showErrorMessage("Errore nel Database");
         }
     }
 
-    /**
-     * imposta il nuovo responsabile di un progetto
-     *
-     * @param id
-     * @param cup
-     * @return
-     */
-    public int setResponsabile(int id, int cup) {
+    public void setResponsabile(int id, int cup) {
         try {
             progettoDAO.setResponsabile(id, cup);
-            return 1;
+            guImain.showInfoMessage("Modifica Riuscita!");
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore nel Database");
-            return 0;
+            guImain.showErrorMessage("Errore nel Database");
         }
     }
 
-    /**
-     * imposta il nuovo referente
-     *
-     * @param idDip
-     * @param cup
-     * @return
-     */
-    public int setReferente(int idDip, int cup) {
+    public void setReferente(Dipendente dipendente , int cup) {
         try {
-            progettoDAO.setReferente(idDip, cup);
-            return 1;
+            progettoDAO.setReferente(dipendente.getId() , cup);
+            guImain.showInfoMessage("Aggiornamento Riuscito");
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore nel Database");
-            return 0;
+            guImain.showErrorMessage("Errore nel Database");
         }
     }
 
-    /**
-     * Assena un progetto ad un laboratorio
-     *
-     * @param Topic
-     * @return
-     */
-    public List<Progetto> AssegnaProgettoLaboratorio(String Topic) {
-        try {
-            int lung = progettoDAO.getNumeroTotale();
-            List<Progetto> Progetti = progettoDAO.getProgetti();
-            ArrayList<Progetto> ProgettiScelti = new ArrayList<>();
-            int i = 0;
-            while (i < lung) {
-                Progetto p = Progetti.get(i);
-                if (laboratorioDAO.getNumeroLaboratoriAssegnati(p.getCup()) < 3) {
-                    {
-                        if (p.getTopic().equals(Topic)) {
-                            ProgettiScelti.add(p);
-                        }
-                    }
-                }
-                i++;
-            }
-            i = 0;
-            lung = ProgettiScelti.size();
-            return ProgettiScelti;
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore di DataBase");
-            return null;
-        }
-    }
-
-    /**
-     * trova quando un dipendente è stato promosso a dirigente
-     *
-     * @param idDip
-     * @return
-     */
-    public Date DataCambio(int idDip) {
+    public Date getDataPromozione(int idDip) {
         try {
             Date dataCambio = cambioRuoloDAO.getDataPromozione(idDip);
             return dataCambio;
@@ -316,36 +154,21 @@ public class ControllerMainPage {
         }
     }
 
-    /**
-     * promuove un dipendente
-     *
-     * @param id
-     * @param value
-     * @return
-     */
-    public int Promuovi(int id, String value) {
+    public void promuovi(Dipendente dipendente){
         try {
-            if (value.equals("NO")) {
-                dipendenteDAO.promuovi(id);
-                cambioRuoloDAO.setDataPromozione(id);
-                return 1;
+            if (!dipendente.isDirigente()) {
+                dipendenteDAO.promuovi(dipendente.getId());
+                cambioRuoloDAO.setDataPromozione(dipendente.getId());
+                guImain.showInfoMessage("Promosso!")
             } else {
-                JOptionPane.showMessageDialog(null, "IMPOSSIBILE PROMUOVERE!");
-                return 0;
+                guImain.showErrorMessage("IMPOSSIBILE PROMUOVERE!");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore nel Database");
-            return 0;
+            guImain.showErrorMessage("Errore nel Database")
         }
     }
 
-    /**
-     * ottiene i referenti possibili per il laboratorio scelto
-     *
-     * @param cup
-     * @return
-     */
     public List<Dipendente> getReferenti(int cup) {
         try {
             List<Laboratorio> labs = laboratorioDAO.getLaboratoriAssegnati(cup);
@@ -367,27 +190,6 @@ public class ControllerMainPage {
         }
     }
 
-    /**
-     * ottiene i progetti disponibili per il laboratorio scelto
-     *
-     * @return
-     */
-    public List<Progetto> getProgetti() {
-        try {
-            List<Progetto> Progetti = progettoDAO.getProgetti();
-            return Progetti;
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore nel Database");
-            return null;
-        }
-    }
-
-    /**
-     * ottiene tutti i laboratori
-     *
-     * @return
-     */
     public List<Laboratorio> getLaboratori() {
         try {
             List<Laboratorio> Laboratori = laboratorioDAO.getLaboratoriAssegnati();
@@ -399,12 +201,6 @@ public class ControllerMainPage {
         }
     }
 
-    /**
-     * Assegna il nuovo referente del progetto
-     *
-     * @param NomeLab
-     * @return
-     */
     public List<Dipendente> getSenior(String NomeLab) {
         try {
             List<Dipendente> DIR = dipendenteDAO.getSenior(NomeLab);
@@ -416,11 +212,6 @@ public class ControllerMainPage {
         }
     }
 
-    /**
-     * ottiene tutti i dipendenti da assegnare
-     *
-     * @return
-     */
     public List<Dipendente> getDipendentiAssegnare() {
         try {
             List<Dipendente> Lista = dipendenteDAO.getDirigenti();
@@ -432,67 +223,36 @@ public class ControllerMainPage {
         }
     }
 
-    /**
-     * riassegna un dipendente ad un nuovo laboratorio
-     *
-     * @param NomeLab
-     * @param idDip
-     * @return
-     */
-    public int riassegnaDipendente(String NomeLab, int idDip) {
+    public void riassegnaDipendente(Laboratorio laboratorio, Dipendente dipendente) {
         try {
-            laboratorioDAO.riassegnaDipendente(NomeLab, idDip);
-            return 1;
+            laboratorioDAO.riassegnaDipendente(laboratorio.getNome(), dipendente.getId());
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Errore nel Database");
-            return 0;
         }
     }
 
-    /**
-     * crea un nuovo progetto
-     *
-     * @param p
-     * @return
-     */
-    public void InserisciProgetto(Progetto p) {
+    public void inserisciProgetto(Progetto p) {
         try {
             progettoDAO.inserisci(p);
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore nel Database");
+            guImain.showErrorMessage("Errore nel Database");
         }
     }
 
-    /**
-     * assegna un nuovo progetto ad un laboratorio scelto
-     *
-     * @param NomeLab
-     * @param idDip
-     * @return
-     */
-    public int AssegnaProgetto(String NomeLab, int idDip) {
+    public void assegnaProgetto(Laboratorio laboratorio, Progetto progetto) {
         try {
-            laboratorioDAO.riassegnaProgetto(NomeLab, idDip);
-            return 1;
-
+            laboratorioDAO.riassegnaProgetto(laboratorio.getNome(), progetto.getCup());
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore nel Database");
-            return 0;
+            guImain.showErrorMessage("Errore nel Database");
         }
     }
 
-    /**
-     * trova i dirigenti del laboratorio
-     *
-     * @param cup
-     * @return
-     */
-    public List<Dipendente> ResponsabiliLaboratorio(int cup) {
+    public List<Dipendente> getResponsabiliPossibili(Progetto progetto) {
         try {
-            List<Laboratorio> labs = laboratorioDAO.getLaboratoriAssegnati(cup);
+            List<Laboratorio> labs = laboratorioDAO.getLaboratoriAssegnati(progetto.getCup());
             int i = 0;
             List<Dipendente> dips = new ArrayList<>();
             while (i < labs.size()) {

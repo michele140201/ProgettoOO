@@ -65,13 +65,13 @@ public class ProgettoDAOImpl implements ProgettoDAO {
     /**
      * Funzione per inserire un proggetto
      *
-     * @param p
+     * @param progetto
      * @return
      */
     @Override
-    public void inserisci(Progetto p) throws Exception {
-        p.setCup(generaCup());
-        String sql = ("Insert into Progetto(CUP,Nome_p) values ('" + p.getCup() + "','" + p.getNome() +  "')");
+    public void inserisci(Progetto progetto) throws Exception {
+        progetto.setCup(generaCup());
+        String sql = ("Insert into Progetto(CUP,Nome_p) values ('" + progetto.getCup() + "','" + progetto.getNome() +  "')");
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
@@ -126,14 +126,14 @@ public class ProgettoDAOImpl implements ProgettoDAO {
     /**
      * Funzione per impostare il nuovo referente di un progetto
      *
-     * @param idDip
+     * @param id
      * @param cup
      * @return
      */
     @Override
-    public void setReferente(int idDip, int cup) throws Exception {
+    public void setReferente(int id, int cup) throws Exception {
 
-        String sql = ("Update progetto set referente = " + idDip + "where cup = " + cup);
+        String sql = ("Update progetto set referente = " + id + "where cup = " + cup);
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
@@ -148,14 +148,14 @@ public class ProgettoDAOImpl implements ProgettoDAO {
     /**
      * Funzione per settare un nuovo dirigente di un progetto
      *
-     * @param idDip
+     * @param id
      * @param cup
      * @return
      */
     @Override
-    public void setResponsabile(int idDip, int cup) throws Exception {
+    public void setResponsabile(int id , int cup) throws Exception {
 
-        String sql = ("Update progetto set responsabile = " + idDip + "where cup = " + cup);
+        String sql = ("Update progetto set responsabile = " + id + "where cup = " + cup);
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();

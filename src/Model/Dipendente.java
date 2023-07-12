@@ -19,6 +19,10 @@ public class Dipendente {
         this(nome, cognome, id, dirigente, dataAssunzione, dataNascita, null);
     }
 
+    public Dipendente(String nome, String cognome , boolean dirigente, Date dataAssunzione, Date dataNascita) {
+        this(nome, cognome, 0 , dirigente, dataAssunzione, dataNascita, null);
+    }
+
 
     public Dipendente(String nome, String cognome, int id, boolean dirigente, Date dataAssunzione, Date dataNascita, String laboratorio) {
         setNome(nome);

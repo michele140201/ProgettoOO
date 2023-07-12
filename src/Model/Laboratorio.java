@@ -14,6 +14,11 @@ public class Laboratorio {
         setResponsabile(responsabile);
     }
 
+    @Override
+    public String toString() {
+        return getNome();
+    }
+
     public Laboratorio(String nome, Topic topic) {
         setNome(nome);
         setTopic(topic);

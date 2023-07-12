@@ -99,13 +99,13 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
      * Riassegnazione di un nuovo progetto
      *
      * @param nome
-     * @param Progetto
+     * @param cup
      * @return
      */
     @Override
-    public void riassegnaProgetto(String nome, int Progetto) throws Exception {
+    public void riassegnaProgetto(String nome, int cup) throws Exception {
 
-        String sql = ("update Laboratorio set progetto = " + Progetto + " where nome_lab = '" + nome + "'");
+        String sql = ("update Laboratorio set progetto = " + cup + " where nome_lab = '" + nome + "'");
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
