@@ -180,7 +180,7 @@ public class GUImain extends JFrame {
         InserimentoProgettoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ButtonInserimentoProgetto(dialogoInserimentoProgetto);
+                ButtonInserimentoProgetto();
             }
         });
         //ACTION LISTENER DI LABORATORIO
@@ -201,13 +201,14 @@ public class GUImain extends JFrame {
         assegnaReferenteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ButtonAssegnaReferente(dialogoAssegnazioneReferente);
+                ButtonAssegnaReferente();
             }
         });
         ConfermaReferenteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ButtonConfermaReferente(dialogoAssegnazioneReferente);
+                Dipendente dipendente = (Dipendente) ComboBox.getSelectedItem();
+                controllerMainPage.riassegnaDipendente(getLaboratorioSelezionato(), dipendente);
             }
         });
         AssegnazioneProgettoButton.addActionListener(new ActionListener() {
@@ -216,12 +217,13 @@ public class GUImain extends JFrame {
                 ButtonAssegnazioneProgetto(DialogoAssegnazioneProgetto);
             }
         });
-        DialogoReferenteProgettiButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ButtonDialogoReferenteProgetti(dialogoProgetti);
-
-            }
+        DialogoReferenteProgettiButton.addActionListener(event->{
+                ComboBox.removeAllItems();
+                Progetto progetto = getProgettoSelezionato();
+                List<Dipendente> dipendenti = controllerMainPage.getReferenti(progetto);
+                for (Dipendente dipendente : dipendenti) {
+                    ComboBox.addItem(dipendente);
+                }
         });
         assegnaProgettoButton.addActionListener(new ActionListener() {
             @Override
@@ -229,11 +231,9 @@ public class GUImain extends JFrame {
                 ButtonAssegnaProgettoLaboratorio(DialogoAssegnazioneProgetto);
             }
         });
-        AssegnaReferenteProgettiButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ButtonAssegnaReferenteProgetti(dialogoProgetti);
-            }
+        AssegnaReferenteProgettiButton.addActionListener(event-> {
+                Dipendente dipendente = (Dipendente) ComboBox.getSelectedItem();
+                controllerMainPage.setReferente(dipendente , getProgettoSelezionato());
         });
         assegnaResponsabileButton.addActionListener(new ActionListener() {
             @Override
@@ -244,7 +244,8 @@ public class GUImain extends JFrame {
         ConfermaResponsabileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ButtonConfermaResponsabile(dialogoAssegnazioneResponabile);
+                Dipendente dipendente =(Dipendente) ComboBox.getSelectedItem();
+                controllerMainPage.setResponsabile(dipendente, getProgettoSelezionato());
             }
         });
     }
@@ -280,45 +281,9 @@ public class GUImain extends JFrame {
         dialogo.add(new JLabel(domanda), BorderLayout.PAGE_START);
         dialogo.add(conferma, BorderLayout.PAGE_END);
         dialogo.pack();
+        return dialogo;
     }
 
-    public void ButtonConfermaResponsabile(JDialog dialogo) {
-        String values = (String) ComboBox.getSelectedItem();
-        String[] id = values.split(" ");
-        int row = tabellaProgetti.getSelectedRow();
-        int cup = Integer.valueOf((String) tabellaProgetti.getValueAt(row, 1));
-        int idDip = Integer.valueOf(id[0]);
-        int i = controllerMainPage.setResponsabile(idDip, cup);
-        if (i > 0) {
-            modelloProgetti.setValueAt(idDip, row, 4);
-            dialogo.setVisible(false);
-        }
-    }
-
-    /**
-     * Funzione del bottone per confermare il referente dei progetti selezionato
-     *
-     * @param dialogo
-     */
-    public void ButtonAssegnaReferenteProgetti(JDialog dialogo) {
-        String values = (String) ComboBox.getSelectedItem();
-        String[] id = values.split(" ");
-        int row = tabellaProgetti.getSelectedRow();
-        int cup = Integer.valueOf((String) tabellaProgetti.getValueAt(row, 1));
-        int i = controllerMainPage.setReferente(Integer.valueOf(id[0]), cup);
-        if (i > 0) {
-            modelloProgetti.setValueAt(id[0], row, 3);
-            dialogo.setVisible(false);
-        }
-
-    }
-
-    /**
-     * Funzione per l'apertura della finestra di dialogo per l'assegnazione di un progetto ad un laboratorio
-     * che abbia lo stesso topic del progetto
-     *
-     * @param dialogo
-     */
     public void ButtonAssegnaProgettoLaboratorio(JDialog dialogo) {
         ComboBox.removeAllItems();
         int row = tabellaLaboratori.getSelectedRow();
@@ -339,27 +304,15 @@ public class GUImain extends JFrame {
         }
     }
 
-    /**
-     * Funzione del bottone per l'apertura della finestra di dialogo per assegnare un referente
-     *
-     * @param dialogo
-     */
-    public void ButtonAssegnaReferente(JDialog dialogo) {
+    public void ButtonAssegnaReferente() {
         ComboBox.removeAllItems();
         int row = tabellaLaboratori.getSelectedRow();
         System.out.println(row);
         String NomeLab = (String) tabellaLaboratori.getValueAt(row, 0);
-        List<Dipendente> Referenti = controllerMainPage.getSenior(NomeLab);
-        if (Referenti.size() > 0) {
-            for (int i = 0; i < Referenti.size(); i++) {
-
-                ComboBox.addItem(Referenti.get(i).getId() + " " + Referenti.get(i).getCognome() + " " + Referenti.get(i).getNome());
+        List<Dipendente> dipendenti = controllerMainPage.getSenior(NomeLab);
+            for (Dipendente dipendente : dipendenti) {
+                ComboBox.addItem(dipendente);
             }
-            dialogo.add(ComboBox, BorderLayout.CENTER);
-            dialogo.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "Nessun referente da assegnare");
-        }
     }
 
     /**
@@ -405,56 +358,11 @@ public class GUImain extends JFrame {
 
     }
 
-    public void ButtonDialogoReferenteProgetti(JDialog dialogo) {
-        ComboBox.removeAllItems();
-        int row = tabellaProgetti.getSelectedRow();
-        int cup = Integer.valueOf((String) tabellaProgetti.getValueAt(row, 1));
-        List<Dipendente> dips = controllerMainPage.getReferenti(cup);
-        int i = 0;
-        if (dips.size() > 0) {
-            while (i < dips.size()) {
-                ComboBox.addItem(dips.get(i).getId() + " " + dips.get(i).getNome() + " " + dips.get(i).getCognome());
-                i++;
-            }
-            dialogo.add(ComboBox, BorderLayout.CENTER);
-            dialogo.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "Nessun Referente da Assegnare");
-        }
-    }
 
-    public void ButtonConfermaReferente() {
-
-        String dirig = (String) ComboBox.getSelectedItem();
-        String[] split = dirig.split(" ");
-        int row = tabellaLaboratori.getSelectedRow();
-        String NomeLab = (String) tabellaLaboratori.getValueAt(row, 0);
-        int idDip = Integer.valueOf(split[0]);
-
-        int i = controllerMainPage.riassegnaDipendente(NomeLab, idDip);
-        if (i > 0) {
-            modelloLaboratori.setValueAt(split[0], row, 3);
-            dialogo.setVisible(false);
-        }
-    }
-
-    /**
-     * Funzione del bottone per la creazione di un nuovo progetto
-     *
-     * @param dialogo
-     */
-    public void ButtonInserimentoProgetto(JDialog dialogo) {
+    public void ButtonInserimentoProgetto() {
         Progetto progetto = InterfacciaProgetto.getProgetto();
         controllerMainPage.inserisciProgetto(progetto);
-        dialogo.setVisible(false);
-            JOptionPane.showMessageDialog(null, "Inserimento riuscito!");
-            String NomeProg = progetto.getNome();
-            String Topic = progetto.getTopic();
-            String cup = String.valueOf(progetto.getCup());
-            String[] row = {NomeProg, cup, Topic};
-            modelloProgetti.addRow(row);
-            InterfacciaProgetto.clear();
-            //todo
+        InterfacciaProgetto.clear();
     }
 
     /**
@@ -463,17 +371,8 @@ public class GUImain extends JFrame {
      * @param dialogo
      */
     public void ButtonAssegnazioneProgetto(JDialog dialogo) {
-        String progs = (String) ComboBox.getSelectedItem();
-        String[] prog = progs.split(" ");
-        int idDip = Integer.valueOf(prog[0]);
-        int row = tabellaLaboratori.getSelectedRow();
-        String NomeLab = (String) tabellaLaboratori.getValueAt(row, 0);
-        int i = controllerMainPage.assegnaProgetto(NomeLab, idDip);
-        if (i > 0) {
-            modelloLaboratori.setValueAt(prog[0], row, 2);
-            dialogo.setVisible(false);
-        }
-
+       Progetto progetto = (Progetto) ComboBox.getSelectedItem();
+        controllerMainPage.assegnaProgetto(getLaboratorioSelezionato(), progetto);
     }
 
     /**
@@ -483,22 +382,12 @@ public class GUImain extends JFrame {
      */
     public void ButtonAssegnaResponsabile(JDialog dialogo) {
         ComboBox.removeAllItems();
-        int row = tabellaProgetti.getSelectedRow();
-        int cup = Integer.valueOf((String) tabellaProgetti.getValueAt(row, 1));
-        List<Dipendente> dips = controllerMainPage.getResponsabiliPossibili(cup);
-        if (dips.size() > 0) {
-            int i = 0;
-            while (i < dips.size()) {
-                ComboBox.addItem(dips.get(i).getId() + " " + dips.get(i).getNome() + " " + dips.get(i).getCognome());
-                i++;
+        List<Dipendente> dipendenti = controllerMainPage.getResponsabiliPossibili(getProgettoSelezionato());
+            for (Dipendente dipendente : dipendenti) {
+                ComboBox.addItem(dipendente);
             }
             dialogo.add(ComboBox, BorderLayout.CENTER);
             dialogo.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "Nessun Resposnabile da Assegnare");
-        }
-
-
     }
 
     /**
@@ -726,6 +615,7 @@ public class GUImain extends JFrame {
 
     private List<Progetto> getProgettiIdonei(){
         //todo
+        return null;
         /*public List<Progetto> getProgettiIdonei(Laboratorio.Topic topic) {
             try {
                 int lung = progettoDAO.getNumeroTotale();

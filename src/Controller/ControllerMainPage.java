@@ -123,9 +123,9 @@ public class ControllerMainPage {
         }
     }
 
-    public void setResponsabile(int id, int cup) {
+    public void setResponsabile(Dipendente dipendente, Progetto progetto) {
         try {
-            progettoDAO.setResponsabile(id, cup);
+            progettoDAO.setResponsabile(dipendente.getId() , progetto.getCup());
             guImain.showInfoMessage("Modifica Riuscita!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -133,9 +133,9 @@ public class ControllerMainPage {
         }
     }
 
-    public void setReferente(Dipendente dipendente , int cup) {
+    public void setReferente(Dipendente dipendente , Progetto progetto) {
         try {
-            progettoDAO.setReferente(dipendente.getId() , cup);
+            progettoDAO.setReferente(dipendente.getId() , progetto.getCup());
             guImain.showInfoMessage("Aggiornamento Riuscito");
         } catch (Exception e) {
             e.printStackTrace();
@@ -169,9 +169,9 @@ public class ControllerMainPage {
         }
     }
 
-    public List<Dipendente> getReferenti(int cup) {
+    public List<Dipendente> getReferenti(Progetto progetto) {
         try {
-            List<Laboratorio> labs = laboratorioDAO.getLaboratoriAssegnati(cup);
+            List<Laboratorio> labs = laboratorioDAO.getLaboratoriAssegnati(progetto.getCup());
             int i = 0;
             List<Dipendente> dips = new ArrayList<>();
             while (i < labs.size()) {

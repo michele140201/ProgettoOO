@@ -9,6 +9,10 @@ public class Progetto {
     private String referente;
     private String responsabile;
 
+    @Override
+    public String toString() {
+        return getNome();
+    }
 
     public Progetto(int cup, String nome, String referente, String responsabile) {
         this(nome);

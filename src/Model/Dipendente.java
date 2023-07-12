@@ -23,6 +23,13 @@ public class Dipendente {
         this(nome, cognome, 0 , dirigente, dataAssunzione, dataNascita, null);
     }
 
+    @Override
+    public String toString() {
+        return "Dipendente{" +
+                "nome='" + nome + '\'' +
+                ", cognome='" + cognome + '\'' +
+                '}';
+    }
 
     public Dipendente(String nome, String cognome, int id, boolean dirigente, Date dataAssunzione, Date dataNascita, String laboratorio) {
         setNome(nome);
