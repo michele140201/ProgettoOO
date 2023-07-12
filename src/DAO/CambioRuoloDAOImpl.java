@@ -7,8 +7,10 @@ import java.time.LocalDate;
 
 
 public class CambioRuoloDAOImpl implements CambioRuoloDAO {
-    ConnectionController controller = new ConnectionController();
-    Connection con;
+    private ConnectionController connectionController;
+    public CambioRuoloDAOImpl(ConnectionController connectionController){
+        this.connectionController = connectionController;
+    }
 
     /**
      * Funzione per vedere quando un dipendente è
@@ -18,20 +20,20 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO {
      * @return
      */
     @Override
-    public Date getDataCambio(int idDip) throws Exception {
+    public Date getDataPromozione(int idDip) throws Exception {
         Date data = null;
         String sql = ("Select * from Ruolo where Ruolo.id_dip = " + idDip);
         try {
-            con = controller.ConnectionController();
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                data = rs.getDate("data_cambio");
+            Connection connection = connectionController.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                data = resultSet.getDate("data_cambio");
             }
+            return data;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new Exception(e);
         }
-        return data;
     }
 
     /**
@@ -42,16 +44,14 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO {
      * @return
      */
     @Override
-    public int setDataPromozione(int idDip) throws Exception {
+    public void setDataPromozione(int idDip) throws Exception {
         String data = LocalDate.now().toString();
-        Date ora = Date.valueOf(data);
         String sql = ("Insert into Ruolo(id_dip,data_cambio) values ('" + idDip + "','" + data + "')");
 
         try {
-            con = controller.ConnectionController();
-            Statement stmt = con.createStatement();
-            stmt.executeUpdate(sql);
-            return 0;
+            Connection connection = connectionController.getConnection();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
         } catch (SQLException e) {
             throw new Exception(e);
         }
@@ -65,13 +65,12 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO {
      * @return
      */
     @Override
-    public int removePromozione(int idDip) throws Exception {
+    public void removePromozione(int idDip) throws Exception {
         String sql = ("Delete from Ruolo where ruolo.id_dip = " + idDip);
         try {
-            con = controller.ConnectionController();
-            Statement stmt = con.createStatement();
-            stmt.executeUpdate(sql);
-            return 0;
+            Connection connection = connectionController.getConnection();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
         } catch (SQLException e) {
             throw new Exception(e);
         }

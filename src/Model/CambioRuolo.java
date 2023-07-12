@@ -1,6 +1,5 @@
 package Model;
 
-import javax.xml.crypto.Data;
 import java.util.Date;
 
 /**
@@ -9,27 +8,27 @@ import java.util.Date;
  * non calcolabile
  */
 public class CambioRuolo {
-    private int id_dip;
-    private Date DataCambio;
+    private int idDipendente;
+    private Date data;
 
-    public CambioRuolo(int id_dip, Date DataCambio) {
-        this.id_dip = id_dip;
-        this.DataCambio = DataCambio;
+    public CambioRuolo(int idDipendente, Date data) {
+        setIdDipendente(idDipendente);
+        setData(data);
     }
 
-    public Date getDataCambio() {
-        return DataCambio;
+    public Date getData() {
+        return data;
     }
 
-    public void setDataCambio(Date dataCambio) {
-        DataCambio = dataCambio;
+    public void setData(Date data) {
+        this.data = data;
     }
 
-    public int getId_dip() {
-        return id_dip;
+    public int getIdDipendente() {
+        return idDipendente;
     }
 
-    public void setId_dip(int id_dip) {
-        this.id_dip = id_dip;
+    public void setIdDipendente(int idDipendente) {
+        this.idDipendente = idDipendente;
     }
 }

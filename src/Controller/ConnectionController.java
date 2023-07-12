@@ -2,31 +2,20 @@ package Controller;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 
 public class ConnectionController {
-    Connection con = null;
-    String dbname = "Progetto";
-    String username = "postgres";
-    String password = "Girafarig20";
+    private final String dbname = "jdbc:postgresql://localhost:5432/Progetto";
+    private final String username = "postgres";
+    private final String password = "Girafarig20";
 
-    public Connection ConnectionController() {
-        Connection conn = null;
+    public ConnectionController() throws ClassNotFoundException {
+        Class.forName("org.postgresql.Driver");
+    }
 
-        /**
-         * Funzione per connettersi al database
-         * @param db_name
-         * @param user
-         * @param pass
-         * @return
-         */
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/" + dbname, username, password);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return conn;
+    public Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(dbname, username, password);
     }
 
 }

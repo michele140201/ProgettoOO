@@ -1,66 +1,55 @@
 package Model;
 
-import java.util.*;
 /**
  * Creazione del model Progetto con getter e setter
  */
 public class Progetto {
-    private int CUP;
-    private String NomeProg;
-    private String Referente;
-    private String Dirigente;
-    private String Topic;
+    private int cup;
+    private String nome;
+    private String referente;
+    private String responsabile;
 
 
-    public Progetto(int CUP, String nome_Prog, String referente, String dirigente, String topic) {
-        this.CUP = CUP;
-        NomeProg = nome_Prog;
-        Referente = referente;
-        Dirigente = dirigente;
-        Topic = topic;
+    public Progetto(int cup, String nome, String referente, String responsabile) {
+        this(nome);
+        setCup(cup);
+        setReferente(referente);
+        setResponsabile(responsabile);
     }
 
-    public Progetto() {
-
+    public Progetto(String nome) {
+        setNome(nome);
     }
 
-    public int getCUP() {
-        return CUP;
+    public int getCup() {
+        return cup;
     }
 
-    public void setCUP(int CUP) {
-        this.CUP = CUP;
+    public void setCup(int cup) {
+        this.cup = cup;
     }
 
-    public String getNomeProg() {
-        return NomeProg;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNomeProg(String nome_Prog) {
-        NomeProg = nome_Prog;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getReferente() {
-        return Referente;
+        return referente;
     }
 
     public void setReferente(String referente) {
-        Referente = referente;
+        this.referente = referente;
     }
 
-    public String getDirigente() {
-        return Dirigente;
+    public String getResponsabile() {
+        return responsabile;
     }
 
-    public void setDirigente(String dirigente) {
-        Dirigente = dirigente;
-    }
-
-    public String getTopic() {
-        return Topic;
-    }
-
-    public void setTopic(String topic) {
-        Topic = topic;
+    public void setResponsabile(String responsabile) {
+        this.responsabile = responsabile;
     }
 }

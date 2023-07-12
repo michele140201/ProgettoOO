@@ -1,6 +1,5 @@
 package Model;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -8,96 +7,83 @@ import java.util.Date;
  */
 public class Dipendente {
 
-        private String nome ;
-        private String cognome ;
-        private int idDip ;
-        private boolean Dirigente;
-        private Date Assunzione ;
-        private Date Data_nascita;
-        private String Laboratorio;
-        public Dipendente(String nome, String cognome, int idDip, boolean dirigente, Date assunzione, Date data_nascita) {
-                this.nome = nome;
-                this.cognome = cognome;
-                this.idDip = idDip;
-                Dirigente = dirigente;
-                Assunzione = assunzione;
-                Data_nascita = data_nascita;
-                Laboratorio = "Non Assegnato";
-        }
+    private String nome;
+    private String cognome;
+    private int id;
+    private boolean dirigente;
+    private Date dataAssunzione;
+    private Date dataNascita;
+    private String laboratorio;
+
+    public Dipendente(String nome, String cognome, int id, boolean dirigente, Date dataAssunzione, Date dataNascita) {
+        this(nome, cognome, id, dirigente, dataAssunzione, dataNascita, null);
+    }
 
 
-        public Dipendente(String nome, String cognome, int idDip, boolean dirigente, Date assunzione, Date data_nascita, String laboratorio) {
-                this.nome = nome;
-                this.cognome = cognome;
-                this.idDip = idDip;
-                Dirigente = dirigente;
-                Assunzione = assunzione;
-                Data_nascita = data_nascita;
-                if(laboratorio!=null) Laboratorio = laboratorio;
-                else Laboratorio = "Non Assegnato";
-        }
+    public Dipendente(String nome, String cognome, int id, boolean dirigente, Date dataAssunzione, Date dataNascita, String laboratorio) {
+        setNome(nome);
+        setCognome(cognome);
+        setId(id);
+        setDirigente(dirigente);
+        setDataAssunzione(dataAssunzione);
+        setDataNascita(dataNascita);
+        setLaboratorio(laboratorio);
+    }
 
+    public String getLaboratorio() {
+        return laboratorio;
+    }
 
+    public void setLaboratorio(String laboratorio) {
+        if (laboratorio != null) this.laboratorio = laboratorio;
+        else this.laboratorio = "Non Assegnato";
+    }
 
+    public Date getDataNascita() {
+        return dataNascita;
+    }
 
+    public void setDataNascita(Date dataNascita) {
+        this.dataNascita = dataNascita;
+    }
 
+    public Date getDataAssunzione() {
+        return dataAssunzione;
+    }
 
-        public void CambioLab(String Nuovo_Lab){Laboratorio = Nuovo_Lab;}
-        public void NuovoDir(){Dirigente = true;}
+    public void setDataAssunzione(Date dataAssunzione) {
+        this.dataAssunzione = dataAssunzione;
+    }
 
-        public String getLaboratorio() {
-                return Laboratorio;
-        }
+    public boolean isDirigente() {
+        return dirigente;
+    }
 
-        public void setLaboratorio(String laboratorio) {
-                Laboratorio = laboratorio;
-        }
+    public void setDirigente(boolean dirigente) {
+        this.dirigente = dirigente;
+    }
 
-        public Date getData_nascita() {
-                return Data_nascita;
-        }
+    public int getId() {
+        return id;
+    }
 
-        public void setData_nascita(Date data_nascita) {
-                Data_nascita = data_nascita;
-        }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-        public Date getAssunzione() {
-                return Assunzione;
-        }
+    public String getNome() {
+        return nome;
+    }
 
-        public void setAssunzione(Date anzianita) {
-                Assunzione = anzianita;
-        }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-        public boolean isDirigente() {
-                return Dirigente;
-        }
+    public String getCognome() {
+        return cognome;
+    }
 
-        public void setDirigente(boolean dirigente) {
-                Dirigente = dirigente;
-        }
-
-        public int getidDip() {
-                return idDip;
-        }
-
-        public void setIdDip(int idDip) {
-                this.idDip = idDip;
-        }
-
-        public String getNome() {
-                return nome;
-        }
-
-        public void setNome(String nome) {
-                this.nome = nome;
-        }
-
-        public String getCognome() {
-                return cognome;
-        }
-
-        public void setCognome(String cognome) {
-                this.cognome = cognome;
-        }
+    public void setCognome(String cognome) {
+        this.cognome = cognome;
+    }
 }

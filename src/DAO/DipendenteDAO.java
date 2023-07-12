@@ -1,21 +1,16 @@
 package DAO;
 import Model.Dipendente;
 
-import java.util.Date;
 import java.util.List;
 
 public interface DipendenteDAO {
-    List<Dipendente> getDipendente() throws Exception;
-    int removeDipendente(int id_dip) throws Exception ;
-    int insertDipendente(Dipendente nuovodip)throws Exception;
-    int count()throws Exception;
-    int IdDip()throws Exception;
-    int setLaboratorio(String nome_lab , int id)throws Exception;
-    int promuovi(int id_dip)throws Exception;
-    int degrada(int id_dip)throws Exception;
-    List<Dipendente> getDir()throws Exception;
-    Date DataAssunzione(int id_dip)throws Exception;
-    List<Dipendente> getSenior(String Nome_lab)throws Exception;
-    int countSenior(String Nome_lab)throws Exception;
-    List<Dipendente> getDirigentiLaboratorio(String Nome_lab)throws Exception;
+    List<Dipendente> getDipendenti() throws Exception;
+    void removeDipendente(int id) throws Exception ;
+    void insertDipendente(Dipendente dipendente)throws Exception;
+    void setLaboratorio(String nome_lab , int id)throws Exception;
+    void promuovi(int id_dip)throws Exception;
+    void degrada(int id_dip)throws Exception;
+    List<Dipendente> getDirigenti()throws Exception;
+    List<Dipendente> getSenior(String nomeLaboratorio)throws Exception;
+    List<Dipendente> getDirigenti(String nomeLaboratorio)throws Exception;
 }

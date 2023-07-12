@@ -1,7 +1,7 @@
 package DAO;
 import java.sql.*;
 public interface CambioRuoloDAO {
-    Date getDataCambio(int id_dip) throws Exception;
-    int setDataPromozione(int id_dip) throws Exception;
-    int removePromozione(int id_dip) throws Exception;
+    Date getDataPromozione(int id_dip) throws Exception;
+    void setDataPromozione(int id_dip) throws Exception;
+    void removePromozione(int id_dip) throws Exception;
 }

@@ -2,92 +2,35 @@ package DAO;
 
 import Controller.*;
 import Model.Laboratorio;
-import Model.Progetto;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class LaboratorioDAOImpl implements LaboratorioDAO {
-    ConnectionController controller = new ConnectionController();
-    Connection con;
-
-    /**
-     * Funzione per avere tutti nomi dei Laboratori
-     *
-     * @return
-     */
-    @Override
-    public String[] getNomeLab() throws Exception {
-        String[] Labs;
-        int i = 0;
-        String sql = "Select * from Laboratorio";
-        int size = countLab();
-        Labs = new String[size];
-        try {
-            con = controller.ConnectionController();
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-
-            while (rs.next()) {
-                String NomeLab = rs.getString("nome_lab");
-                Labs[i] = NomeLab;
-
-                i++;
-            }
-            return Labs;
-        } catch (SQLException e) {
-            throw new Exception(e);
-        }
-
+    private ConnectionController connectionController;
+    public LaboratorioDAOImpl(ConnectionController connectionController){
+        this.connectionController = connectionController;
     }
-
-    /**
-     * Funzione per contare tutti i Laboratori
-     *
-     * @return
-     */
-    @Override
-    public int countLab() {
-        int i = 0;
-        String sql = "Select count(*) AS count from Laboratorio";
-
-        try {
-            con = controller.ConnectionController();
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                i = rs.getInt("count");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return i;
-    }
-
     /**
      * Funzione per ottenere tutti i laboratori
      *
      * @return
      */
     @Override
-    public List<Laboratorio> getLabs() throws Exception {
-        List<Laboratorio> Laboratori = new ArrayList<>();
+    public List<Laboratorio> getLaboratoriAssegnati() throws Exception {
+        List<Laboratorio> laboratori = new ArrayList<>();
         String sql = ("Select * from Laboratorio");
-        int i = 0;
-        int progetto;
         try {
-            con = controller.ConnectionController();
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                if (rs.getString("progetto") == null) progetto = 0;
-                else progetto = rs.getInt("progetto");
-                Laboratorio lab = new Laboratorio(rs.getString("nome_lab"), rs.getString("topic"), progetto, rs.getInt("referente"));
-                Laboratori.add(lab);
+            Connection connection = connectionController.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                int progetto = resultSet.getString("progetto") == null ? 0 : resultSet.getInt("progetto");
+                Laboratorio laboratorio = new Laboratorio(resultSet.getString("nome_lab"), Laboratorio.Topic.valueOf(resultSet.getString("topic")), progetto, resultSet.getInt("referente"));
+                laboratori.add(laboratorio);
             }
-            return Laboratori;
+            return laboratori;
         } catch (SQLException e) {
             throw new Exception(e);
         }
@@ -97,39 +40,35 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
     /**
      * Inserimento di un nuovo laboratorio
      *
-     * @param NomeLab
+     * @param nome
      * @param Topic
      * @return
      */
     @Override
-    public int Inserisci(String NomeLab, String Topic) {
-        int i = 0;
-        String sql = ("Insert into laboratorio(nome_lab , topic) values('" + NomeLab + "','" + Topic + "')");
+    public void inserisci(Laboratorio laboratorio) throws Exception{
+        String sql = "Insert into laboratorio(nome_lab , topic) values('" + laboratorio.getNome() + "','" + laboratorio.getTopic() + "')";
         try {
-            con = controller.ConnectionController();
-            Statement stmt = con.createStatement();
-            i = stmt.executeUpdate(sql);
+            Connection connection = connectionController.getConnection();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new Exception(e);
         }
-        return i;
     }
 
     /**
      * Rimozione di un laboratorio
      *
-     * @param Nome
+     * @param nome
      * @return
      */
     @Override
-    public int remove(String Nome) throws Exception {
-        String sql = ("delete from laboratorio where laboratorio.nome_lab = '" + Nome + "'");
-        int i = 0;
+    public void rimuovi(String nome) throws Exception {
+        String sql = ("delete from laboratorio where laboratorio.nome_lab = '" + nome + "'");
         try {
-            con = controller.ConnectionController();
-            Statement stmt = con.createStatement();
-            i = stmt.executeUpdate(sql);
-            return i;
+            Connection connection = connectionController.getConnection();
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate(sql);
         } catch (SQLException e) {
             throw new Exception(e);
         }
@@ -139,19 +78,17 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
     /**
      * Assegnazione di un nuovo Referente
      *
-     * @param NomeLab
+     * @param nome
      * @param idDip
      * @return
      */
     @Override
-    public int riassegnaDipendente(String NomeLab, int idDip) throws Exception {
-        int c = 0;
-        String sql = ("update Laboratorio set referente = " + idDip + "where laboratorio.nome_lab = '" + NomeLab + "'");
+    public void riassegnaDipendente(String nome, int idDip) throws Exception {
+        String sql = ("update Laboratorio set referente = " + idDip + "where laboratorio.nome_lab = '" + nome + "'");
         try {
-            con = controller.ConnectionController();
-            Statement stmt = con.createStatement();
-            c = stmt.executeUpdate(sql);
-            return c;
+            Connection connection = connectionController.getConnection();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
         } catch (SQLException e) {
             throw new Exception(e);
         }
@@ -161,19 +98,18 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
     /**
      * Riassegnazione di un nuovo progetto
      *
-     * @param NomeLab
+     * @param nome
      * @param Progetto
      * @return
      */
     @Override
-    public int riassegnaProgetto(String NomeLab, int Progetto) throws Exception {
-        int c = 0;
-        String sql = ("update Laboratorio set progetto = " + Progetto + " where nome_lab = '" + NomeLab + "'");
+    public void riassegnaProgetto(String nome, int Progetto) throws Exception {
+
+        String sql = ("update Laboratorio set progetto = " + Progetto + " where nome_lab = '" + nome + "'");
         try {
-            con = controller.ConnectionController();
-            Statement stmt = con.createStatement();
-            c = stmt.executeUpdate(sql);
-            return c;
+            Connection connection = connectionController.getConnection();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
         } catch (SQLException e) {
             throw new Exception(e);
         }
@@ -187,15 +123,15 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
      * @return
      */
     @Override
-    public int countProgetti(int progetto) throws Exception {
+    public int getNumeroLaboratoriAssegnati(int progetto) throws Exception {
         int c = 0;
         String sql = ("Select count(*) as conto from laboratorio where laboratorio.progetto = " + progetto);
         try {
-            con = controller.ConnectionController();
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                c = rs.getInt("conto");
+            Connection connection = connectionController.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                c = resultSet.getInt("conto");
             }
             return c;
         } catch (SQLException e) {
@@ -211,18 +147,18 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
      * @return
      */
     @Override
-    public List<Laboratorio> getLaboratori(int cup) throws Exception {
-        List<Laboratorio> labs = new ArrayList<>();
+    public List<Laboratorio> getLaboratoriAssegnati(int cup) throws Exception {
+        List<Laboratorio> laboratori = new ArrayList<>();
         String sql = ("Select * from laboratorio where laboratorio.progetto = " + cup);
         try {
-            con = controller.ConnectionController();
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                Laboratorio lab = new Laboratorio(rs.getString("nome_lab"), rs.getString("topic"), rs.getInt("progetto"), rs.getInt("Referente"));
-                labs.add(lab);
+            Connection connection = connectionController.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                Laboratorio lab = new Laboratorio(resultSet.getString("nome_lab"), Laboratorio.Topic.valueOf(resultSet.getString("topic")), resultSet.getInt("progetto"), resultSet.getInt("Referente"));
+                laboratori.add(lab);
             }
-            return labs;
+            return laboratori;
         } catch (SQLException e) {
             throw new Exception(e);
         }
@@ -232,19 +168,19 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
     /**
      * Funzione per ottenere il referente del laboratorio
      *
-     * @param NomeLab
+     * @param nome
      * @return
      */
     @Override
-    public int getReferenteLab(String NomeLab) throws Exception {
+    public int getIdReferente(String nome) throws Exception {
         int idDip = 0;
-        String sql = ("Select referente from laboratorio where laboratorio.nome_lab = '" + NomeLab + "'");
+        String sql = ("Select referente from laboratorio where laboratorio.nome_lab = '" + nome + "'");
         try {
-            con = controller.ConnectionController();
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                idDip = rs.getInt("referente");
+            Connection connection = connectionController.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                idDip = resultSet.getInt("referente");
             }
             return idDip;
         } catch (SQLException e) {
@@ -252,29 +188,4 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
         }
 
     }
-
-    /**
-     * Funzione per ottenere a quale progetto sta lavorando il laboratorio
-     *
-     * @param NomeLab
-     * @return
-     */
-    @Override
-    public int getProgetto(String NomeLab) throws Exception {
-        int cup = 0;
-        String sql = ("Select progetto from laboratorio where laboratorio.nome_lab = '" + NomeLab + "'");
-        try {
-            con = controller.ConnectionController();
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                cup = rs.getInt(cup);
-            }
-            return cup;
-        } catch (SQLException e) {
-            throw new Exception(e);
-        }
-
-    }
-
 }
