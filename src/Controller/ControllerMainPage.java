@@ -109,7 +109,7 @@ public class ControllerMainPage {
     }
 
 
-    public void Degrada(Dipendente dipendente) {
+    public void degrada(Dipendente dipendente) {
         try {
             if (dipendente.isDirigente()) {
                 dipendenteDAO.degrada(dipendente.getId());
@@ -159,13 +159,13 @@ public class ControllerMainPage {
             if (!dipendente.isDirigente()) {
                 dipendenteDAO.promuovi(dipendente.getId());
                 cambioRuoloDAO.setDataPromozione(dipendente.getId());
-                guImain.showInfoMessage("Promosso!")
+                guImain.showInfoMessage("Promosso!");
             } else {
                 guImain.showErrorMessage("IMPOSSIBILE PROMUOVERE!");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            guImain.showErrorMessage("Errore nel Database")
+            guImain.showErrorMessage("Errore nel Database");
         }
     }
 

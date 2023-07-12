@@ -34,13 +34,18 @@ public class Dipendente {
         setLaboratorio(laboratorio);
     }
 
+    public boolean haLaboratorioAssegnato(){
+        return !laboratorio.equals("Non Assegnato");
+    }
     public String getLaboratorio() {
         return laboratorio;
     }
 
     public void setLaboratorio(String laboratorio) {
-        if (laboratorio != null) this.laboratorio = laboratorio;
-        else this.laboratorio = "Non Assegnato";
+        if (laboratorio != null)
+            this.laboratorio = laboratorio;
+        else
+            this.laboratorio = "Non Assegnato";
     }
 
     public Date getDataNascita() {

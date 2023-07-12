@@ -7,7 +7,6 @@ import Model.Progetto;
 
 import java.sql.Date;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -52,9 +51,9 @@ public class GUImain extends JFrame {
     private JTextField annoDiNascitaTextField;
     private JSpinner AnnoNascita;
     private JTextField NomeInserito;
-    private JButton dipendentiDaAssegnareButton;
-    private JButton tuttiIDipendentiButton;
-    private JTable TabellaDipendenti;
+    private JButton mostraDipendentiNonAssegnatiButton;
+    private JButton mostraTuttiDipendentiButton;
+    private JTable tabellaDipendenti;
     private JScrollPane PannelloDipendenti;
     private JScrollPane PannelloProgetti;
     private JButton licenziaButton;
@@ -62,7 +61,7 @@ public class GUImain extends JFrame {
     private JButton promuoviButton;
     private JButton degradaButton;
     private JButton visualizzaCarrieraButton;
-    private JTable TabellaProgetti;
+    private JTable tabellaProgetti;
     private JButton nuovoProgettoButton;
     private JButton eliminaProgettoButton;
     private boolean Dir;
@@ -91,7 +90,8 @@ public class GUImain extends JFrame {
         inizializzaTabellaLaboratori();
         inizializzaTabellaProgetti();
         inizializzaDialogoAssegnazioneDipendenteLaboratorio();
-
+        inizializzaPulsantiGrado();
+        inizializzaFormAssunzione();
 
         Lab = new JComboBox<>();
 
@@ -134,61 +134,38 @@ public class GUImain extends JFrame {
                 DirigFunction();
             }
         });
-        assumiButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String Nome = NomeInserito.getText();
-                String Cognome = CognomeInserito.getText();
-                String dir = (String) DirigenteBox.getSelectedItem();
-                Boolean Dir;
-                Dir = dir.equals("SI");
-                Date data = Date.valueOf(LocalDate.now());
-                int Giorno = (int) GiornoNascita.getValue();
-                String mese = (String) MesiNascita.getSelectedItem();
-                int Anno = (int) AnnoNascita.getValue();
-                Anno = Anno - 1900;
-                Date DatadiN = Converti(Giorno, mese, Anno);
-                Dipendente dipendente = new Dipendente(Nome, Cognome, Dir, Date.valueOf(LocalDate.now()), DatadiN);
-                controllerMainPage.aggiungiDipendente(dipendente);
-                NomeInserito.setText("");
-                CognomeInserito.setText("");
-            }
-        });
+
         //Action Listener del Pannello Visual
         licenziaButton.addActionListener(event-> controllerMainPage.licenziaDipendente(getDipendenteSelezionato()));
 
 
-        promuoviButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ButtonPromuovi(modelloDipendenti);
+
+
+        mostraTuttiDipendentiButton.addActionListener(event-> {
+            List<Dipendente> dipendenti = controllerMainPage.getDipendentiAssegnare();
+            getModelloDipendenti().setDipendenti(dipendenti);
+        });
+
+        mostraDipendentiNonAssegnatiButton.addActionListener(event-> {
+            int i = 0;
+            ModelloDipendenti modello = getModelloDipendenti();
+            while (i < modello.getRowCount()) {
+                Dipendente dipendente = modello.getDipendente(i);
+                if (dipendente.haLaboratorioAssegnato()) {
+                    modello.rimuoviDipendente(dipendente);
+                } else {
+                    i++;
+                }
             }
         });
 
-        degradaButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ButtonDegrada(modelloDipendenti);
-            }
-        });
-        tuttiIDipendentiButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ButtonTuttiIDipendenti(modelloDipendenti);
-            }
-        });
-        dipendentiDaAssegnareButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ButtonDipendentiDaAssegnare(modelloDipendenti);
-            }
-        });
         visualizzaCarrieraButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ButtonVisualizzaCarriera();
             }
         });
+
         //ACTION LISTENER DI PROGETTO
         nuovoProgettoButton.addActionListener(new ActionListener() {
             @Override
@@ -196,11 +173,9 @@ public class GUImain extends JFrame {
                 dialogoInserimentoProgetto.setVisible(true);
             }
         });
-        eliminaProgettoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ButtonEliminaProgetto();
-            }
+        eliminaProgettoButton.addActionListener(event-> {
+                Progetto progetto = getProgettoSelezionato();
+                controllerMainPage.EliminaProgetto(progetto);
         });
         InserimentoProgettoButton.addActionListener(new ActionListener() {
             @Override
@@ -215,17 +190,13 @@ public class GUImain extends JFrame {
                 DialogoNuovoLaboratorio.setVisible(true);
             }
         });
-        CreaNuovoLaboratorioButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ButtonCreaNuovoLaboratorio(DialogoNuovoLaboratorio);
-            }
+        CreaNuovoLaboratorioButton.addActionListener(event-> {
+                Laboratorio laboratorio = nuovoLab.getLaboratorio();
+                controllerMainPage.creaLaboratorio(laboratorio);
         });
-        eliminaSedeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ButtonEliminaSede();
-            }
+        eliminaSedeButton.addActionListener(event-> {
+                Laboratorio laboratorio = getLaboratorioSelezionato();
+                controllerMainPage.rimuovoLaboratorio(laboratorio);;
         });
         assegnaReferenteButton.addActionListener(new ActionListener() {
             @Override
@@ -279,28 +250,6 @@ public class GUImain extends JFrame {
     }
 
 
-
-
-
-
-    /**
-     * funzione per assegnare un nuovo laboratorio
-     *
-     * @param dialogo
-     * @param modello
-     */
-
-
-    /**
-     * Elimina un laboratorio
-     */
-    public void ButtonEliminaSede() {
-        int row = tabellaLaboratori.getSelectedRow();
-        String nome = String.valueOf(tabellaLaboratori.getValueAt(row, 0));//ottengo il nome del laboratorio
-        int i = controllerMainPage.rimuovoLaboratorio(nome);
-        if (i > 0) modelloLaboratori.removeRow(row);
-    }
-
     private JTable creaTabella(JScrollPane tab, TableModel modello, String nome) {
         JTable tabella = new JTable(modello) {
             public boolean isCellEditable(int row, int column) {
@@ -333,80 +282,11 @@ public class GUImain extends JFrame {
         dialogo.pack();
     }
 
-    /**
-     * Funzione del bottone di conferma della finestra di dialogo laboratorio
-     *
-     * @param dialogo
-     */
-    public void ButtonCreaNuovoLaboratorio(JDialog dialogo) {
-        Laboratorio laboratorio = nuovoLab.getLaboratorio();
-        int i = controllerMainPage.creaLaboratorio(dialogo, laboratorio);
-        if (i > 0) {
-            Object[] row = {laboratorio.getNome(), laboratorio.getTopic(), "Non Assegnato", "Non Assegnato"};
-            modelloLaboratori.addRow(row);
-            nuovoLab.clear();
-        }
-
-    }
-
-    /**
-     * Funzione del bottone per eliminare un progetto dal db e dalla tabella e aggiornare
-     * la tabella laboratorio
-     */
-    public void ButtonEliminaProgetto() {
-        int row = TabellaProgetti.getSelectedRow();
-        int cup = Integer.valueOf(TabellaProgetti.getValueAt(row, 1).toString());//prendo il cup dalla tabella
-        int i = controllerMainPage.EliminaProgetto(cup);
-        if (i > 0) {
-            modelloProgetti.removeRow(row);
-            fetchProgetti(modelloProgetti);
-        }
-
-    }
-
-    /**
-     * funzione per degradare un responsabile
-     *
-     * @param modello
-     */
-    public void ButtonDegrada(DefaultTableModel modello) {
-        int row = TabellaDipendenti.getSelectedRow();
-        String value = (String) TabellaDipendenti.getModel().getValueAt(row, 5);
-        int idDip = Integer.valueOf(TabellaDipendenti.getValueAt(row, 2).toString());//prendendo id_dip dalla tabella
-        int i = controllerMainPage.Degrada(value, idDip);
-        if (i > 0) {
-            modello.setValueAt("NO", row, 5);
-        }
-    }
-
-    /**
-     * filtro per visualizzare solo i dipendenti da assegnare
-     *
-     * @param modello
-     */
-    public void ButtonDipendentiDaAssegnare(DefaultTableModel modello) {
-        int i = 0;
-        while (i < modello.getRowCount()) {
-            String cmp = (String) modello.getValueAt(i, 4);
-            if ((!cmp.equals("Non Assegnato"))) {
-                modello.removeRow(i);
-            } else {
-                i++;
-            }
-        }
-    }
-
-    /**
-     * Funzione del bottone per inserire nella tabella il responsabile di progetto selezionato
-     *
-     * @param dialogo
-     */
-
     public void ButtonConfermaResponsabile(JDialog dialogo) {
         String values = (String) ComboBox.getSelectedItem();
         String[] id = values.split(" ");
-        int row = TabellaProgetti.getSelectedRow();
-        int cup = Integer.valueOf((String) TabellaProgetti.getValueAt(row, 1));
+        int row = tabellaProgetti.getSelectedRow();
+        int cup = Integer.valueOf((String) tabellaProgetti.getValueAt(row, 1));
         int idDip = Integer.valueOf(id[0]);
         int i = controllerMainPage.setResponsabile(idDip, cup);
         if (i > 0) {
@@ -423,8 +303,8 @@ public class GUImain extends JFrame {
     public void ButtonAssegnaReferenteProgetti(JDialog dialogo) {
         String values = (String) ComboBox.getSelectedItem();
         String[] id = values.split(" ");
-        int row = TabellaProgetti.getSelectedRow();
-        int cup = Integer.valueOf((String) TabellaProgetti.getValueAt(row, 1));
+        int row = tabellaProgetti.getSelectedRow();
+        int cup = Integer.valueOf((String) tabellaProgetti.getValueAt(row, 1));
         int i = controllerMainPage.setReferente(Integer.valueOf(id[0]), cup);
         if (i > 0) {
             modelloProgetti.setValueAt(id[0], row, 3);
@@ -486,10 +366,10 @@ public class GUImain extends JFrame {
      * Funzione del bottone per visualizzare gli scatti di carriera di un dipendente
      */
     public void ButtonVisualizzaCarriera() {
-        int row = TabellaDipendenti.getSelectedRow();
-        String DataA = (String) TabellaDipendenti.getValueAt(row, 6);
-        String Nome = (String) TabellaDipendenti.getValueAt(row, 0);
-        String Cognome = (String) TabellaDipendenti.getValueAt(row, 1);
+        int row = tabellaDipendenti.getSelectedRow();
+        String DataA = (String) tabellaDipendenti.getValueAt(row, 6);
+        String Nome = (String) tabellaDipendenti.getValueAt(row, 0);
+        String Cognome = (String) tabellaDipendenti.getValueAt(row, 1);
         Date A = Date.valueOf(DataA);
         Date ora = Date.valueOf(LocalDate.now());
         long diff = ora.getTime() - A.getTime();
@@ -499,7 +379,7 @@ public class GUImain extends JFrame {
         prova = prova.plusYears(3);
         LocalDate senior = A.toLocalDate();
         senior = senior.plusYears(7);
-        Date dataCambio = controllerMainPage.getDataPromozione(Integer.valueOf(TabellaDipendenti.getValueAt(row, 2).toString()));
+        Date dataCambio = controllerMainPage.getDataPromozione(Integer.valueOf(tabellaDipendenti.getValueAt(row, 2).toString()));
         if (dataCambio != null) {
             if (Anni < 3) {
                 JOptionPane.showMessageDialog(null, " " + Nome + " " + Cognome + "\nDipendente junior : " + DataA + "\nDirigente : " + dataCambio);
@@ -525,31 +405,10 @@ public class GUImain extends JFrame {
 
     }
 
-    /**
-     * Funzione del bottone per promuovere un dipendente
-     * ovviamente se si prova a promuovere un dipendente gia dirigente si
-     * ha un errore
-     *
-     * @param modello
-     */
-    public void ButtonPromuovi(DefaultTableModel modello) {
-        int row = TabellaDipendenti.getSelectedRow();
-        String value = (String) TabellaDipendenti.getModel().getValueAt(row, 5);
-        int id = Integer.valueOf(TabellaDipendenti.getValueAt(row, 2).toString());//prendendo id dip dalla tabella
-        int i = controllerMainPage.promuovi(id, value);
-        if (i > 0) modello.setValueAt("SI", row, 5);
-    }
-
-    /**
-     * Funzione del bottone per la creazione della finestra di dialogo per assegnare
-     * il referente del progetto
-     *
-     * @param dialogo
-     */
     public void ButtonDialogoReferenteProgetti(JDialog dialogo) {
         ComboBox.removeAllItems();
-        int row = TabellaProgetti.getSelectedRow();
-        int cup = Integer.valueOf((String) TabellaProgetti.getValueAt(row, 1));
+        int row = tabellaProgetti.getSelectedRow();
+        int cup = Integer.valueOf((String) tabellaProgetti.getValueAt(row, 1));
         List<Dipendente> dips = controllerMainPage.getReferenti(cup);
         int i = 0;
         if (dips.size() > 0) {
@@ -564,36 +423,8 @@ public class GUImain extends JFrame {
         }
     }
 
-    /**
-     * Filtro per visualizzare tutti i dipendenti
-     */
-    public void ButtonTuttiIDipendenti(DefaultTableModel modello) {
-        List<Dipendente> Lista = controllerMainPage.getDipendentiAssegnare();
-        if (!(modello.getRowCount() == Lista.size())) {
-            for (int i = 0; i < Lista.size(); i++) {
-                Dipendente d = Lista.get(i);
-                String nome, cognome, DataN, Laboratorio, DataA;
-                nome = d.getNome();
-                cognome = d.getCognome();
-                DataN = d.getDataNascita().toString();
-                String idDip = Integer.toString(d.getId());
-                Laboratorio = d.getLaboratorio();
-                String Dirigente;
-                DataA = d.getDataAssunzione().toString();
-                if (d.isDirigente()) Dirigente = "SI";
-                else Dirigente = "NO";
-                String[] row = {nome, cognome, idDip, DataN, Laboratorio, Dirigente, DataA};
-                modello.addRow(row);
-            }
-        }
-    }
+    public void ButtonConfermaReferente() {
 
-    /**
-     * Funzione del bottone per confermare l'assegnazione del referente di laboratorio
-     *
-     * @param dialogo
-     */
-    public void ButtonConfermaReferente(JDialog dialogo) {
         String dirig = (String) ComboBox.getSelectedItem();
         String[] split = dirig.split(" ");
         int row = tabellaLaboratori.getSelectedRow();
@@ -652,8 +483,8 @@ public class GUImain extends JFrame {
      */
     public void ButtonAssegnaResponsabile(JDialog dialogo) {
         ComboBox.removeAllItems();
-        int row = TabellaProgetti.getSelectedRow();
-        int cup = Integer.valueOf((String) TabellaProgetti.getValueAt(row, 1));
+        int row = tabellaProgetti.getSelectedRow();
+        int cup = Integer.valueOf((String) tabellaProgetti.getValueAt(row, 1));
         List<Dipendente> dips = controllerMainPage.getResponsabiliPossibili(cup);
         if (dips.size() > 0) {
             int i = 0;
@@ -768,7 +599,7 @@ public class GUImain extends JFrame {
 
     private void inizializzaTabellaDipendenti() {
         ModelloDipendenti modello = new ModelloDipendenti();
-        TabellaDipendenti = creaTabella(PannelloDipendenti, modello, "Dipendenti");
+        tabellaDipendenti = creaTabella(PannelloDipendenti, modello, "Dipendenti");
     }
 
     private void inizializzaTabellaLaboratori(){
@@ -777,7 +608,7 @@ public class GUImain extends JFrame {
     }
     private void inizializzaTabellaProgetti(){
         ModelloProgetti modello = new ModelloProgetti();
-        TabellaProgetti = creaTabella(PannelloProgetti, modello, "Progetti");
+        tabellaProgetti = creaTabella(PannelloProgetti, modello, "Progetti");
     }
 
     private void inizializzaInserimentoDipendente(){
@@ -814,48 +645,85 @@ public class GUImain extends JFrame {
     private void inizializzaDialogoAssegnazioneDipendenteLaboratorio(){
         JButton buttonConferma = new JButton("Conferma");
         buttonConferma.addActionListener(event->{
+            String NuovoLab = (String) Lab.getSelectedItem();
             Dipendente dipendente = getDipendenteSelezionato();
-            controllerMainPage.AssegnaLaboratorio(dipendente)
+            controllerMainPage.AssegnaLaboratorio(dipendente, NuovoLab);
+            getModelloDipendenti().fireTableDataChanged();
+            dialogoAssegnazioneDipendenteLaboratorio.setVisible(false);
                 });
         dialogoAssegnazioneDipendenteLaboratorio = creaDialogo( buttonConferma, "A quale laboratorio vuoi assegnarlo?");
         assegnaButton.addActionListener(event-> apriDialogoAssegnaDipendenteLaboratorio(dialogoAssegnazioneDipendenteLaboratorio));
-        ConfermaAssegnazioneLaboratorio.addActionListener(event->AssegnazioneLaboratorio(dialogoLaboratorio, modelloDipendenti));
-
     }
 
-
-    private void AssegnazioneLaboratorio(JDialog dialogo, DefaultTableModel modello) {
-        String NuovoLab = (String) Lab.getSelectedItem();
-        int row = TabellaDipendenti.getSelectedRow();
-        String value = TabellaDipendenti.getModel().getValueAt(row, 2).toString();
-        int idDip = Integer.valueOf(value);
-        String NomeLab = TabellaDipendenti.getModel().getValueAt(row, 4).toString();
-        int i = controllerMainPage.AssegnaLaboratorio(idDip, NomeLab, dialogo, NuovoLab);
-        if (i > 0) {
-            PannelloDipendenti.setViewportView(TabellaDipendenti);
-            JOptionPane.showMessageDialog(null, "Dipendente Assegnato");
-            dialogo.setVisible(false);
-            modello.setValueAt(NuovoLab, row, 4);
-        }
-    }
     private ModelloDipendenti getModelloDipendenti(){
-        return (ModelloDipendenti) TabellaDipendenti.getModel();
+        return (ModelloDipendenti) tabellaDipendenti.getModel();
     }
 
     private ModelloLaboratori getModelloLaboratori(){
         return (ModelloLaboratori) tabellaLaboratori.getModel();
     }
 
+    private ModelloProgetti getModelloProgetti(){
+        return(ModelloProgetti) tabellaProgetti.getModel();
+    }
+
     private Dipendente getDipendenteSelezionato(){
         ModelloDipendenti modello = getModelloDipendenti();
-        return modello.getDipendente(TabellaDipendenti.getSelectedRow());
+        return modello.getDipendente(tabellaDipendenti.getSelectedRow());
     }
+
+    private Laboratorio getLaboratorioSelezionato(){
+        ModelloLaboratori modello = getModelloLaboratori();
+        return modello.getLaboratorio(tabellaLaboratori.getSelectedRow());
+    }
+
+    private Progetto getProgettoSelezionato(){
+        ModelloProgetti modello = getModelloProgetti();
+        return modello.getProgetto(tabellaProgetti.getSelectedRow());
+    }
+
+
     public void showErrorMessage(String messaggio){
         JOptionPane.showMessageDialog(this , messaggio);
     }
     public void showInfoMessage(String messaggio){
         JOptionPane.showMessageDialog(this , messaggio);
     }
+
+    private void inizializzaPulsantiGrado(){
+        promuoviButton.addActionListener(event-> {
+            Dipendente dipendente = getDipendenteSelezionato();
+            controllerMainPage.promuovi(dipendente);
+            getModelloDipendenti().fireTableDataChanged();
+        });
+
+        degradaButton.addActionListener(event-> {
+            Dipendente dipendente = getDipendenteSelezionato();
+            controllerMainPage.degrada(dipendente);
+            getModelloDipendenti().fireTableDataChanged();
+        });
+    }
+
+    private void inizializzaFormAssunzione(){
+        assumiButton.addActionListener(event-> {
+                String Nome = NomeInserito.getText();
+                String Cognome = CognomeInserito.getText();
+                String dir = (String) DirigenteBox.getSelectedItem();
+                Boolean Dir;
+                Dir = dir.equals("SI");
+                Date data = Date.valueOf(LocalDate.now());
+                int Giorno = (int) GiornoNascita.getValue();
+                String mese = (String) MesiNascita.getSelectedItem();
+                int Anno = (int) AnnoNascita.getValue();
+                Anno = Anno - 1900;
+                Date DatadiN = Converti(Giorno, mese, Anno);
+                Dipendente dipendente = new Dipendente(Nome, Cognome, Dir, Date.valueOf(LocalDate.now()), DatadiN);
+                controllerMainPage.aggiungiDipendente(dipendente);
+                NomeInserito.setText("");
+                CognomeInserito.setText("");
+            });
+    }
+
     private List<Progetto> getProgettiIdonei(){
         //todo
         /*public List<Progetto> getProgettiIdonei(Laboratorio.Topic topic) {
