@@ -22,6 +22,16 @@ public class ModelloProgetti extends AbstractTableModel {
         fireTableDataChanged();
     }
 
+    public void aggiungiProgetto(Progetto progetto){
+        progetti.add(progetto);
+        fireTableDataChanged();
+    }
+
+    public void rimuoviProgetto(Progetto progetto){
+        progetti.remove(progetto);
+        fireTableDataChanged();
+    }
+
     public Progetto getProgetto(int rowIndex) {
         return progetti.get(rowIndex);
     }

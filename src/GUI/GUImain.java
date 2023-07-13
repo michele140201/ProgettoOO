@@ -542,6 +542,14 @@ public class GUImain extends JFrame {
         getModelloLaboratori().rimuoviLaboratorio(laboratorio);
     }
 
+    public void aggiungiProgetto(Progetto progetto){
+        getModelloProgetti().aggiungiProgetto(progetto);
+    }
+
+    public void rimuoviProgetto(Progetto progetto){
+        getModelloProgetti().rimuoviProgetto(progetto);
+    }
+
     private void inizializzaDialogoAssegnazioneDipendenteLaboratorio(){
         JButton buttonConferma = new JButton("Conferma");
         buttonConferma.addActionListener(event->{

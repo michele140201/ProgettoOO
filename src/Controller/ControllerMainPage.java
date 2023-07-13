@@ -245,9 +245,10 @@ public class ControllerMainPage {
         }
     }
 
-    public void inserisciProgetto(Progetto p) {
+    public void inserisciProgetto(Progetto progetto) {
         try {
-            progettoDAO.inserisci(p);
+            progettoDAO.inserisci(progetto);
+            guImain.aggiungiProgetto(progetto);
         } catch (Exception e) {
             e.printStackTrace();
             guImain.showErrorMessage("Errore nel Database");
