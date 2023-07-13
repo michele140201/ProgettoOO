@@ -1,9 +1,11 @@
 package DAO;
 import Model.Dipendente;
+import Model.Progetto;
 
 import java.util.List;
 
 public interface DipendenteDAO {
+    Dipendente getDipendente(int id) throws Exception;
     List<Dipendente> getDipendenti() throws Exception;
     void removeDipendente(int id) throws Exception ;
     void insertDipendente(Dipendente dipendente)throws Exception;

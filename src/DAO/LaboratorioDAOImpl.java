@@ -1,6 +1,7 @@
 package DAO;
 
 import Controller.*;
+import Model.Dipendente;
 import Model.Laboratorio;
 
 import java.sql.*;
@@ -37,13 +38,6 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
 
     }
 
-    /**
-     * Inserimento di un nuovo laboratorio
-     *
-     * @param nome
-     * @param Topic
-     * @return
-     */
     @Override
     public void inserisci(Laboratorio laboratorio) throws Exception{
         String sql = "Insert into laboratorio(nome_lab , topic) values('" + laboratorio.getNome() + "','" + laboratorio.getTopic() + "')";
@@ -165,16 +159,10 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
 
     }
 
-    /**
-     * Funzione per ottenere il referente del laboratorio
-     *
-     * @param nome
-     * @return
-     */
     @Override
-    public int getIdReferente(String nome) throws Exception {
+    public int getIdReferente(Laboratorio laboratorio) throws Exception {
         int idDip = 0;
-        String sql = ("Select referente from laboratorio where laboratorio.nome_lab = '" + nome + "'");
+        String sql = ("Select referente from laboratorio where laboratorio.nome_lab = '" + laboratorio.getNome() + "'");
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
@@ -187,5 +175,22 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
             throw new Exception(e);
         }
 
+    }
+
+    @Override
+    public Laboratorio getLaboratorioDipendente(Dipendente dipendente) throws Exception {
+        String sql = "Select * from laboratorio where laboratorio.referente = " + dipendente.getId();
+        try{
+            Connection connection = connectionController.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while(resultSet.next()){
+                Laboratorio laboratorio = new Laboratorio(resultSet.getString("nome_lab") , Laboratorio.Topic.valueOf(resultSet.getString("topic")) , resultSet.getInt("referente") , resultSet.getInt("progetto"));
+                return laboratorio;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

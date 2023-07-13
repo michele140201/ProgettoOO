@@ -29,7 +29,17 @@ public class ControllerMainPage {
         this.laboratorioDAO = laboratorioDAO;
         this.progettoDAO = progettoDAO;
         this.guImain = guImain;
-        guImain.setDipendenti(dipendenteDAO.getDipendenti());
+        List<Dipendente> dipendenti = dipendenteDAO.getDipendenti();
+        guImain.setLaboratori(laboratorioDAO.getLaboratoriAssegnati());
+        for (Dipendente dipendente : dipendenti) {
+            dipendente.setLaboratorio(laboratorioDAO.getLaboratorioDipendente(dipendente));
+        }
+        guImain.setDipendenti(dipendenti);
+        List<Progetto> progetti = progettoDAO.getProgetti();
+        for (Progetto progetto : progetti) {
+            setReferente(progetto);
+        }
+        guImain.setProgetti(progetti);
         //todo setlaboratori e set progetti
 
 
@@ -52,6 +62,7 @@ public class ControllerMainPage {
             if (dipendente.getId() != laboratorioDAO.getIdReferente(dipendente.getLaboratorio())) {
                 dipendenteDAO.removeDipendente(dipendente.getId());
                guImain.showInfoMessage("Dipendente Licenziato! Poverino :(");
+               guImain.rimuoviDipendente(dipendente);
             } else {
                 guImain.showErrorMessage("Il Dipendente è Responsabile di Laboratorio");
             }
@@ -77,6 +88,7 @@ public class ControllerMainPage {
     public void rimuovoLaboratorio(Laboratorio laboratorio) {
         try {
             laboratorioDAO.rimuovi(laboratorio.getNome());
+            guImain.rimuoviLaboratorio(laboratorio);
             guImain.showInfoMessage("Laboratorio Eliminato");
         } catch (Exception e) {
             guImain.showErrorMessage("Errore nel Database");
@@ -87,6 +99,7 @@ public class ControllerMainPage {
     public void creaLaboratorio(Laboratorio laboratorio) {
         try {
             laboratorioDAO.inserisci(laboratorio);
+            guImain.aggiungiLaboratorio(laboratorio);
             guImain.showInfoMessage("Inserimento Riuscito!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -266,4 +279,14 @@ public class ControllerMainPage {
             return null;
         }
     }
+    private void setReferente(Progetto progetto){
+        try{
+            int iddip = progettoDAO.getReferente(progetto , "Referente");
+            Dipendente dipendente = dipendenteDAO.getDipendente(iddip);
+            progetto.setReferente(dipendente);
+        }catch(Exception e){
+            progetto.setReferente(null);
+        }
+    }
+
 }

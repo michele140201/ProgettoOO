@@ -57,10 +57,10 @@ public class Laboratorio {
     }
 
     public enum Topic {
-        Chimica,
-        Fisica,
-        Matematica,
-        Informatica,
-        Biologia
+        chimica,
+        fisica,
+        matematica,
+        informatica,
+        biologia
     }
 }

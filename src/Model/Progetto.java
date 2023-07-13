@@ -6,19 +6,24 @@ package Model;
 public class Progetto {
     private int cup;
     private String nome;
-    private String referente;
-    private String responsabile;
+    private Dipendente referente;
+    private Dipendente responsabile;
 
     @Override
     public String toString() {
         return getNome();
     }
 
-    public Progetto(int cup, String nome, String referente, String responsabile) {
+    public Progetto(int cup, String nome, Dipendente referente, Dipendente responsabile) {
         this(nome);
         setCup(cup);
         setReferente(referente);
         setResponsabile(responsabile);
+    }
+
+    public Progetto(String nome , int cup){
+        this(nome);
+        setCup(cup);
     }
 
     public Progetto(String nome) {
@@ -41,19 +46,19 @@ public class Progetto {
         this.nome = nome;
     }
 
-    public String getReferente() {
+    public Dipendente getReferente() {
         return referente;
     }
 
-    public void setReferente(String referente) {
+    public void setReferente(Dipendente referente) {
         this.referente = referente;
     }
 
-    public String getResponsabile() {
+    public Dipendente getResponsabile() {
         return responsabile;
     }
 
-    public void setResponsabile(String responsabile) {
+    public void setResponsabile(Dipendente responsabile) {
         this.responsabile = responsabile;
     }
 }

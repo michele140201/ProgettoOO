@@ -34,6 +34,11 @@ public class ModelloLaboratori extends AbstractTableModel {
         fireTableDataChanged();
     }
 
+    public void rimuoviLaboratorio(Laboratorio laboratorio){
+        laboratori.remove(laboratorio);
+        fireTableDataChanged();
+    }
+
     public Laboratorio getLaboratorio(int rowIndex) {
         return laboratori.get(rowIndex);
     }

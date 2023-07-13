@@ -29,7 +29,7 @@ public class ProgettoDAOImpl implements ProgettoDAO {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                Progetto progetto = new Progetto(resultSet.getInt("CUP"), resultSet.getString("nome_p"), resultSet.getString("referente"), resultSet.getString("responsabile"));
+                Progetto progetto = new Progetto(resultSet.getString("nome_p") , resultSet.getInt("CUP"));
                 progetti.add(progetto);
             }
             return progetti;
@@ -163,5 +163,23 @@ public class ProgettoDAOImpl implements ProgettoDAO {
         } catch (SQLException e) {
             throw new Exception(e);
         }
+    }
+
+    @Override
+    public int getReferente(Progetto progetto , String ruoloDipendente) throws Exception {
+        String sql = "Select " + ruoloDipendente + " from progetto where progetto.cup = " + progetto.getCup();
+        try{
+            Connection connection = connectionController.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            int id = 0;
+            while(resultSet.next()){
+                id = resultSet.getInt(ruoloDipendente);
+            }
+            return id;
+        }catch(SQLException e){
+            throw new Exception(e);
+        }
+
     }
 }

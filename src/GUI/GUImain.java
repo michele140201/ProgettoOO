@@ -518,6 +518,15 @@ public class GUImain extends JFrame {
 
         getModelloDipendenti().setDipendenti(dipendenti);
     }
+
+    public void setLaboratori(List<Laboratorio> laboratori){
+        getModelloLaboratori().setLaboratori(laboratori);
+    }
+
+    public void setProgetti(List<Progetto> progetti){
+        getModelloProgetti().setProgetti(progetti);
+    }
+
     public void aggiungiDipendente(Dipendente dipendente){
         getModelloDipendenti().aggiungiDipendente(dipendente);
     }
@@ -527,6 +536,10 @@ public class GUImain extends JFrame {
 
     public void aggiungiLaboratorio(Laboratorio laboratorio){
         getModelloLaboratori().aggiungiLaboratorio(laboratorio);
+    }
+
+    public void rimuoviLaboratorio(Laboratorio laboratorio){
+        getModelloLaboratori().rimuoviLaboratorio(laboratorio);
     }
 
     private void inizializzaDialogoAssegnazioneDipendenteLaboratorio(){

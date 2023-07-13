@@ -2,6 +2,8 @@ package DAO;
 
 import Controller.*;
 import Model.Dipendente;
+import Model.Laboratorio;
+import Model.Progetto;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -155,7 +157,7 @@ public class DipendenteDAOimpl implements DipendenteDAO {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                Dipendente dipendente = new Dipendente(resultSet.getString("Nome"), resultSet.getString("Cognome"), resultSet.getInt("id_dip"), resultSet.getBoolean("dirigente"), resultSet.getDate("Data_assunzione"), resultSet.getDate("Data_N"), resultSet.getString("nome_lab"));
+                Dipendente dipendente = new Dipendente(resultSet.getString("Nome"), resultSet.getString("Cognome"), resultSet.getInt("id_dip"), resultSet.getBoolean("dirigente"), resultSet.getDate("Data_assunzione"), resultSet.getDate("Data_N"));
                 dirigenti.add(dipendente);
             }
             return dirigenti;
@@ -205,5 +207,23 @@ public class DipendenteDAOimpl implements DipendenteDAO {
         } catch (SQLException e) {
             throw new Exception(e);
         }
+    }
+
+    @Override
+    public Dipendente getDipendente(int id) throws Exception {
+        String sql = "select * from dipendente where dipendente.id_dip = " + id;
+        try {
+            Connection connection = connectionController.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            Dipendente dipendente = null;
+            while (resultSet.next()) {
+                dipendente = new Dipendente(resultSet.getString("Nome"), resultSet.getString("Cognome"), resultSet.getInt("id_dip"), resultSet.getBoolean("Dirigente"), resultSet.getDate("data_assunzione"), resultSet.getDate("data_n"));
+            }
+            return dipendente;
+        }catch(SQLException e){
+            throw new Exception(e);
+        }
+
     }
 }
