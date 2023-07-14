@@ -23,23 +23,15 @@ public class ControllerMainPage {
     private final CambioRuoloDAO cambioRuoloDAO;
     private GUImain guImain;
 
-    public ControllerMainPage(DipendenteDAO dipendenteDAO, ProgettoDAO progettoDAO, LaboratorioDAO laboratorioDAO, CambioRuoloDAO cambioRuoloDAO , GUImain guImain) throws Exception{
+    public ControllerMainPage(DipendenteDAO dipendenteDAO, ProgettoDAO progettoDAO, LaboratorioDAO laboratorioDAO, CambioRuoloDAO cambioRuoloDAO, GUImain guImain) throws Exception {
         this.dipendenteDAO = dipendenteDAO;
         this.cambioRuoloDAO = cambioRuoloDAO;
         this.laboratorioDAO = laboratorioDAO;
         this.progettoDAO = progettoDAO;
         this.guImain = guImain;
-        List<Dipendente> dipendenti = dipendenteDAO.getDipendenti();
         guImain.setLaboratori(laboratorioDAO.getLaboratoriAssegnati());
-        for (Dipendente dipendente : dipendenti) {
-            dipendente.setLaboratorio(laboratorioDAO.getLaboratorioDipendente(dipendente));
-        }
-        guImain.setDipendenti(dipendenti);
-        List<Progetto> progetti = progettoDAO.getProgetti();
-        for (Progetto progetto : progetti) {
-            setReferente(progetto);
-        }
-        guImain.setProgetti(progetti);
+        guImain.setDipendenti(inizializzaDipendenti());
+        guImain.setProgetti(inzializzaProgetti());
         //todo setlaboratori e set progetti
 
 
@@ -61,8 +53,8 @@ public class ControllerMainPage {
         try {
             if (dipendente.getId() != laboratorioDAO.getIdReferente(dipendente.getLaboratorio())) {
                 dipendenteDAO.removeDipendente(dipendente.getId());
-               guImain.showInfoMessage("Dipendente Licenziato! Poverino :(");
-               guImain.rimuoviDipendente(dipendente);
+                guImain.showInfoMessage("Dipendente Licenziato! Poverino :(");
+                guImain.rimuoviDipendente(dipendente);
             } else {
                 guImain.showErrorMessage("Il Dipendente è Responsabile di Laboratorio");
             }
@@ -72,12 +64,12 @@ public class ControllerMainPage {
         }
     }
 
-    public void AssegnaLaboratorio(Dipendente dipendente ,String NuovoLab) {
+    public void AssegnaLaboratorio(Dipendente dipendente, String NuovoLab) {
         try {
-            if (dipendente.getId() != laboratorioDAO.getIdReferente(dipendente.getLaboratorio())){
+            if (dipendente.getId() != laboratorioDAO.getIdReferente(dipendente.getLaboratorio())) {
                 dipendenteDAO.setLaboratorio(NuovoLab, dipendente.getId());
             } else {
-                guImain.showErrorMessage( "Il Dipendente è Responsabile di Laboratorio");
+                guImain.showErrorMessage("Il Dipendente è Responsabile di Laboratorio");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -138,7 +130,7 @@ public class ControllerMainPage {
 
     public void setResponsabile(Dipendente dipendente, Progetto progetto) {
         try {
-            progettoDAO.setResponsabile(dipendente.getId() , progetto.getCup());
+            progettoDAO.setResponsabile(dipendente.getId(), progetto.getCup());
             guImain.showInfoMessage("Modifica Riuscita!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -146,9 +138,9 @@ public class ControllerMainPage {
         }
     }
 
-    public void setReferente(Dipendente dipendente , Progetto progetto) {
+    public void setReferente(Dipendente dipendente, Progetto progetto) {
         try {
-            progettoDAO.setReferente(dipendente.getId() , progetto.getCup());
+            progettoDAO.setReferente(dipendente.getId(), progetto.getCup());
             guImain.showInfoMessage("Aggiornamento Riuscito");
         } catch (Exception e) {
             e.printStackTrace();
@@ -167,7 +159,7 @@ public class ControllerMainPage {
         }
     }
 
-    public void promuovi(Dipendente dipendente){
+    public void promuovi(Dipendente dipendente) {
         try {
             if (!dipendente.isDirigente()) {
                 dipendenteDAO.promuovi(dipendente.getId());
@@ -280,14 +272,58 @@ public class ControllerMainPage {
             return null;
         }
     }
-    private void setReferente(Progetto progetto){
-        try{
-            int iddip = progettoDAO.getReferente(progetto , "Referente");
+
+    private void setReferente(Progetto progetto) {
+        try {
+            int iddip = progettoDAO.getReferente(progetto, "Referente");
             Dipendente dipendente = dipendenteDAO.getDipendente(iddip);
             progetto.setReferente(dipendente);
-        }catch(Exception e){
+        } catch (Exception e) {
             progetto.setReferente(null);
         }
     }
 
+    private void setResponsabile(Progetto progetto) {
+        try {
+            int iddip = progettoDAO.getReferente(progetto, "Responsabile");
+            Dipendente dipendente = dipendenteDAO.getDipendente(iddip);
+            progetto.setReferente(dipendente);
+        } catch (Exception e) {
+            progetto.setReferente(null);
+        }
+
+    }
+
+    private List<Progetto> inzializzaProgetti() throws Exception {
+        List<Progetto> progetti = progettoDAO.getProgetti();
+        for (Progetto progetto : progetti) {
+            setReferente(progetto);
+            setResponsabile(progetto);
+        }
+        return progetti;
+    }
+
+    private List<Dipendente> inizializzaDipendenti() throws Exception {
+        List<Dipendente> dipendenti = dipendenteDAO.getDipendenti();
+        for (Dipendente dipendente : dipendenti) {
+            dipendente.setLaboratorio(laboratorioDAO.getLaboratorioDipendente(dipendente));
+        }
+        return dipendenti;
+    }
+
+    public void setProgettiLaboratorioComboBox() throws Exception {
+        List<Progetto> Progetti = progettoDAO.getProgetti();
+        ArrayList<Progetto> ProgettiScelti = new ArrayList<>();
+        int i = 0;
+        while (i < Progetti.size()) {
+            Progetto p = Progetti.get(i);
+            if (laboratorioDAO.getNumeroLaboratoriAssegnati(p.getCup()) < 3) {
+                {
+                    ProgettiScelti.add(p);
+                }
+            }
+            i++;
+        }
+        guImain.setComboBox(ProgettiScelti);
+    }
 }

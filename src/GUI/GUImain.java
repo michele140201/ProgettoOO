@@ -90,7 +90,7 @@ public class GUImain extends JFrame {
         inizializzaDialogoAssegnazioneDipendenteLaboratorio();
         inizializzaPulsantiGrado();
         inizializzaFormAssunzione();
-
+        ComboBox = new JComboBox<>();
         Lab = new JComboBox<>();
 
 
@@ -111,9 +111,9 @@ public class GUImain extends JFrame {
         DialogoNuovoLaboratorio.setLocationRelativeTo(null);
 
         JButton ConfermaReferenteButton = new JButton("Conferma");
-        JDialog dialogoAssegnazioneReferente = creaDialogo(ConfermaReferenteButton, "Quale referente vuoi assegnare?");
+        JDialog dialogoAssegnazioneReferente = creaDialogo(ConfermaReferenteButton, "Quale referente vuoi assegnare?" );
 
-        ComboBox = new JComboBox<>();
+
         JDialog DialogoAssegnazioneProgetto = creaDialogo(AssegnazioneProgettoButton, "Quale progetto vuoi assegnare?");
 
         JDialog dialogoProgetti = creaDialogo(AssegnaReferenteProgettiButton, "Assegna Referente");
@@ -226,7 +226,11 @@ public class GUImain extends JFrame {
         assegnaProgettoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ButtonAssegnaProgettoLaboratorio(DialogoAssegnazioneProgetto);
+                try {
+                    ButtonAssegnaProgettoLaboratorio(DialogoAssegnazioneProgetto);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
         AssegnaReferenteProgettiButton.addActionListener(event-> {
@@ -268,7 +272,7 @@ public class GUImain extends JFrame {
         return tabella;
     }
 
-    private JDialog creaDialogo(JButton conferma, String domanda) {
+    private JDialog creaDialogo(JButton conferma, String domanda ) {
         JDialog dialogo = new JDialog();
         dialogo.setLocationRelativeTo(null);
         dialogo.setModal(true);
@@ -277,29 +281,18 @@ public class GUImain extends JFrame {
         dialogo.setSize(300, 150);
         dialogo.setResizable(false);
         dialogo.add(new JLabel(domanda), BorderLayout.PAGE_START);
+        JComboBox comboBox = new JComboBox<>();
+        dialogo.add(comboBox);
         dialogo.add(conferma, BorderLayout.PAGE_END);
         dialogo.pack();
         return dialogo;
     }
 
-    public void ButtonAssegnaProgettoLaboratorio(JDialog dialogo) {
+    public void ButtonAssegnaProgettoLaboratorio(JDialog dialogo) throws Exception {
         ComboBox.removeAllItems();
-        int row = tabellaLaboratori.getSelectedRow();
-        String NomeLab = (String) tabellaLaboratori.getValueAt(row, 0);
-        String Topic = (String) tabellaLaboratori.getValueAt(row, 1);
-        List<Progetto> Progetti = getProgettiIdonei();
-        int i = 0;
-        if (Progetti.size() > 0) {
-            while (i < Progetti.size()) {
-                Progetto p = Progetti.get(i);
-                ComboBox.addItem(p.getCup() + " " + p.getNome());
-                i++;
-            }
+        controllerMainPage.setProgettiLaboratorioComboBox();
             dialogo.add(ComboBox, BorderLayout.CENTER);
             dialogo.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "Nessun Progetto con lo stesso Topic");
-        }
     }
 
     public void ButtonAssegnaReferente() {
@@ -635,33 +628,10 @@ public class GUImain extends JFrame {
     public void setController(ControllerMainPage controller){
         this.controllerMainPage = controller;
     }
-    private List<Progetto> getProgettiIdonei(){
-        //todo
-        return null;
-        /*public List<Progetto> getProgettiIdonei(Laboratorio.Topic topic) {
-            try {
-                int lung = progettoDAO.getNumeroTotale();
-                List<Progetto> Progetti = progettoDAO.getProgetti();
-                ArrayList<Progetto> ProgettiScelti = new ArrayList<>();
-                int i = 0;
-                while (i < lung) {
-                    Progetto p = Progetti.get(i);
-                    if (laboratorioDAO.getNumeroLaboratoriAssegnati(p.getCup()) < 3) {
-                        {
-                            ProgettiScelti.add(p);
-                        }
-                    }
-                    i++;
-                }
-                i = 0;
-                lung = ProgettiScelti.size();
-                return ProgettiScelti;
-            } catch (Exception e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Errore di DataBase");
-                return null;
-            }
-        }*/
+    public void setComboBox(List<Progetto> progetti){
+        for (Progetto progetto : progetti) {
+            ComboBox.addItem(progetto);
+        }
     }
 
 
