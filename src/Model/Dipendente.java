@@ -39,8 +39,9 @@ public class Dipendente {
     }
 
     public boolean haLaboratorioAssegnato() {
-        return !laboratorio.equals("Non Assegnato");
+        return laboratorio == null;
     }
+
 
     public Laboratorio getLaboratorio() {
         return laboratorio;
