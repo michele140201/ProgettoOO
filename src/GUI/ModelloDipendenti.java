@@ -27,12 +27,12 @@ public class ModelloDipendenti extends AbstractTableModel {
         dipendenti.add(dipendente);
     }
 
-    public void rimuoviDipendentiAssegnati(){
+    public void rimuoviDipendentiAssegnati() {
         int i = 0;
-        while (i < dipendenti.size()){
-            if(!dipendenti.get(i).haLaboratorioAssegnato()){
+        while (i < dipendenti.size()) {
+            if (!dipendenti.get(i).haLaboratorioAssegnato()) {
                 rimuoviDipendente(dipendenti.get(i));
-            }else{
+            } else {
                 i++;
             }
         }

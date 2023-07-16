@@ -9,10 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LaboratorioDAOImpl implements LaboratorioDAO {
-    private ConnectionController connectionController;
-    public LaboratorioDAOImpl(ConnectionController connectionController){
+    private final ConnectionController connectionController;
+
+    public LaboratorioDAOImpl(ConnectionController connectionController) {
         this.connectionController = connectionController;
     }
+
     /**
      * Funzione per ottenere tutti i laboratori
      *
@@ -39,7 +41,7 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
     }
 
     @Override
-    public void inserisci(Laboratorio laboratorio) throws Exception{
+    public void inserisci(Laboratorio laboratorio) throws Exception {
         String sql = "Insert into laboratorio(nome_lab , topic) values('" + laboratorio.getNome() + "','" + laboratorio.getTopic() + "')";
         try {
             Connection connection = connectionController.getConnection();
@@ -180,15 +182,15 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
     @Override
     public Laboratorio getLaboratorioDipendente(Dipendente dipendente) throws Exception {
         String sql = "Select * from laboratorio where laboratorio.referente = " + dipendente.getId();
-        try{
+        try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
-            while(resultSet.next()){
-                Laboratorio laboratorio = new Laboratorio(resultSet.getString("nome_lab") , Laboratorio.Topic.valueOf(resultSet.getString("topic")) , resultSet.getInt("referente") , resultSet.getInt("progetto"));
+            while (resultSet.next()) {
+                Laboratorio laboratorio = new Laboratorio(resultSet.getString("nome_lab"), Laboratorio.Topic.valueOf(resultSet.getString("topic")), resultSet.getInt("referente"), resultSet.getInt("progetto"));
                 return laboratorio;
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;

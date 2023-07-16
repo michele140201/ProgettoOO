@@ -10,8 +10,9 @@ import Controller.*;
 import java.sql.*;
 
 public class ProgettoDAOImpl implements ProgettoDAO {
-    private ConnectionController connectionController;
-    public ProgettoDAOImpl(ConnectionController connectionController){
+    private final ConnectionController connectionController;
+
+    public ProgettoDAOImpl(ConnectionController connectionController) {
         this.connectionController = connectionController;
     }
 
@@ -29,7 +30,7 @@ public class ProgettoDAOImpl implements ProgettoDAO {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                Progetto progetto = new Progetto(resultSet.getString("nome_p") , resultSet.getInt("CUP"));
+                Progetto progetto = new Progetto(resultSet.getString("nome_p"), resultSet.getInt("CUP"));
                 progetti.add(progetto);
             }
             return progetti;
@@ -71,7 +72,7 @@ public class ProgettoDAOImpl implements ProgettoDAO {
     @Override
     public void inserisci(Progetto progetto) throws Exception {
         progetto.setCup(generaCup());
-        String sql = ("Insert into Progetto(CUP,Nome_p) values ('" + progetto.getCup() + "','" + progetto.getNome() +  "')");
+        String sql = ("Insert into Progetto(CUP,Nome_p) values ('" + progetto.getCup() + "','" + progetto.getNome() + "')");
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
@@ -137,7 +138,7 @@ public class ProgettoDAOImpl implements ProgettoDAO {
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
-           statement.executeUpdate(sql);
+            statement.executeUpdate(sql);
 
         } catch (SQLException e) {
             throw new Exception(e);
@@ -153,7 +154,7 @@ public class ProgettoDAOImpl implements ProgettoDAO {
      * @return
      */
     @Override
-    public void setResponsabile(int id , int cup) throws Exception {
+    public void setResponsabile(int id, int cup) throws Exception {
 
         String sql = ("Update progetto set responsabile = " + id + "where cup = " + cup);
         try {
@@ -166,18 +167,18 @@ public class ProgettoDAOImpl implements ProgettoDAO {
     }
 
     @Override
-    public int getReferente(Progetto progetto , String ruoloDipendente) throws Exception {
+    public int getReferente(Progetto progetto, String ruoloDipendente) throws Exception {
         String sql = "Select " + ruoloDipendente + " from progetto where progetto.cup = " + progetto.getCup();
-        try{
+        try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             int id = 0;
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 id = resultSet.getInt(ruoloDipendente);
             }
             return id;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             throw new Exception(e);
         }
 
