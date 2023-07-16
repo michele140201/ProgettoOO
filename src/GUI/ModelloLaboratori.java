@@ -20,21 +20,21 @@ public class ModelloLaboratori extends AbstractTableModel {
         setLaboratori(laboratori);
     }
 
+    public List<Laboratorio> getLaboratori() {
+        return laboratori;
+    }
+
     public void setLaboratori(List<Laboratorio> laboratori) {
         this.laboratori = laboratori;
         fireTableDataChanged();
     }
 
-    public List<Laboratorio> getLaboratori(){
-        return laboratori;
-    }
-
-    public void aggiungiLaboratorio(Laboratorio laboratorio){
+    public void aggiungiLaboratorio(Laboratorio laboratorio) {
         laboratori.add(laboratorio);
         fireTableDataChanged();
     }
 
-    public void rimuoviLaboratorio(Laboratorio laboratorio){
+    public void rimuoviLaboratorio(Laboratorio laboratorio) {
         laboratori.remove(laboratorio);
         fireTableDataChanged();
     }

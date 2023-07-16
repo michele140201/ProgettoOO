@@ -18,7 +18,8 @@ public class DialogoNuovoProgetto extends JPanel {
         add(panel1);
         setSize(500, 300);
     }
-    public Progetto getProgetto(){
+
+    public Progetto getProgetto() {
         return new Progetto(nomeTextField.getText());
     }
 

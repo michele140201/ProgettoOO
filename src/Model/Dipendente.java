@@ -19,13 +19,8 @@ public class Dipendente {
         this(nome, cognome, id, dirigente, dataAssunzione, dataNascita, null);
     }
 
-    public Dipendente(String nome, String cognome , boolean dirigente, Date dataAssunzione, Date dataNascita) {
-        this(nome, cognome, 0 , dirigente, dataAssunzione, dataNascita, null);
-    }
-
-    @Override
-    public String toString() {
-        return  getNome() + " " +getCognome() + " " + getId();
+    public Dipendente(String nome, String cognome, boolean dirigente, Date dataAssunzione, Date dataNascita) {
+        this(nome, cognome, 0, dirigente, dataAssunzione, dataNascita, null);
     }
 
     public Dipendente(String nome, String cognome, int id, boolean dirigente, Date dataAssunzione, Date dataNascita, Laboratorio laboratorio) {
@@ -38,18 +33,21 @@ public class Dipendente {
         setLaboratorio(laboratorio);
     }
 
-    public boolean haLaboratorioAssegnato(){
+    @Override
+    public String toString() {
+        return getNome() + " " + getCognome() + " " + getId();
+    }
+
+    public boolean haLaboratorioAssegnato() {
         return !laboratorio.equals("Non Assegnato");
     }
+
     public Laboratorio getLaboratorio() {
         return laboratorio;
     }
 
     public void setLaboratorio(Laboratorio laboratorio) {
-        if (laboratorio != null)
-            this.laboratorio = laboratorio;
-        else
-            this.laboratorio = null;
+        this.laboratorio = laboratorio;
     }
 
     public Date getDataNascita() {

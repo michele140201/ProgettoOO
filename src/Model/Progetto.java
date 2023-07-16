@@ -9,11 +9,6 @@ public class Progetto {
     private Dipendente referente;
     private Dipendente responsabile;
 
-    @Override
-    public String toString() {
-        return getNome();
-    }
-
     public Progetto(int cup, String nome, Dipendente referente, Dipendente responsabile) {
         this(nome);
         setCup(cup);
@@ -21,13 +16,18 @@ public class Progetto {
         setResponsabile(responsabile);
     }
 
-    public Progetto(String nome , int cup){
+    public Progetto(String nome, int cup) {
         this(nome);
         setCup(cup);
     }
 
     public Progetto(String nome) {
         setNome(nome);
+    }
+
+    @Override
+    public String toString() {
+        return getNome();
     }
 
     public int getCup() {

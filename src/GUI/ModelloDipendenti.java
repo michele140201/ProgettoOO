@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import Model.Dipendente;
+import Model.Laboratorio;
 
 public class ModelloDipendenti extends AbstractTableModel {
 
@@ -20,17 +21,23 @@ public class ModelloDipendenti extends AbstractTableModel {
         setDipendenti(dipendenti);
     }
 
+    public void setLaboratorio(Laboratorio nomeLaboratorio, Dipendente dipendente) {
+        dipendenti.remove(dipendente);
+        dipendente.setLaboratorio(nomeLaboratorio);
+        dipendenti.add(dipendente);
+    }
+
     public void setDipendenti(List<Dipendente> dipendenti) {
         this.dipendenti = dipendenti;
         fireTableDataChanged();
     }
 
-    public void aggiungiDipendente(Dipendente dipendente){
+    public void aggiungiDipendente(Dipendente dipendente) {
         this.dipendenti.add(dipendente);
         fireTableDataChanged();
     }
 
-    public void rimuoviDipendente(Dipendente dipendente){
+    public void rimuoviDipendente(Dipendente dipendente) {
         this.dipendenti.remove(dipendente);
         fireTableDataChanged();
     }

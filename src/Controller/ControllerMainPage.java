@@ -21,7 +21,7 @@ public class ControllerMainPage {
     private final DipendenteDAO dipendenteDAO;
     private final LaboratorioDAO laboratorioDAO;
     private final CambioRuoloDAO cambioRuoloDAO;
-    private GUImain guImain;
+    private final GUImain guImain;
 
     public ControllerMainPage(DipendenteDAO dipendenteDAO, ProgettoDAO progettoDAO, LaboratorioDAO laboratorioDAO, CambioRuoloDAO cambioRuoloDAO, GUImain guImain) throws Exception {
         this.dipendenteDAO = dipendenteDAO;
@@ -64,13 +64,10 @@ public class ControllerMainPage {
         }
     }
 
-    public void AssegnaLaboratorio(Dipendente dipendente, String NuovoLab) {
+    public void AssegnaLaboratorio(Dipendente dipendente, Laboratorio laboratorio) {
         try {
-            if (dipendente.getId() != laboratorioDAO.getIdReferente(dipendente.getLaboratorio())) {
-                dipendenteDAO.setLaboratorio(NuovoLab, dipendente.getId());
-            } else {
-                guImain.showErrorMessage("Il Dipendente è Responsabile di Laboratorio");
-            }
+            dipendenteDAO.setLaboratorio(laboratorio, dipendente);
+            guImain.aggiornaLaboratorioDipendente(laboratorio, dipendente);
         } catch (Exception e) {
             e.printStackTrace();
             guImain.showErrorMessage("Errore nel Database");
@@ -84,6 +81,7 @@ public class ControllerMainPage {
             guImain.showInfoMessage("Laboratorio Eliminato");
         } catch (Exception e) {
             guImain.showErrorMessage("Errore nel Database");
+            e.printStackTrace();
         }
         //todo chiama la gui per aggiungere
     }

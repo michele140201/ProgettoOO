@@ -8,20 +8,21 @@ public class Laboratorio {
     private Topic topic;
     private int progetto;
     private int responsabile;
+
     public Laboratorio(String nome, Topic topic, int progetto, int responsabile) {
         this(nome, topic);
         setProgetto(progetto);
         setResponsabile(responsabile);
     }
 
-    @Override
-    public String toString() {
-        return getNome();
-    }
-
     public Laboratorio(String nome, Topic topic) {
         setNome(nome);
         setTopic(topic);
+    }
+
+    @Override
+    public String toString() {
+        return getNome();
     }
 
     public String getNome() {

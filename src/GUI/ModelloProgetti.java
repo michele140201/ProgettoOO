@@ -22,12 +22,12 @@ public class ModelloProgetti extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    public void aggiungiProgetto(Progetto progetto){
+    public void aggiungiProgetto(Progetto progetto) {
         progetti.add(progetto);
         fireTableDataChanged();
     }
 
-    public void rimuoviProgetto(Progetto progetto){
+    public void rimuoviProgetto(Progetto progetto) {
         progetti.remove(progetto);
         fireTableDataChanged();
     }

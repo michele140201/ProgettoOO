@@ -9,7 +9,7 @@ public class DialogoNuovoLaboratorio extends JPanel {
     private JTextField nomeJTextField;
     private JTextField topicTextField;
     private JTextField creaLaboratorioTextField;
-    private JComboBox <Laboratorio.Topic> topicJComboBox;
+    private JComboBox<Laboratorio.Topic> topicJComboBox;
     private JPanel panel1;
 
     /**
@@ -21,13 +21,14 @@ public class DialogoNuovoLaboratorio extends JPanel {
 /**
  * Aggiunge alla combo box tutti i topic nel sistema
  */
-        for (Laboratorio.Topic topic: Laboratorio.Topic.values()) {
+        for (Laboratorio.Topic topic : Laboratorio.Topic.values()) {
             topicJComboBox.addItem(topic);
         }
 
     }
-    public Laboratorio getLaboratorio(){
-        return new Laboratorio(nomeJTextField.getText() , (Laboratorio.Topic)topicJComboBox.getSelectedItem());
+
+    public Laboratorio getLaboratorio() {
+        return new Laboratorio(nomeJTextField.getText(), (Laboratorio.Topic) topicJComboBox.getSelectedItem());
     }
 
     public void clear() {

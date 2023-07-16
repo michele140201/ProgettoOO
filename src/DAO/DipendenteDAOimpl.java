@@ -11,8 +11,9 @@ import java.util.List;
 
 
 public class DipendenteDAOimpl implements DipendenteDAO {
-    private ConnectionController connectionController;
-    public DipendenteDAOimpl(ConnectionController connectionController){
+    private final ConnectionController connectionController;
+
+    public DipendenteDAOimpl(ConnectionController connectionController) {
         this.connectionController = connectionController;
     }
 
@@ -90,13 +91,13 @@ public class DipendenteDAOimpl implements DipendenteDAO {
     /**
      * Funzione per impostare il laboratorio di un dipendente
      *
-     * @param nomeLaboratorio
-     * @param id
+     * @param laboratorio
+     * @param dipendente
      * @return
      */
     @Override
-    public void setLaboratorio(String nomeLaboratorio, int id) throws Exception {
-        String sql = ("update Dipendente set nome_lab = '" + nomeLaboratorio + "' where Dipendente.id_dip = " + id);
+    public void setLaboratorio(Laboratorio laboratorio, Dipendente dipendente) throws Exception {
+        String sql = ("update Dipendente set nome_lab = '" + laboratorio.getNome() + "' where Dipendente.id_dip = " + dipendente.getId());
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
@@ -221,7 +222,7 @@ public class DipendenteDAOimpl implements DipendenteDAO {
                 dipendente = new Dipendente(resultSet.getString("Nome"), resultSet.getString("Cognome"), resultSet.getInt("id_dip"), resultSet.getBoolean("Dirigente"), resultSet.getDate("data_assunzione"), resultSet.getDate("data_n"));
             }
             return dipendente;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             throw new Exception(e);
         }
 

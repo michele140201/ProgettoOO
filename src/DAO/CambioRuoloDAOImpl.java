@@ -7,8 +7,9 @@ import java.time.LocalDate;
 
 
 public class CambioRuoloDAOImpl implements CambioRuoloDAO {
-    private ConnectionController connectionController;
-    public CambioRuoloDAOImpl(ConnectionController connectionController){
+    private final ConnectionController connectionController;
+
+    public CambioRuoloDAOImpl(ConnectionController connectionController) {
         this.connectionController = connectionController;
     }
 
