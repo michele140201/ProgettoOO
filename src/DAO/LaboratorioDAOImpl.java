@@ -3,6 +3,7 @@ package DAO;
 import Controller.*;
 import Model.Dipendente;
 import Model.Laboratorio;
+import Model.Progetto;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -23,13 +24,13 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
     @Override
     public List<Laboratorio> getLaboratoriAssegnati() throws Exception {
         List<Laboratorio> laboratori = new ArrayList<>();
-        String sql = ("Select * from Laboratorio");
+        String sql = ("select * from laboratorio left join progetto on laboratorio.progetto = progetto.cup");
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                int progetto = resultSet.getString("progetto") == null ? 0 : resultSet.getInt("progetto");
+                Progetto progetto = new Progetto(resultSet.getString("nome_p"), resultSet.getInt("cup"));
                 Laboratorio laboratorio = new Laboratorio(resultSet.getString("nome_lab"), Laboratorio.Topic.valueOf(resultSet.getString("topic")), progetto, resultSet.getInt("referente"));
                 laboratori.add(laboratorio);
             }
@@ -145,13 +146,14 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
     @Override
     public List<Laboratorio> getLaboratoriAssegnati(int cup) throws Exception {
         List<Laboratorio> laboratori = new ArrayList<>();
-        String sql = ("Select * from laboratorio where laboratorio.progetto = " + cup);
+        String sql = ("Select * from laboratorio , progetto where laboratorio.progetto = " + cup + "and laboratorio.progetto = progetto.cup");
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                Laboratorio lab = new Laboratorio(resultSet.getString("nome_lab"), Laboratorio.Topic.valueOf(resultSet.getString("topic")), resultSet.getInt("progetto"), resultSet.getInt("Referente"));
+                Progetto progetto = new Progetto(resultSet.getString("nome_p"), resultSet.getInt("cup"));
+                Laboratorio lab = new Laboratorio(resultSet.getString("nome_lab"), Laboratorio.Topic.valueOf(resultSet.getString("topic")), progetto, resultSet.getInt("Referente"));
                 laboratori.add(lab);
             }
             return laboratori;
@@ -181,18 +183,19 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
 
     @Override
     public Laboratorio getLaboratorioDipendente(Dipendente dipendente) throws Exception {
-        String sql = "Select * from laboratorio where laboratorio.referente = " + dipendente.getId();
+        String sql = "Select * from laboratorio,progetto,dipendente where dipendente.nome_lab = laboratorio.nome_lab and dipendente.id_dip =  " + dipendente.getId() + " and laboratorio.progetto = progetto.cup";
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
+            Laboratorio laboratorio = null;
             while (resultSet.next()) {
-                Laboratorio laboratorio = new Laboratorio(resultSet.getString("nome_lab"), Laboratorio.Topic.valueOf(resultSet.getString("topic")), resultSet.getInt("referente"), resultSet.getInt("progetto"));
-                return laboratorio;
+                Progetto progetto = new Progetto(resultSet.getString("nome_p"), resultSet.getInt("cup"));
+                laboratorio = new Laboratorio(resultSet.getString("nome_lab"), Laboratorio.Topic.valueOf(resultSet.getString("topic")), progetto, resultSet.getInt("referente"));
             }
+            return laboratorio;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new Exception(e);
         }
-        return null;
     }
 }

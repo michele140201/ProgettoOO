@@ -29,8 +29,8 @@ public class ControllerMainPage {
         this.laboratorioDAO = laboratorioDAO;
         this.progettoDAO = progettoDAO;
         this.guImain = guImain;
-        guImain.setLaboratori(laboratorioDAO.getLaboratoriAssegnati());
         guImain.setDipendenti(inizializzaDipendenti());
+        guImain.setLaboratori(laboratorioDAO.getLaboratoriAssegnati());
         guImain.setProgetti(inzializzaProgetti());
         //todo setlaboratori e set progetti
 
@@ -48,6 +48,12 @@ public class ControllerMainPage {
             guImain.showErrorMessage("OPS! Qualcosa è andato storto");
         }
     }
+
+    public void mostraTuttiDipendenti() throws Exception {
+        guImain.setDipendenti(inizializzaDipendenti());
+    }
+
+
 
     public void licenziaDipendente(Dipendente dipendente) {
         try {
@@ -136,19 +142,20 @@ public class ControllerMainPage {
         }
     }
 
-    public void setReferente(Dipendente dipendente, Progetto progetto) {
+    public void setReferenteProgetto(Dipendente dipendente, Progetto progetto) {
         try {
             progettoDAO.setReferente(dipendente.getId(), progetto.getCup());
             guImain.showInfoMessage("Aggiornamento Riuscito");
+            guImain.aggiornaReferenteProgetto(progetto , dipendente);
         } catch (Exception e) {
             e.printStackTrace();
             guImain.showErrorMessage("Errore nel Database");
         }
     }
 
-    public Date getDataPromozione(int idDip) {
+    public Date getDataPromozione(Dipendente dipendente) {
         try {
-            Date dataCambio = cambioRuoloDAO.getDataPromozione(idDip);
+            Date dataCambio = cambioRuoloDAO.getDataPromozione(dipendente.getId());
             return dataCambio;
         } catch (Exception e) {
             e.printStackTrace();
@@ -271,10 +278,9 @@ public class ControllerMainPage {
         }
     }
 
-    private void setReferente(Progetto progetto) {
+    public void setReferente(Dipendente dipendente, Progetto progetto) {
         try {
             int iddip = progettoDAO.getReferente(progetto, "Referente");
-            Dipendente dipendente = dipendenteDAO.getDipendente(iddip);
             progetto.setReferente(dipendente);
         } catch (Exception e) {
             progetto.setReferente(null);
@@ -295,7 +301,6 @@ public class ControllerMainPage {
     private List<Progetto> inzializzaProgetti() throws Exception {
         List<Progetto> progetti = progettoDAO.getProgetti();
         for (Progetto progetto : progetti) {
-            setReferente(progetto);
             setResponsabile(progetto);
         }
         return progetti;
@@ -322,6 +327,6 @@ public class ControllerMainPage {
             }
             i++;
         }
-        guImain.setComboBox(ProgettiScelti);
+        guImain.setComboBoxLaboratorioDipendente(ProgettiScelti);
     }
 }

@@ -1,5 +1,6 @@
 package GUI;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import javax.swing.table.AbstractTableModel;
 
 
 import Model.Laboratorio;
+import Model.Progetto;
 
 public class ModelloLaboratori extends AbstractTableModel {
 
@@ -22,6 +24,16 @@ public class ModelloLaboratori extends AbstractTableModel {
 
     public List<Laboratorio> getLaboratori() {
         return laboratori;
+    }
+
+    public List<Laboratorio> getLaboratoriProgetto(Progetto progetto){
+        List<Laboratorio> laboratoriProgetto = new ArrayList<>();
+        for (Laboratorio laboratorio : laboratori) {
+            if(laboratorio.getProgetto().getCup() == progetto.getCup()){
+                laboratoriProgetto.add(laboratorio);
+            }
+        }
+        return laboratoriProgetto;
     }
 
     public void setLaboratori(List<Laboratorio> laboratori) {

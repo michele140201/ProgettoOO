@@ -6,10 +6,10 @@ package Model;
 public class Laboratorio {
     private String nome;
     private Topic topic;
-    private int progetto;
+    private Progetto progetto;
     private int responsabile;
 
-    public Laboratorio(String nome, Topic topic, int progetto, int responsabile) {
+    public Laboratorio(String nome, Topic topic, Progetto progetto, int responsabile) {
         this(nome, topic);
         setProgetto(progetto);
         setResponsabile(responsabile);
@@ -41,11 +41,11 @@ public class Laboratorio {
         this.topic = topic;
     }
 
-    public int getProgetto() {
+    public Progetto getProgetto() {
         return progetto;
     }
 
-    public void setProgetto(int progetto) {
+    public void setProgetto(Progetto progetto) {
         this.progetto = progetto;
     }
 

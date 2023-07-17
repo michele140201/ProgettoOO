@@ -24,7 +24,7 @@ public class DipendenteDAOimpl implements DipendenteDAO {
      */
     @Override
     public List<Dipendente> getDipendenti() throws Exception {
-        String sql = ("SELECT * FROM DIPENDENTE");
+        String sql = ("select * from dipendente");
         return getDipendenti(sql);
     }
 

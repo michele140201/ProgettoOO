@@ -1,5 +1,6 @@
 package GUI;
 
+import Model.Dipendente;
 import Model.Progetto;
 
 import javax.swing.table.AbstractTableModel;
@@ -29,6 +30,13 @@ public class ModelloProgetti extends AbstractTableModel {
 
     public void rimuoviProgetto(Progetto progetto) {
         progetti.remove(progetto);
+        fireTableDataChanged();
+    }
+
+    public void setReferente(Progetto progetto , Dipendente dipendente){
+        rimuoviProgetto(progetto);
+        progetto.setReferente(dipendente);
+        aggiungiProgetto(progetto);
         fireTableDataChanged();
     }
 
