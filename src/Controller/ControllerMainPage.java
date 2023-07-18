@@ -32,6 +32,11 @@ public class ControllerMainPage {
         guImain.setDipendenti(inizializzaDipendenti());
         guImain.setLaboratori(laboratorioDAO.getLaboratoriAssegnati());
         guImain.setProgetti(inzializzaProgetti());
+        guImain.setLaboratoriDipendenti();
+        guImain.setProgettiLaboratorio();
+        guImain.setReferenteLaboratorio();
+        guImain.setProgettiLaboratorio();
+        guImain.setReferenteProgetto();
         //todo setlaboratori e set progetti
 
 
@@ -300,17 +305,11 @@ public class ControllerMainPage {
 
     private List<Progetto> inzializzaProgetti() throws Exception {
         List<Progetto> progetti = progettoDAO.getProgetti();
-        for (Progetto progetto : progetti) {
-            setResponsabile(progetto);
-        }
         return progetti;
     }
 
     private List<Dipendente> inizializzaDipendenti() throws Exception {
         List<Dipendente> dipendenti = dipendenteDAO.getDipendenti();
-        for (Dipendente dipendente : dipendenti) {
-            dipendente.setLaboratorio(laboratorioDAO.getLaboratorioDipendente(dipendente));
-        }
         return dipendenti;
     }
 

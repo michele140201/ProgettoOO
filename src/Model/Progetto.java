@@ -25,6 +25,16 @@ public class Progetto {
         setNome(nome);
     }
 
+    public Progetto(int cup) {
+        setCup(cup);
+    }
+
+    public Progetto(String nome, int cup, Dipendente dipendente) {
+        setNome(nome);
+        setCup(cup);
+        setReferente(dipendente);
+    }
+
     @Override
     public String toString() {
         return getNome();

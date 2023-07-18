@@ -216,7 +216,10 @@ public class GUImain extends JFrame {
         DialogoReferenteProgettiButton.addActionListener(event -> {
             JDialog dialodoAssegnazioneReferente = SchermataDialogoAssegnazioneReferenteProgetto();
             List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
-            setComboBoxReferenteProgetto(referenteProgettoComboBox , getModelloDipendenti().getDipendentiLaboratorio(getModelloLaboratori().getLaboratoriProgetto(getProgettoSelezionato())));
+            Progetto progetto = getProgettoSelezionato();
+            List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
+
+            setComboBoxReferenteProgetto(referenteProgettoComboBox ,  dipendenti , laboratori , progetto);
             dialodoAssegnazioneReferente.setVisible(true);
             //todo implementare bene la scelta dei referenti
         });
@@ -605,11 +608,27 @@ public class GUImain extends JFrame {
         }
     }
 
-    private void setComboBoxReferenteProgetto(JComboBox comboBox, List<Dipendente> dipendenti){
+    private void setComboBoxReferenteProgetto(JComboBox comboBox, List<Dipendente> dipendenti , List<Laboratorio> laboratori , Progetto progetto){
         comboBox.removeAllItems();
-        for (Dipendente dipendente : dipendenti) {
-            comboBox.addItem(dipendente);
+        String[] nomiLaboratorio = new String[3];
+        int i = 0;
+        for (Laboratorio laboratorio: laboratori) {
+            if(laboratorio.getProgetto().getCup() == progetto.getCup()){
+                nomiLaboratorio[i] = laboratorio.getNome();
+                i++;
+            }
         }
+
+        for (Dipendente dipendente : dipendenti) {
+            for (i = 0; i < nomiLaboratorio.length ; i++) {
+                    if(dipendente.getLaboratorio().getNome() == nomiLaboratorio[i]){
+                        comboBox.addItem(dipendente);
+                        System.out.println(comboBox.getItemCount() + " CONTO ELEMENTI ");
+                        System.out.println(dipendente);
+                        break;
+                    }
+                }
+            }
     }
 
     private JDialog SchermataDialogoAssegnazioneLaboratorioDipendente() {
@@ -663,6 +682,54 @@ public class GUImain extends JFrame {
     public void AssegnaReferenteProgettiButtonFunction(){
         Dipendente dipendente = (Dipendente) ComboBox.getSelectedItem();
         controllerMainPage.setReferente(dipendente, getProgettoSelezionato());
+    }
+
+    public void setLaboratoriDipendenti(){
+        List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
+        List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
+        for (Dipendente dipendente : dipendenti) {
+            for (Laboratorio laboratorio : laboratori) {
+                if(laboratorio.getNome() == dipendente.getLaboratorio().getNome()){
+                    dipendente.setLaboratorio(laboratorio);
+                }
+            }
+        }
+    }
+
+    public void setProgettiLaboratorio(){
+        List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
+        List<Progetto> progetti = getModelloProgetti().getProgetti();
+        for (Laboratorio laboratorio : laboratori) {
+            for (Progetto progetto : progetti) {
+                if(progetto.getCup() == laboratorio.getProgetto().getCup()){
+                    laboratorio.setProgetto(progetto);
+                }
+            }
+        }
+    }
+
+    public void setReferenteLaboratorio(){
+        List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
+        List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
+        for (Laboratorio laboratorio : laboratori) {
+            for (Dipendente dipendente : dipendenti) {
+                if(laboratorio.getResponsabile().getId() == dipendente.getId()){
+                    laboratorio.setResponsabile(dipendente);
+                }
+            }
+        }
+    }
+
+    public void setReferenteProgetto(){
+        List<Progetto> progetti = getModelloProgetti().getProgetti();
+        List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
+        for (Progetto progetto : progetti) {
+            for (Dipendente dipendente : dipendenti) {
+                if(progetto.getReferente().getId() == dipendente.getId()){
+                    progetto.setReferente(dipendente);
+                }
+            }
+        }
     }
 
 }

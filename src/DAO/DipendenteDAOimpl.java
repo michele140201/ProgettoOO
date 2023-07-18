@@ -201,7 +201,8 @@ public class DipendenteDAOimpl implements DipendenteDAO {
             ResultSet resultSet = statement.executeQuery(sql);
             List<Dipendente> dipendenti = new ArrayList<>();
             while (resultSet.next()) {
-                Dipendente dipendente = new Dipendente(resultSet.getString("Nome"), resultSet.getString("Cognome"), resultSet.getInt("id_dip"), resultSet.getBoolean("Dirigente"), resultSet.getDate("data_assunzione"), resultSet.getDate("data_n"));
+                Laboratorio laboratorio = new Laboratorio(resultSet.getString("nome_lab"));
+                Dipendente dipendente = new Dipendente(resultSet.getString("Nome"), resultSet.getString("Cognome"), resultSet.getInt("id_dip"), resultSet.getBoolean("Dirigente"), resultSet.getDate("data_assunzione"), resultSet.getDate("data_n") , laboratorio);
                 dipendenti.add(dipendente);
             }
             return dipendenti;

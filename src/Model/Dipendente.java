@@ -33,6 +33,10 @@ public class Dipendente {
         setLaboratorio(laboratorio);
     }
 
+    public Dipendente(int id) {
+        setId(id);
+    }
+
     @Override
     public String toString() {
         return getNome() + " " + getCognome() + " " + getId();

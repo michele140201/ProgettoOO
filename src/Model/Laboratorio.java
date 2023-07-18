@@ -7,12 +7,16 @@ public class Laboratorio {
     private String nome;
     private Topic topic;
     private Progetto progetto;
-    private int responsabile;
+    private Dipendente responsabile;
 
-    public Laboratorio(String nome, Topic topic, Progetto progetto, int responsabile) {
+    public Laboratorio(String nome, Topic topic, Progetto progetto, Dipendente responsabile) {
         this(nome, topic);
         setProgetto(progetto);
         setResponsabile(responsabile);
+    }
+
+    public Laboratorio(String nome){
+        setNome(nome);
     }
 
     public Laboratorio(String nome, Topic topic) {
@@ -49,11 +53,11 @@ public class Laboratorio {
         this.progetto = progetto;
     }
 
-    public int getResponsabile() {
+    public Dipendente getResponsabile() {
         return responsabile;
     }
 
-    public void setResponsabile(int responsabile) {
+    public void setResponsabile(Dipendente responsabile) {
         this.responsabile = responsabile;
     }
 

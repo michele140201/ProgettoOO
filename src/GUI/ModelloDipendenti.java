@@ -50,17 +50,15 @@ public class ModelloDipendenti extends AbstractTableModel {
 
     public List<Dipendente> getDipendentiLaboratorio(List<Laboratorio> laboratori) {
         List<Dipendente> dipendentiLaboratorio = new ArrayList<>();
-        int i = 0;
-        for (Dipendente dipendente : getDipendenti()) {
+        for (Dipendente dipendente : dipendenti) {
             for (Laboratorio laboratorio : laboratori) {
-                if(dipendente.getLaboratorio() != null){
-                    if (dipendente.getLaboratorio() == laboratori.get(i))
-                    {
-                        dipendentiLaboratorio.add(dipendente);
-                        System.out.println(dipendente);
-                    }
+                if (dipendente.getLaboratorio() == laboratorio)
+                {
+                    dipendentiLaboratorio.add(dipendente);
+                    System.out.println(dipendente);
                 }
             }
+
         }
         return dipendentiLaboratorio;
     }

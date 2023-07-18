@@ -1,5 +1,6 @@
 package DAO;
 
+import Model.Dipendente;
 import Model.Progetto;
 
 import java.util.ArrayList;
@@ -30,7 +31,8 @@ public class ProgettoDAOImpl implements ProgettoDAO {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                Progetto progetto = new Progetto(resultSet.getString("nome_p"), resultSet.getInt("CUP"));
+                Dipendente dipendente = new Dipendente(resultSet.getInt("referente"));
+                Progetto progetto = new Progetto(resultSet.getString("nome_p"), resultSet.getInt("CUP") , dipendente);
                 progetti.add(progetto);
             }
             return progetti;

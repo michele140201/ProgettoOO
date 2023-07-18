@@ -23,6 +23,10 @@ public class ModelloProgetti extends AbstractTableModel {
         fireTableDataChanged();
     }
 
+    public List<Progetto> getProgetti(){
+      return progetti;
+    }
+
     public void aggiungiProgetto(Progetto progetto) {
         progetti.add(progetto);
         fireTableDataChanged();

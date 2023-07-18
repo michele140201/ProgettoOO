@@ -24,14 +24,15 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
     @Override
     public List<Laboratorio> getLaboratoriAssegnati() throws Exception {
         List<Laboratorio> laboratori = new ArrayList<>();
-        String sql = ("select * from laboratorio left join progetto on laboratorio.progetto = progetto.cup");
+        String sql = ("select * from laboratorio ");
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                Progetto progetto = new Progetto(resultSet.getString("nome_p"), resultSet.getInt("cup"));
-                Laboratorio laboratorio = new Laboratorio(resultSet.getString("nome_lab"), Laboratorio.Topic.valueOf(resultSet.getString("topic")), progetto, resultSet.getInt("referente"));
+                Progetto progetto = new Progetto(resultSet.getInt("progetto"));
+                Dipendente dipendente = new Dipendente(resultSet.getInt("referente"));
+                Laboratorio laboratorio = new Laboratorio(resultSet.getString("nome_lab"), Laboratorio.Topic.valueOf(resultSet.getString("topic")), progetto, dipendente);
                 laboratori.add(laboratorio);
             }
             return laboratori;
@@ -153,7 +154,8 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 Progetto progetto = new Progetto(resultSet.getString("nome_p"), resultSet.getInt("cup"));
-                Laboratorio lab = new Laboratorio(resultSet.getString("nome_lab"), Laboratorio.Topic.valueOf(resultSet.getString("topic")), progetto, resultSet.getInt("Referente"));
+                Dipendente dipendente = new Dipendente(resultSet.getInt("referente"));
+                Laboratorio lab = new Laboratorio(resultSet.getString("nome_lab"), Laboratorio.Topic.valueOf(resultSet.getString("topic")), progetto , dipendente);
                 laboratori.add(lab);
             }
             return laboratori;
@@ -191,7 +193,7 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
             Laboratorio laboratorio = null;
             while (resultSet.next()) {
                 Progetto progetto = new Progetto(resultSet.getString("nome_p"), resultSet.getInt("cup"));
-                laboratorio = new Laboratorio(resultSet.getString("nome_lab"), Laboratorio.Topic.valueOf(resultSet.getString("topic")), progetto, resultSet.getInt("referente"));
+                laboratorio = new Laboratorio(resultSet.getString("nome_lab"), Laboratorio.Topic.valueOf(resultSet.getString("topic")), progetto, dipendente);
             }
             return laboratorio;
         } catch (SQLException e) {
