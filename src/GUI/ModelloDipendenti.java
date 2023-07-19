@@ -21,7 +21,7 @@ public class ModelloDipendenti extends AbstractTableModel {
     public ModelloDipendenti(List<Dipendente> dipendenti) {
         setDipendenti(dipendenti);
     }
-    
+
 
     public void rimuoviDipendentiAssegnati() {
         int i = 0;

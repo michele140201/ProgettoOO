@@ -613,10 +613,6 @@ public class GUImain extends JFrame {
 
     private void setComboBoxReferenteProgetto(JComboBox comboBox, Progetto progetto) {
         comboBox.removeAllItems();
-        int i = 0;
-        for (Laboratorio laboratorio : progetto.getLaboratori()) {
-            System.out.println(i++ + " " + laboratorio);
-        }
         TimeUnit time = TimeUnit.DAYS;
         for (Dipendente dipendente : getModelloDipendenti().getDipendenti()) {
             for (Laboratorio laboratorio : progetto.getLaboratori()) {
