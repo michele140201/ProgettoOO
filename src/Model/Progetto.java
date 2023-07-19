@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.List;
+
 /**
  * Creazione del model Progetto con getter e setter
  */
@@ -8,12 +10,25 @@ public class Progetto {
     private String nome;
     private Dipendente referente;
     private Dipendente responsabile;
+    private List<Laboratorio> laboratori;
 
     public Progetto(int cup, String nome, Dipendente referente, Dipendente responsabile) {
         this(nome);
         setCup(cup);
         setReferente(referente);
         setResponsabile(responsabile);
+    }
+
+    public List<Laboratorio> getLaboratori() {
+        return laboratori;
+    }
+
+    public void setLaboratori(List<Laboratorio> laboratori) {
+        this.laboratori = laboratori;
+    }
+
+    public void addLaboratorio(Laboratorio laboratorio){
+        laboratori.add(laboratorio);
     }
 
     public Progetto(String nome, int cup) {

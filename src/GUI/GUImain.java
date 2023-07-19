@@ -78,7 +78,7 @@ public class GUImain extends JFrame {
     private JButton DialogoReferenteProgettiButton;
     private ControllerMainPage controllerMainPage;
     private JDialog dialogoAssegnazioneDipendenteLaboratorio;
-    private JComboBox<Dipendente> referenteProgettoComboBox = new JComboBox<>();
+    private final JComboBox<Dipendente> referenteProgettoComboBox = new JComboBox<>();
 
     public GUImain() {
         setContentPane(PannelloPrincipale);
@@ -219,7 +219,7 @@ public class GUImain extends JFrame {
             Progetto progetto = getProgettoSelezionato();
             List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
 
-            setComboBoxReferenteProgetto(referenteProgettoComboBox ,  dipendenti , laboratori , progetto);
+            setComboBoxReferenteProgetto(referenteProgettoComboBox , progetto);
             dialodoAssegnazioneReferente.setVisible(true);
             //todo implementare bene la scelta dei referenti
         });
@@ -608,27 +608,26 @@ public class GUImain extends JFrame {
         }
     }
 
-    private void setComboBoxReferenteProgetto(JComboBox comboBox, List<Dipendente> dipendenti , List<Laboratorio> laboratori , Progetto progetto){
+    private void setComboBoxReferenteProgetto(JComboBox comboBox, Progetto progetto) {
         comboBox.removeAllItems();
-        String[] nomiLaboratorio = new String[3];
         int i = 0;
-        for (Laboratorio laboratorio: laboratori) {
-            if(laboratorio.getProgetto().getCup() == progetto.getCup()){
-                nomiLaboratorio[i] = laboratorio.getNome();
-                i++;
+        for (Laboratorio laboratorio : progetto.getLaboratori()) {
+            System.out.println(i++ + " " +laboratorio );
+        }
+        for (Dipendente dipendente : getModelloDipendenti().getDipendenti()) {
+            for (Laboratorio laboratorio : progetto.getLaboratori()) {
+                if(dipendente.getLaboratorio().getNome()!=null){
+                        if(dipendente.getLaboratorio().getNome().equals(laboratorio.getNome())){
+                            if((Date.valueOf(LocalDate.now()).getTime() - dipendente.getDataAssunzione().getTime())/365 >= 7)
+                                comboBox.addItem(dipendente);
+                                System.out.println("1");
+                        }
+                    System.out.println(dipendente);
+                    System.out.println("laboratorio : " + dipendente.getLaboratorio());
+                }
+
             }
         }
-
-        for (Dipendente dipendente : dipendenti) {
-            for (i = 0; i < nomiLaboratorio.length ; i++) {
-                    if(dipendente.getLaboratorio().getNome() == nomiLaboratorio[i]){
-                        comboBox.addItem(dipendente);
-                        System.out.println(comboBox.getItemCount() + " CONTO ELEMENTI ");
-                        System.out.println(dipendente);
-                        break;
-                    }
-                }
-            }
     }
 
     private JDialog SchermataDialogoAssegnazioneLaboratorioDipendente() {
@@ -650,7 +649,7 @@ public class GUImain extends JFrame {
         return dialogo;
     }
 
-    private JDialog SchermataDialogoAssegnazioneReferenteProgetto(){
+    private JDialog SchermataDialogoAssegnazioneReferenteProgetto() {
         JDialog dialogo = creaDialogo();
         dialogo.add(new JLabel("Quale Dipendente vuoi rendere referente"), BorderLayout.PAGE_START);
         dialogo.add(referenteProgettoComboBox, BorderLayout.CENTER);
@@ -660,9 +659,9 @@ public class GUImain extends JFrame {
         conferma.addActionListener(Event -> {
             Dipendente dipendente = (Dipendente) referenteProgettoComboBox.getSelectedItem();
             Progetto progetto = getProgettoSelezionato();
-            controllerMainPage.setReferenteProgetto(dipendente , progetto);
+            controllerMainPage.setReferenteProgetto(dipendente, progetto);
             getModelloDipendenti().fireTableDataChanged();
-            dialogo.setVisible(true);
+            dialogo.setVisible(false);
         });
         return dialogo;
     }
@@ -671,64 +670,78 @@ public class GUImain extends JFrame {
         getModelloDipendenti().setLaboratorio(laboratorio, dipendente);
     }
 
-    public void aggiornaReferenteProgetto(Progetto progetto , Dipendente dipendente){
-        getModelloProgetti().setReferente(progetto , dipendente);
+    public void aggiornaReferenteProgetto(Progetto progetto, Dipendente dipendente) {
+        getModelloProgetti().setReferente(progetto, dipendente);
     }
 
     public void rimuoviDipendentiAssegnati() {
         getModelloDipendenti().rimuoviDipendentiAssegnati();
     }
 
-    public void AssegnaReferenteProgettiButtonFunction(){
+    public void AssegnaReferenteProgettiButtonFunction() {
         Dipendente dipendente = (Dipendente) ComboBox.getSelectedItem();
         controllerMainPage.setReferente(dipendente, getProgettoSelezionato());
     }
 
-    public void setLaboratoriDipendenti(){
+    public void setLaboratoriDipendenti() {
         List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
         List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
         for (Dipendente dipendente : dipendenti) {
             for (Laboratorio laboratorio : laboratori) {
-                if(laboratorio.getNome() == dipendente.getLaboratorio().getNome()){
+                if (laboratorio.getNome() == dipendente.getLaboratorio().getNome()) {
                     dipendente.setLaboratorio(laboratorio);
                 }
             }
         }
     }
 
-    public void setProgettiLaboratorio(){
+    public void setProgettiLaboratorio() {
         List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
         List<Progetto> progetti = getModelloProgetti().getProgetti();
         for (Laboratorio laboratorio : laboratori) {
             for (Progetto progetto : progetti) {
-                if(progetto.getCup() == laboratorio.getProgetto().getCup()){
+                if (progetto.getCup() == laboratorio.getProgetto().getCup()) {
                     laboratorio.setProgetto(progetto);
                 }
             }
         }
     }
 
-    public void setReferenteLaboratorio(){
+    public void setReferenteLaboratorio() {
         List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
         List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
         for (Laboratorio laboratorio : laboratori) {
             for (Dipendente dipendente : dipendenti) {
-                if(laboratorio.getResponsabile().getId() == dipendente.getId()){
+                if (laboratorio.getResponsabile().getId() == dipendente.getId()) {
                     laboratorio.setResponsabile(dipendente);
                 }
             }
         }
     }
 
-    public void setReferenteProgetto(){
+    public void setReferenteProgetto() {
         List<Progetto> progetti = getModelloProgetti().getProgetti();
         List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
         for (Progetto progetto : progetti) {
             for (Dipendente dipendente : dipendenti) {
-                if(progetto.getReferente().getId() == dipendente.getId()){
+                if (progetto.getReferente().getId() == dipendente.getId()) {
                     progetto.setReferente(dipendente);
                 }
             }
+        }
+    }
+
+    public void setLaboratoriProgetto(){
+        List<Progetto> progetti = getModelloProgetti().getProgetti();
+        List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
+        for (Progetto progetto : progetti) {
+            List<Laboratorio> laboratoriProgetto = new ArrayList<>();
+            for (Laboratorio laboratorio : laboratori) {
+                if(progetto.getNome() == laboratorio.getProgetto().getNome()){
+                    laboratoriProgetto.add(laboratorio);
+                }
+            }
+            progetto.setLaboratori(laboratoriProgetto);
         }
     }
 

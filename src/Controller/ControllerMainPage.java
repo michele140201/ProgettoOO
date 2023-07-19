@@ -37,6 +37,7 @@ public class ControllerMainPage {
         guImain.setReferenteLaboratorio();
         guImain.setProgettiLaboratorio();
         guImain.setReferenteProgetto();
+        guImain.setLaboratoriProgetto();
         //todo setlaboratori e set progetti
 
 
