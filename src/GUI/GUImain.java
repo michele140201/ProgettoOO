@@ -12,6 +12,7 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class GUImain extends JFrame {
     private final JButton ConfermaResponsabileButton = new JButton("Conferma");
     private final int currentYear = LocalDate.now().getYear();
     private final JComboBox<Laboratorio> LaboratorioComboBox = new JComboBox<>();
+    private final JComboBox<Dipendente> referenteProgettoComboBox = new JComboBox<>();
     String[] ValoriDirigenteBox = {"NO", "SI"};
     String[] Mesi = {"Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"};
     private SpinnerNumberModel YearModel;
@@ -78,7 +80,6 @@ public class GUImain extends JFrame {
     private JButton DialogoReferenteProgettiButton;
     private ControllerMainPage controllerMainPage;
     private JDialog dialogoAssegnazioneDipendenteLaboratorio;
-    private final JComboBox<Dipendente> referenteProgettoComboBox = new JComboBox<>();
 
     public GUImain() {
         setContentPane(PannelloPrincipale);
@@ -219,7 +220,7 @@ public class GUImain extends JFrame {
             Progetto progetto = getProgettoSelezionato();
             List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
 
-            setComboBoxReferenteProgetto(referenteProgettoComboBox , progetto);
+            setComboBoxReferenteProgetto(referenteProgettoComboBox, progetto);
             dialodoAssegnazioneReferente.setVisible(true);
             //todo implementare bene la scelta dei referenti
         });
@@ -612,23 +613,21 @@ public class GUImain extends JFrame {
         comboBox.removeAllItems();
         int i = 0;
         for (Laboratorio laboratorio : progetto.getLaboratori()) {
-            System.out.println(i++ + " " +laboratorio );
+            System.out.println(i++ + " " + laboratorio);
         }
+        TimeUnit time = TimeUnit.DAYS;
         for (Dipendente dipendente : getModelloDipendenti().getDipendenti()) {
             for (Laboratorio laboratorio : progetto.getLaboratori()) {
-                if(dipendente.getLaboratorio().getNome()!=null){
-                        if(dipendente.getLaboratorio().getNome().equals(laboratorio.getNome())){
-                            if((Date.valueOf(LocalDate.now()).getTime() - dipendente.getDataAssunzione().getTime())/365 >= 7)
-                                comboBox.addItem(dipendente);
-                                System.out.println("1");
-                        }
-                    System.out.println(dipendente);
-                    System.out.println("laboratorio : " + dipendente.getLaboratorio());
+                if (dipendente.getLaboratorio().getNome() != null) {
+                    if (dipendente.getLaboratorio().getNome().equals(laboratorio.getNome())) {
+                        if (time.convert(Date.valueOf(LocalDate.now()).getTime() - dipendente.getDataAssunzione().getTime(), TimeUnit.MILLISECONDS) / 365 >= 7)
+                            comboBox.addItem(dipendente);
+                    }
                 }
-
             }
+
         }
-    }
+}
 
     private JDialog SchermataDialogoAssegnazioneLaboratorioDipendente() {
         JDialog dialogo = creaDialogo();
@@ -731,13 +730,13 @@ public class GUImain extends JFrame {
         }
     }
 
-    public void setLaboratoriProgetto(){
+    public void setLaboratoriProgetto() {
         List<Progetto> progetti = getModelloProgetti().getProgetti();
         List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
         for (Progetto progetto : progetti) {
             List<Laboratorio> laboratoriProgetto = new ArrayList<>();
             for (Laboratorio laboratorio : laboratori) {
-                if(progetto.getNome() == laboratorio.getProgetto().getNome()){
+                if (progetto.getNome() == laboratorio.getProgetto().getNome()) {
                     laboratoriProgetto.add(laboratorio);
                 }
             }
