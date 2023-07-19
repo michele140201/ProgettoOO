@@ -38,6 +38,7 @@ public class ControllerMainPage {
         guImain.setProgettiLaboratorio();
         guImain.setReferenteProgetto();
         guImain.setLaboratoriProgetto();
+        guImain.setResponsabiliProgetto();
         //todo setlaboratori e set progetti
 
 
@@ -173,8 +174,9 @@ public class ControllerMainPage {
     public void promuovi(Dipendente dipendente) {
         try {
             if (!dipendente.isDirigente()) {
-                dipendenteDAO.promuovi(dipendente.getId());
-                cambioRuoloDAO.setDataPromozione(dipendente.getId());
+                dipendenteDAO.promuovi(dipendente);
+                cambioRuoloDAO.setDataPromozione(dipendente);
+                dipendente.setDirigente(true);
                 guImain.showInfoMessage("Promosso!");
             } else {
                 guImain.showErrorMessage("IMPOSSIBILE PROMUOVERE!");

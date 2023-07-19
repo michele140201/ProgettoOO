@@ -1,6 +1,7 @@
 package DAO;
 
 import Controller.*;
+import Model.Dipendente;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -45,9 +46,9 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO {
      * @return
      */
     @Override
-    public void setDataPromozione(int idDip) throws Exception {
+    public void setDataPromozione(Dipendente dipendente) throws Exception {
         String data = LocalDate.now().toString();
-        String sql = ("Insert into Ruolo(id_dip,data_cambio) values ('" + idDip + "','" + data + "')");
+        String sql = ("Insert into Ruolo(id_dip,data_cambio) values ('" + dipendente.getId() + "','" + data + "')");
 
         try {
             Connection connection = connectionController.getConnection();

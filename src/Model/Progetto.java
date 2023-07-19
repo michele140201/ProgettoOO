@@ -19,6 +19,11 @@ public class Progetto {
         setResponsabile(responsabile);
     }
 
+    public Progetto(String nome, int cup, Dipendente referente, Dipendente responsabile) {
+        this(nome , cup , referente);
+        setResponsabile(responsabile);
+    }
+
     public List<Laboratorio> getLaboratori() {
         return laboratori;
     }

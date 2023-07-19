@@ -17,7 +17,7 @@ public interface DipendenteDAO {
 
     void setLaboratorio(Laboratorio laboratorio, Dipendente dipendente) throws Exception;
 
-    void promuovi(int id_dip) throws Exception;
+    void promuovi(Dipendente dipendente) throws Exception;
 
     void degrada(int id_dip) throws Exception;
 

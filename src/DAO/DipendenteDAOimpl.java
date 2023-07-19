@@ -108,15 +108,10 @@ public class DipendenteDAOimpl implements DipendenteDAO {
 
     }
 
-    /**
-     * Funzione per la promozione di un dipendente
-     *
-     * @param id
-     * @return
-     */
+
     @Override
-    public void promuovi(int id) throws Exception {
-        String sql = ("update Dipendente set Dirigente = 'yes' where Dipendente.id_dip = " + id);
+    public void promuovi(Dipendente dipendente) throws Exception {
+        String sql = ("update Dipendente set Dirigente = 'yes' where Dipendente.id_dip = " + dipendente.getId());
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
