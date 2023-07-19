@@ -22,10 +22,8 @@ public class ModelloDipendenti extends AbstractTableModel {
         setDipendenti(dipendenti);
     }
 
-    public void setLaboratorio(Laboratorio nomeLaboratorio, Dipendente dipendente) {
-        dipendenti.remove(dipendente);
-        dipendente.setLaboratorio(nomeLaboratorio);
-        dipendenti.add(dipendente);
+    public void setLaboratorio(Laboratorio laboratorio, Dipendente dipendente) {
+
     }
 
     public void rimuoviDipendentiAssegnati() {
@@ -48,20 +46,6 @@ public class ModelloDipendenti extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    public List<Dipendente> getDipendentiLaboratorio(List<Laboratorio> laboratori) {
-        List<Dipendente> dipendentiLaboratorio = new ArrayList<>();
-        for (Dipendente dipendente : dipendenti) {
-            for (Laboratorio laboratorio : laboratori) {
-                if (dipendente.getLaboratorio() == laboratorio)
-                {
-                    dipendentiLaboratorio.add(dipendente);
-                    System.out.println(dipendente);
-                }
-            }
-
-        }
-        return dipendentiLaboratorio;
-    }
 
     public void aggiungiDipendente(Dipendente dipendente) {
         this.dipendenti.add(dipendente);

@@ -26,16 +26,6 @@ public class ModelloLaboratori extends AbstractTableModel {
         return laboratori;
     }
 
-    public List<Laboratorio> getLaboratoriProgetto(Progetto progetto){
-        List<Laboratorio> laboratoriProgetto = new ArrayList<>();
-        for (Laboratorio laboratorio : laboratori) {
-            if(laboratorio.getProgetto().getCup() == progetto.getCup()){
-                laboratoriProgetto.add(laboratorio);
-            }
-        }
-        return laboratoriProgetto;
-    }
-
     public void setLaboratori(List<Laboratorio> laboratori) {
         this.laboratori = laboratori;
         fireTableDataChanged();

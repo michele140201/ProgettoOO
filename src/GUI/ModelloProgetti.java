@@ -37,12 +37,6 @@ public class ModelloProgetti extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    public void setReferente(Progetto progetto , Dipendente dipendente){
-        rimuoviProgetto(progetto);
-        progetto.setReferente(dipendente);
-        aggiungiProgetto(progetto);
-        fireTableDataChanged();
-    }
 
     public Progetto getProgetto(int rowIndex) {
         return progetti.get(rowIndex);

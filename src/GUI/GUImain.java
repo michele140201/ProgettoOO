@@ -219,10 +219,12 @@ public class GUImain extends JFrame {
             List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
             Progetto progetto = getProgettoSelezionato();
             List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
-
-            setComboBoxReferenteProgetto(referenteProgettoComboBox, progetto);
-            dialodoAssegnazioneReferente.setVisible(true);
-            //todo implementare bene la scelta dei referenti
+            if(progetto.getLaboratori().size()>0){
+                setComboBoxReferenteProgetto(referenteProgettoComboBox, progetto);
+                dialodoAssegnazioneReferente.setVisible(true);
+            }else{
+                showErrorMessage("Nessun laboratorio assegnato");
+            }
         });
         assegnaProgettoButton.addActionListener(new ActionListener() {
             @Override
@@ -632,7 +634,7 @@ public class GUImain extends JFrame {
     private JDialog SchermataDialogoAssegnazioneLaboratorioDipendente() {
         JDialog dialogo = creaDialogo();
         dialogo.add(new JLabel("Quale Laboratorio vuoi assegnargli"), BorderLayout.PAGE_START);
-        List<Laboratorio> laboratory = getModelloLaboratori().getLaboratoriProgetto(getProgettoSelezionato());
+        List<Laboratorio> laboratory = getModelloLaboratori().getLaboratori();
         setComboBoxLaboratorioDipendente(LaboratorioComboBox, laboratory);
         dialogo.add(LaboratorioComboBox, BorderLayout.CENTER);
         JButton conferma = new JButton("Conferma");
@@ -666,11 +668,15 @@ public class GUImain extends JFrame {
     }
 
     public void aggiornaLaboratorioDipendente(Laboratorio laboratorio, Dipendente dipendente) {
-        getModelloDipendenti().setLaboratorio(laboratorio, dipendente);
+        dipendente.setLaboratorio(laboratorio);
+        getModelloDipendenti().fireTableDataChanged();
+
     }
 
     public void aggiornaReferenteProgetto(Progetto progetto, Dipendente dipendente) {
-        getModelloProgetti().setReferente(progetto, dipendente);
+
+        progetto.setReferente(dipendente);
+        getModelloProgetti().fireTableDataChanged();
     }
 
     public void rimuoviDipendentiAssegnati() {
