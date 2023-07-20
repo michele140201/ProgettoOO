@@ -143,6 +143,7 @@ public class ControllerMainPage {
         try {
             progettoDAO.setResponsabile(dipendente.getId(), progetto.getCup());
             guImain.showInfoMessage("Modifica Riuscita!");
+            guImain.aggiornaResponsabileProgetto(progetto , dipendente);
         } catch (Exception e) {
             e.printStackTrace();
             guImain.showErrorMessage("Errore nel Database");
@@ -219,6 +220,17 @@ public class ControllerMainPage {
         }
     }
 
+    public void aggiornaProgettoLaboratorio(Progetto progetto , Laboratorio laboratorio){
+        try {
+            laboratorioDAO.riassegnaProgetto(laboratorio.getNome() , progetto.getCup());
+            guImain.showInfoMessage("Aggiornamento Riuscito");
+            guImain.aggiornaProgettoLaboratorio(laboratorio , progetto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            guImain.showErrorMessage("Errore nel Database");
+        }
+    }
+
     public List<Dipendente> getSenior(String NomeLab) {
         try {
             List<Dipendente> DIR = dipendenteDAO.getSenior(NomeLab);
@@ -286,24 +298,11 @@ public class ControllerMainPage {
         }
     }
 
-    public void setReferente(Dipendente dipendente, Progetto progetto) {
+    public void setReferenteLaboratorio(Dipendente dipendente, Laboratorio laboratorio) {
         try {
-            int iddip = progettoDAO.getReferente(progetto, "Referente");
-            progetto.setReferente(dipendente);
+            laboratorioDAO.riassegnaDipendente(laboratorio.getNome() , dipendente.getId());
         } catch (Exception e) {
-            progetto.setReferente(null);
         }
-    }
-
-    private void setResponsabile(Progetto progetto) {
-        try {
-            int iddip = progettoDAO.getReferente(progetto, "Responsabile");
-            Dipendente dipendente = dipendenteDAO.getDipendente(iddip);
-            progetto.setReferente(dipendente);
-        } catch (Exception e) {
-            progetto.setReferente(null);
-        }
-
     }
 
     private List<Progetto> inzializzaProgetti() throws Exception {

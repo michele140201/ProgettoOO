@@ -2,7 +2,7 @@ import Controller.*;
 import DAO.*;
 import GUI.GUImain;
 
-public class Applicazione {
+public class  Applicazione {
     public static void main(String[] args) throws Exception {
         ConnectionController connectionController = new ConnectionController();
         ProgettoDAO progettoDAO = new ProgettoDAOImpl(connectionController);
