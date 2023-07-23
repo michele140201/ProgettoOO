@@ -723,7 +723,15 @@ public class GUImain extends JFrame {
     }
 
     public void rimuoviDipendentiAssegnati() {
-        getModelloDipendenti().rimuoviDipendentiAssegnati();
+        int i = 0;
+        List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
+        while (i < dipendenti.size()) {
+            if (dipendenti.get(i).getLaboratorio().getNome() != null) {
+                rimuoviDipendente(dipendenti.get(i));
+            } else {
+                i++;
+            }
+        }
     }
 
     public void setLaboratoriDipendenti() {
