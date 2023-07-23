@@ -15,6 +15,10 @@ public class Laboratorio {
         setResponsabile(responsabile);
     }
 
+    public Laboratorio(){
+        setNome(null);
+    }
+
     public Laboratorio(String nome){
         setNome(nome);
     }
@@ -26,7 +30,10 @@ public class Laboratorio {
 
     @Override
     public String toString() {
-        return getNome();
+        if(getNome() != null)
+            return getNome();
+        else
+            return "Non Assegnato";
     }
 
     public String getNome() {

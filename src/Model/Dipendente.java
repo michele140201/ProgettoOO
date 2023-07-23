@@ -37,19 +37,27 @@ public class Dipendente {
         setId(id);
     }
 
+    public Dipendente(){
+        setId(0);
+    }
+
+    public Dipendente(String nome, String cognome, Boolean dir, Date date, java.sql.Date datadiN, Laboratorio laboratorio) {
+        setNome(nome);
+        setCognome(cognome);
+        setDirigente(dirigente);
+        setDataAssunzione(dataAssunzione);
+        setDataNascita(dataNascita);
+        setLaboratorio(laboratorio);
+    }
+
     @Override
     public String toString() {
-        if(getNome() != null)
+        if (getNome() != null)
             return getNome() + " " + getCognome() + " " + getId();
-        else{
+        else {
             return "Non Assegnato";
         }
     }
-
-    public boolean haLaboratorioAssegnato() {
-        return laboratorio == null;
-    }
-
 
     public Laboratorio getLaboratorio() {
         return laboratorio;

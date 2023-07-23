@@ -10,10 +10,10 @@ public interface ProgettoDAO {
 
     void inserisci(Progetto progetto) throws Exception;
 
-    void rimuovi(int cup) throws Exception;
+    void rimuovi(Progetto progetto) throws Exception;
 
-    void setReferente(Dipendente dipendente, int cup) throws Exception;
+    void setReferente(Dipendente dipendente, Progetto progetto) throws Exception;
 
-    void setResponsabile(Dipendente dipendente, int cup) throws Exception;
+    void setResponsabile(Dipendente dipendente, Progetto progetto) throws Exception;
 
 }

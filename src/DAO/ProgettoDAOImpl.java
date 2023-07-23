@@ -28,7 +28,7 @@ public class ProgettoDAOImpl implements ProgettoDAO {
             while (resultSet.next()) {
                 Dipendente dipendente = new Dipendente(resultSet.getInt("referente"));
                 Dipendente responsabile = new Dipendente(resultSet.getInt("responsabile"));
-                Progetto progetto = new Progetto(resultSet.getString("nome_p"), resultSet.getInt("CUP") , dipendente , responsabile);
+                Progetto progetto = new Progetto(resultSet.getString("nome_p"), resultSet.getInt("CUP"), dipendente, responsabile);
                 progetti.add(progetto);
             }
             return progetti;
@@ -69,9 +69,10 @@ public class ProgettoDAOImpl implements ProgettoDAO {
         }
 
     }
+
     @Override
-    public void rimuovi(int cup) throws Exception {
-        String sql = ("Delete from progetto where progetto.cup = " + cup);
+    public void rimuovi(Progetto progetto) throws Exception {
+        String sql = ("Delete from progetto where progetto.cup = " + progetto.getCup());
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
@@ -83,13 +84,14 @@ public class ProgettoDAOImpl implements ProgettoDAO {
     }
 
     @Override
-    public void setReferente(Dipendente dipendente, int cup) throws Exception {
+    public void setReferente(Dipendente dipendente, Progetto progetto) throws Exception {
         int id;
         String sql;
-        if(dipendente != null){
-            sql = ("Update progetto set referente = "  + dipendente.getId() + " where cup = " + cup);
-        }else{
-            sql = ("Update progetto set referente = "  + null + " where cup = " + cup);        }
+        if (dipendente != null) {
+            sql = ("Update progetto set referente = " + dipendente.getId() + " where cup = " + progetto.getCup());
+        } else {
+            sql = ("Update progetto set referente = " + null + " where cup = " + progetto.getCup());
+        }
 
         try {
             Connection connection = connectionController.getConnection();
@@ -103,9 +105,9 @@ public class ProgettoDAOImpl implements ProgettoDAO {
     }
 
     @Override
-    public void setResponsabile(Dipendente dipendente, int cup) throws Exception {
+    public void setResponsabile(Dipendente dipendente, Progetto progetto) throws Exception {
 
-        String sql = ("Update progetto set responsabile = " + dipendente.getId() + "where cup = " + cup);
+        String sql = ("Update progetto set responsabile = " + dipendente.getId() + "where cup = " + progetto.getCup());
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();

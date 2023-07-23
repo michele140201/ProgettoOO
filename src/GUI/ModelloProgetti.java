@@ -18,13 +18,13 @@ public class ModelloProgetti extends AbstractTableModel {
         setProgetti(progetti);
     }
 
+    public List<Progetto> getProgetti() {
+        return progetti;
+    }
+
     public void setProgetti(List<Progetto> progetti) {
         this.progetti = progetti;
         fireTableDataChanged();
-    }
-
-    public List<Progetto> getProgetti(){
-      return progetti;
     }
 
     public void aggiungiProgetto(Progetto progetto) {

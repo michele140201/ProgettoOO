@@ -18,13 +18,13 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO {
      * Funzione per vedere quando un dipendente è
      * stato promosso a dirigente
      *
-     * @param idDip
+     * @param dipendente
      * @return
      */
     @Override
-    public Date getDataPromozione(int idDip) throws Exception {
+    public Date getDataPromozione(Dipendente dipendente) throws Exception {
         Date data = null;
-        String sql = ("Select * from Ruolo where Ruolo.id_dip = " + idDip);
+        String sql = ("Select * from Ruolo where Ruolo.id_dip = " + dipendente.getId());
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
@@ -38,13 +38,6 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO {
         }
     }
 
-    /**
-     * funzione per inserire la data in cui un dipendente
-     * è stato promosso a dirigente
-     *
-     * @param idDip
-     * @return
-     */
     @Override
     public void setDataPromozione(Dipendente dipendente) throws Exception {
         String data = LocalDate.now().toString();
@@ -63,12 +56,12 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO {
     /**
      * Funzione per rimuovere la promozione di un dipendente, quando viene degradato
      *
-     * @param idDip
+     * @param dipendente
      * @return
      */
     @Override
-    public void removePromozione(int idDip) throws Exception {
-        String sql = ("Delete from Ruolo where ruolo.id_dip = " + idDip);
+    public void removePromozione(Dipendente dipendente) throws Exception {
+        String sql = ("Delete from Ruolo where ruolo.id_dip = " + dipendente.getId());
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();

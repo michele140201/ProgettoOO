@@ -20,20 +20,8 @@ public class Progetto {
     }
 
     public Progetto(String nome, int cup, Dipendente referente, Dipendente responsabile) {
-        this(nome , cup , referente);
+        this(nome, cup, referente);
         setResponsabile(responsabile);
-    }
-
-    public List<Laboratorio> getLaboratori() {
-        return laboratori;
-    }
-
-    public void setLaboratori(List<Laboratorio> laboratori) {
-        this.laboratori = laboratori;
-    }
-
-    public void addLaboratorio(Laboratorio laboratorio){
-        laboratori.add(laboratorio);
     }
 
     public Progetto(String nome, int cup) {
@@ -55,9 +43,28 @@ public class Progetto {
         setReferente(dipendente);
     }
 
+    public List<Laboratorio> getLaboratori() {
+        return laboratori;
+    }
+
+    public void setLaboratori(List<Laboratorio> laboratori) {
+        this.laboratori = laboratori;
+    }
+
+    public void addLaboratorio(Laboratorio laboratorio) {
+        laboratori.add(laboratorio);
+    }
+
+    public Progetto(){
+        setCup(0);
+    }
+
     @Override
     public String toString() {
-        return getNome();
+        if(getNome() != null)
+            return getNome();
+        else
+            return "Non Assegnato";
     }
 
     public int getCup() {

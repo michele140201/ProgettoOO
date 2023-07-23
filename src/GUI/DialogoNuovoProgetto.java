@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class DialogoNuovoProgetto extends JPanel {
     private JTextField inserisciNomeProgettoMAXTextField;
-    private JPanel panel1;
+    private JPanel pannello;
     private JTextField nomeTextField;
     private JTextField textField4;
     private JTextField inserimentoNuovoProgettoTextField;
@@ -15,7 +15,7 @@ public class DialogoNuovoProgetto extends JPanel {
      * Creazione della finestra di inserimento di un nuovo Progetto
      */
     public DialogoNuovoProgetto() {
-        add(panel1);
+        add(pannello);
         setSize(500, 300);
     }
 

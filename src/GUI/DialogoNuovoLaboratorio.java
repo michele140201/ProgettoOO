@@ -10,13 +10,13 @@ public class DialogoNuovoLaboratorio extends JPanel {
     private JTextField topicTextField;
     private JTextField creaLaboratorioTextField;
     private JComboBox<Laboratorio.Topic> topicJComboBox;
-    private JPanel panel1;
+    private JPanel pannello;
 
     /**
      * Creazione della finestra di inserimento di un nuovo laboratorio
      */
     public DialogoNuovoLaboratorio() {
-        add(panel1);
+        add(pannello);
         setSize(500, 300);
 /**
  * Aggiunge alla combo box tutti i topic nel sistema

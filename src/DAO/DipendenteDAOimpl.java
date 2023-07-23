@@ -17,26 +17,17 @@ public class DipendenteDAOimpl implements DipendenteDAO {
         this.connectionController = connectionController;
     }
 
-    /**
-     * Funzione per avere tutti i dipendenti
-     *
-     * @return
-     */
+
     @Override
     public List<Dipendente> getDipendenti() throws Exception {
         String sql = ("select * from dipendente");
         return getDipendenti(sql);
     }
 
-    /**
-     * Funzione per rimuovere un dipendente
-     *
-     * @param id
-     * @return
-     */
+
     @Override
-    public void removeDipendente(int id) throws Exception {
-        String sql = "delete from Dipendente where Dipendente.id_dip = " + id;
+    public void removeDipendente(Dipendente dipendente) throws Exception {
+        String sql = "delete from Dipendente where Dipendente.id_dip = " + dipendente.getId();
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
@@ -47,12 +38,6 @@ public class DipendenteDAOimpl implements DipendenteDAO {
 
     }
 
-    /**
-     * Funzione per aggiungere un dipendente
-     *
-     * @param dipendente
-     * @return
-     */
     @Override
     public void insertDipendente(Dipendente dipendente) throws Exception {
         dipendente.setId(generaId());
@@ -67,11 +52,6 @@ public class DipendenteDAOimpl implements DipendenteDAO {
 
     }
 
-    /**
-     * Funzione per trovare l'id dipendente maggiore
-     *
-     * @return
-     */
     private int generaId() throws Exception {
         String sql = ("select MAX(id_dip) as Max from dipendente ");
         int id = 0;
@@ -88,13 +68,6 @@ public class DipendenteDAOimpl implements DipendenteDAO {
 
     }
 
-    /**
-     * Funzione per impostare il laboratorio di un dipendente
-     *
-     * @param laboratorio
-     * @param dipendente
-     * @return
-     */
     @Override
     public void setLaboratorio(Laboratorio laboratorio, Dipendente dipendente) throws Exception {
         String sql = ("update Dipendente set nome_lab = '" + laboratorio.getNome() + "' where Dipendente.id_dip = " + dipendente.getId());
@@ -120,16 +93,9 @@ public class DipendenteDAOimpl implements DipendenteDAO {
             throw new Exception(e);
         }
     }
-
-    /**
-     * Funzione per degradare un dipendente
-     *
-     * @param id
-     * @return
-     */
     @Override
-    public void degrada(int id) throws Exception {
-        String sql = ("update Dipendente set Dirigente = 'no' where Dipendente.id_dip = " + id);
+    public void degrada(Dipendente dipendente) throws Exception {
+        String sql = ("update Dipendente set Dirigente = 'no' where Dipendente.id_dip = " + dipendente.getId());
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
@@ -140,54 +106,6 @@ public class DipendenteDAOimpl implements DipendenteDAO {
 
     }
 
-    /**
-     * Funzione per avere tutti i dirigenti
-     *
-     * @return
-     */
-    public List<Dipendente> getDirigenti() throws Exception {
-        String sql = ("select * from Dipendente where Dipendente.nome_lab is not null");
-        List<Dipendente> dirigenti = new ArrayList<>();
-        try {
-            Connection connection = connectionController.getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                Dipendente dipendente = new Dipendente(resultSet.getString("Nome"), resultSet.getString("Cognome"), resultSet.getInt("id_dip"), resultSet.getBoolean("dirigente"), resultSet.getDate("Data_assunzione"), resultSet.getDate("Data_N"));
-                dirigenti.add(dipendente);
-            }
-            return dirigenti;
-        } catch (SQLException e) {
-            throw new Exception(e);
-        }
-
-    }
-
-    /**
-     * Funzione per avere tutti i dipendenti senior
-     *
-     * @param nomeLaboratorio
-     * @return
-     */
-    @Override
-    public List<Dipendente> getSenior(String nomeLaboratorio) throws Exception {
-        String sql = ("Select * from dipendente where (current_date-dipendente.data_assunzione)/365>=7 and dipendente.nome_lab = '" + nomeLaboratorio + "'");
-        return getDipendenti(sql);
-
-    }
-
-    /**
-     * Funzione per avere tutti dirigenti di un laboratorio
-     *
-     * @param nomeLaboratorio
-     * @return
-     */
-    @Override
-    public List<Dipendente> getDirigenti(String nomeLaboratorio) throws Exception {
-        String sql = ("Select * from dipendente where dipendente.nome_lab = '" + nomeLaboratorio + "' and dirigente = 'yes'");
-        return getDipendenti(sql);
-
-    }
 
     private List<Dipendente> getDipendenti(String sql) throws Exception {
         try {
@@ -197,7 +115,7 @@ public class DipendenteDAOimpl implements DipendenteDAO {
             List<Dipendente> dipendenti = new ArrayList<>();
             while (resultSet.next()) {
                 Laboratorio laboratorio = new Laboratorio(resultSet.getString("nome_lab"));
-                Dipendente dipendente = new Dipendente(resultSet.getString("Nome"), resultSet.getString("Cognome"), resultSet.getInt("id_dip"), resultSet.getBoolean("Dirigente"), resultSet.getDate("data_assunzione"), resultSet.getDate("data_n") , laboratorio);
+                Dipendente dipendente = new Dipendente(resultSet.getString("Nome"), resultSet.getString("Cognome"), resultSet.getInt("id_dip"), resultSet.getBoolean("Dirigente"), resultSet.getDate("data_assunzione"), resultSet.getDate("data_n"), laboratorio);
                 dipendenti.add(dipendente);
             }
             return dipendenti;
@@ -206,21 +124,4 @@ public class DipendenteDAOimpl implements DipendenteDAO {
         }
     }
 
-    @Override
-    public Dipendente getDipendente(int id) throws Exception {
-        String sql = "select * from dipendente where dipendente.id_dip = " + id;
-        try {
-            Connection connection = connectionController.getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            Dipendente dipendente = null;
-            while (resultSet.next()) {
-                dipendente = new Dipendente(resultSet.getString("Nome"), resultSet.getString("Cognome"), resultSet.getInt("id_dip"), resultSet.getBoolean("Dirigente"), resultSet.getDate("data_assunzione"), resultSet.getDate("data_n"));
-            }
-            return dipendente;
-        } catch (SQLException e) {
-            throw new Exception(e);
-        }
-
-    }
 }
