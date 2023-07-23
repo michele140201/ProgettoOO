@@ -17,11 +17,6 @@ public class ProgettoDAOImpl implements ProgettoDAO {
         this.connectionController = connectionController;
     }
 
-    /**
-     * Funzione per ottenere tutti i progetti
-     *
-     * @return
-     */
     @Override
     public List<Progetto> getProgetti() throws Exception {
         List<Progetto> progetti = new ArrayList<>();
@@ -44,11 +39,6 @@ public class ProgettoDAOImpl implements ProgettoDAO {
 
     }
 
-    /**
-     * Funzione per trovare il cup piu grande di un progetto
-     *
-     * @return
-     */
     private int generaCup() throws Exception {
         int cup = 1;
         String sql = ("SELECT max(cup) as massimo from progetto");
@@ -66,12 +56,6 @@ public class ProgettoDAOImpl implements ProgettoDAO {
 
     }
 
-    /**
-     * Funzione per inserire un proggetto
-     *
-     * @param progetto
-     * @return
-     */
     @Override
     public void inserisci(Progetto progetto) throws Exception {
         progetto.setCup(generaCup());
@@ -85,13 +69,6 @@ public class ProgettoDAOImpl implements ProgettoDAO {
         }
 
     }
-
-    /**
-     * Funzione per eliminare un progetto
-     *
-     * @param cup
-     * @return
-     */
     @Override
     public void rimuovi(int cup) throws Exception {
         String sql = ("Delete from progetto where progetto.cup = " + cup);
@@ -105,39 +82,15 @@ public class ProgettoDAOImpl implements ProgettoDAO {
 
     }
 
-    /**
-     * Funzione per contare tutti i progetti
-     *
-     * @return
-     */
     @Override
-    public int getNumeroTotale() throws Exception {
-        int i = 0;
-        String sql = ("Select COUNT(*) as conto from progetto");
-        try {
-            Connection connection = connectionController.getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                i = resultSet.getInt("conto");
-            }
-            return i;
-        } catch (SQLException e) {
-            throw new Exception(e);
-        }
-    }
+    public void setReferente(Dipendente dipendente, int cup) throws Exception {
+        int id;
+        String sql;
+        if(dipendente != null){
+            sql = ("Update progetto set referente = "  + dipendente.getId() + " where cup = " + cup);
+        }else{
+            sql = ("Update progetto set referente = "  + null + " where cup = " + cup);        }
 
-    /**
-     * Funzione per impostare il nuovo referente di un progetto
-     *
-     * @param id
-     * @param cup
-     * @return
-     */
-    @Override
-    public void setReferente(int id, int cup) throws Exception {
-
-        String sql = ("Update progetto set referente = " + id + "where cup = " + cup);
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
@@ -149,17 +102,10 @@ public class ProgettoDAOImpl implements ProgettoDAO {
 
     }
 
-    /**
-     * Funzione per settare un nuovo dirigente di un progetto
-     *
-     * @param id
-     * @param cup
-     * @return
-     */
     @Override
-    public void setResponsabile(int id, int cup) throws Exception {
+    public void setResponsabile(Dipendente dipendente, int cup) throws Exception {
 
-        String sql = ("Update progetto set responsabile = " + id + "where cup = " + cup);
+        String sql = ("Update progetto set responsabile = " + dipendente.getId() + "where cup = " + cup);
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
@@ -167,23 +113,5 @@ public class ProgettoDAOImpl implements ProgettoDAO {
         } catch (SQLException e) {
             throw new Exception(e);
         }
-    }
-
-    @Override
-    public int getReferente(Progetto progetto, String ruoloDipendente) throws Exception {
-        String sql = "Select " + ruoloDipendente + " from progetto where progetto.cup = " + progetto.getCup();
-        try {
-            Connection connection = connectionController.getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            int id = 0;
-            while (resultSet.next()) {
-                id = resultSet.getInt(ruoloDipendente);
-            }
-            return id;
-        } catch (SQLException e) {
-            throw new Exception(e);
-        }
-
     }
 }

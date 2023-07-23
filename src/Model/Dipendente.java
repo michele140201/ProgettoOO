@@ -39,7 +39,11 @@ public class Dipendente {
 
     @Override
     public String toString() {
-        return getNome() + " " + getCognome() + " " + getId();
+        if(getNome() != null)
+            return getNome() + " " + getCognome() + " " + getId();
+        else{
+            return "Non Assegnato";
+        }
     }
 
     public boolean haLaboratorioAssegnato() {
