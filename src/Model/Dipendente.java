@@ -2,9 +2,6 @@ package Model;
 
 import java.util.Date;
 
-/**
- * Creazione del model Dipendente con getter e setter
- */
 public class Dipendente {
 
     private String nome;

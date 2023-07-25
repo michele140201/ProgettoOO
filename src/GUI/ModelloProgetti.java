@@ -65,9 +65,9 @@ public class ModelloProgetti extends AbstractTableModel {
             case 1:
                 return progetto.getCup();
             case 2:
-                return progetto.getReferente();
-            case 3:
                 return progetto.getResponsabile();
+            case 3:
+                return progetto.getReferente();
             default:
                 return null;
         }
@@ -81,9 +81,9 @@ public class ModelloProgetti extends AbstractTableModel {
             case 1:
                 return "CUP";
             case 2:
-                return "Referente";
-            case 3:
                 return "Responsabile";
+            case 3:
+                return "Referente";
             default:
                 return null;
         }

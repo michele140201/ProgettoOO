@@ -74,7 +74,7 @@
               <text value="Dirigente"/>
             </properties>
           </component>
-          <component id="9cbe0" class="javax.swing.JComboBox" binding="DirigenteBox">
+          <component id="9cbe0" class="javax.swing.JComboBox" binding="dirigenteBox">
             <constraints>
               <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -146,7 +146,7 @@
               <text value="Anno di Nascita"/>
             </properties>
           </component>
-          <component id="a40b2" class="javax.swing.JComboBox" binding="MesiNascita">
+          <component id="a40b2" class="javax.swing.JComboBox" binding="mesiNascita">
             <constraints>
               <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -312,7 +312,7 @@
               <text value="Assegna Responsabile"/>
             </properties>
           </component>
-          <component id="22754" class="javax.swing.JButton" binding="DialogoReferenteProgettiButton">
+          <component id="22754" class="javax.swing.JButton" binding="dialogoReferenteProgettiButton">
             <constraints>
               <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>

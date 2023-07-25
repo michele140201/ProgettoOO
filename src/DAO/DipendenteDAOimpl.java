@@ -93,6 +93,7 @@ public class DipendenteDAOimpl implements DipendenteDAO {
             throw new Exception(e);
         }
     }
+
     @Override
     public void degrada(Dipendente dipendente) throws Exception {
         String sql = ("update Dipendente set Dirigente = 'no' where Dipendente.id_dip = " + dipendente.getId());

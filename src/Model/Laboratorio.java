@@ -1,18 +1,14 @@
 package Model;
-
-/**
- * Creazione del model Laboratorio con getter e setter
- */
 public class Laboratorio {
     private String nome;
     private Topic topic;
     private Progetto progetto;
-    private Dipendente responsabile;
+    private Dipendente referente;
 
-    public Laboratorio(String nome, Topic topic, Progetto progetto, Dipendente responsabile) {
+    public Laboratorio(String nome, Topic topic, Progetto progetto, Dipendente referente) {
         this(nome, topic);
         setProgetto(progetto);
-        setResponsabile(responsabile);
+        setReferente(referente);
     }
 
     public Laboratorio(){
@@ -60,12 +56,12 @@ public class Laboratorio {
         this.progetto = progetto;
     }
 
-    public Dipendente getResponsabile() {
-        return responsabile;
+    public Dipendente getReferente() {
+        return referente;
     }
 
-    public void setResponsabile(Dipendente responsabile) {
-        this.responsabile = responsabile;
+    public void setReferente(Dipendente referente) {
+        this.referente = referente;
     }
 
     public enum Topic {

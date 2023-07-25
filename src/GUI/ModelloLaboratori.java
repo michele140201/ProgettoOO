@@ -1,6 +1,5 @@
 package GUI;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -8,7 +7,6 @@ import javax.swing.table.AbstractTableModel;
 
 
 import Model.Laboratorio;
-import Model.Progetto;
 
 public class ModelloLaboratori extends AbstractTableModel {
 
@@ -68,9 +66,9 @@ public class ModelloLaboratori extends AbstractTableModel {
             case 1:
                 return laboratorio.getTopic();
             case 2:
-                return laboratorio.getResponsabile();
-            case 3:
                 return laboratorio.getProgetto();
+            case 3:
+                return laboratorio.getReferente();
             default:
                 return null;
         }
@@ -84,9 +82,9 @@ public class ModelloLaboratori extends AbstractTableModel {
             case 1:
                 return "Topic";
             case 2:
-                return "Referente";
-            case 3:
                 return "Progetto";
+            case 3:
+                return "Referente";
             default:
                 return null;
         }

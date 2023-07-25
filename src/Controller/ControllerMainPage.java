@@ -5,7 +5,9 @@ import Model.Dipendente;
 
 import javax.swing.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import DAO.*;
 import Model.Laboratorio;
@@ -84,16 +86,18 @@ public class ControllerMainPage {
         }
     }
 
-    public void rimuovoLaboratorio(Laboratorio laboratorio) {
+    public void eliminaLaboratorio(Laboratorio laboratorio) {
         try {
             laboratorioDAO.rimuovi(laboratorio);
             guImain.rimuoviLaboratorio(laboratorio);
+            guImain.aggiornaTabelleDopoEliminazioneLaboratorio(laboratorio);
             guImain.showInfoMessage("Laboratorio Eliminato");
         } catch (Exception e) {
             guImain.showErrorMessage("Errore nel Database");
             e.printStackTrace();
         }
     }
+
 
     public void nuovoLaboratorio(Laboratorio laboratorio) {
         try {
@@ -109,6 +113,8 @@ public class ControllerMainPage {
     public void EliminaProgetto(Progetto progetto) {
         try {
             progettoDAO.rimuovi(progetto);
+            guImain.aggiornaTabelleDopoEliminazioneProgetto(progetto);
+            guImain.rimuoviProgetto(progetto);
             guImain.showInfoMessage("Progetto Eliminato");
         } catch (Exception e) {
             e.printStackTrace();
@@ -238,7 +244,6 @@ public class ControllerMainPage {
     }
 
 
-
     public void setReferenteLaboratorio(Dipendente dipendente, Laboratorio laboratorio) {
         try {
             laboratorioDAO.riassegnaDipendente(laboratorio, dipendente);
@@ -259,4 +264,36 @@ public class ControllerMainPage {
         return dipendenti;
     }
 
+    public void getVisualizzaCarriera(Dipendente dipendente) {
+        Date ora = Date.valueOf(LocalDate.now());
+        long differenzaDiDate = ora.getTime() - dipendente.getDataAssunzione().getTime();
+        long Anni = (TimeUnit.DAYS.convert(differenzaDiDate, TimeUnit.MILLISECONDS)) / 365;
+        Date dataAssunzione = (Date) dipendente.getDataAssunzione();
+        LocalDate dataDipendenteMiddle = dataAssunzione.toLocalDate();
+        dataDipendenteMiddle = dataDipendenteMiddle.plusYears(3);
+        LocalDate senior = dataAssunzione.toLocalDate();
+        senior = senior.plusYears(7);
+        Date dataCambio = getDataPromozione(dipendente);
+        if (dataCambio != null) {
+            if (Anni < 3) {
+                JOptionPane.showMessageDialog(null, " " + dipendente.getNome() + " " + dipendente.getCognome() + "\nDipendente junior : " + dipendente.getDataAssunzione() + "\nDirigente : " + dataCambio);
+            } else if (Anni >= 3 && Anni < 7) {
+                JOptionPane.showMessageDialog(null, " " + dipendente.getNome() + " " + dipendente.getCognome() + "\nDipendente junior : " + dipendente.getDataAssunzione() + "\nDipendente Middle : " + dataDipendenteMiddle + "\nDirigente : " + dataCambio);
+
+            } else {
+                JOptionPane.showMessageDialog(null, " " + dipendente.getNome() + " " + dipendente.getCognome() + "\nDipendente junior : " + dipendente.getDataAssunzione() + "\nDipendente Middle : " + dataDipendenteMiddle + "\nDipendente Senior : " + senior + "\nDirigente : " + dataCambio);
+
+            }
+        } else {
+            if (Anni < 3) {
+                JOptionPane.showMessageDialog(null, " " + dipendente.getNome() + " " + dipendente.getCognome() + "\nDipendente junior : " + dipendente.getDataAssunzione());
+            } else if (Anni >= 3 && Anni < 7) {
+                JOptionPane.showMessageDialog(null, " " + dipendente.getNome() + " " + dipendente.getCognome() + "\nDipendente junior : " + dipendente.getDataAssunzione() + "\nDipendente Middle : " + dataDipendenteMiddle);
+
+            } else {
+                JOptionPane.showMessageDialog(null, " " + dipendente.getNome() + " " + dipendente.getCognome() + "\nDipendente junior : " + dipendente.getDataAssunzione() + "\nDipendente Middle : " + dataDipendenteMiddle + "\nDipendente Senior : " + senior);
+
+            }
+        }
+    }
 }
