@@ -16,8 +16,15 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
         this.connectionController = connectionController;
     }
 
+    /**
+     * funzione che restituisce tutti i laboratori nel database
+     *
+     * @return
+     * @throws Exception
+     */
+
     @Override
-    public List<Laboratorio> getLaboratoriAssegnati() throws Exception {
+    public List<Laboratorio> getLaboratori() throws Exception {
         List<Laboratorio> laboratori = new ArrayList<>();
         String sql = ("select * from laboratorio ");
         try {
@@ -37,6 +44,13 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
 
     }
 
+    /**
+     * funzione che inserisce un laboratorio nel database
+     *
+     * @param laboratorio
+     * @throws Exception
+     */
+
     @Override
     public void inserisci(Laboratorio laboratorio) throws Exception {
         String sql = "Insert into laboratorio(nome_lab , topic) values('" + laboratorio.getNome() + "','" + laboratorio.getTopic() + "')";
@@ -48,6 +62,13 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
             throw new Exception(e);
         }
     }
+
+    /**
+     * funzione che rimuove un laboratorio dal database
+     *
+     * @param laboratorio
+     * @throws Exception
+     */
 
     @Override
     public void rimuovi(Laboratorio laboratorio) throws Exception {
@@ -62,8 +83,16 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
 
     }
 
+    /**
+     * funzione che riassegna un dipendente come referente al laboratorio
+     *
+     * @param laboratorio
+     * @param dipendente
+     * @throws Exception
+     */
+
     @Override
-    public void riassegnaDipendente(Laboratorio laboratorio, Dipendente dipendente) throws Exception {
+    public void assegnaDipendente(Laboratorio laboratorio, Dipendente dipendente) throws Exception {
         String sql = ("update Laboratorio set referente = " + dipendente.getId() + "where laboratorio.nome_lab = '" + laboratorio.getNome() + "'");
         try {
             Connection connection = connectionController.getConnection();
@@ -75,8 +104,16 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
 
     }
 
+    /**
+     * funzione che assegna un progetto ad un laboratorio
+     *
+     * @param laboratorio
+     * @param progetto
+     * @throws Exception
+     */
+
     @Override
-    public void riassegnaProgetto(Laboratorio laboratorio, Progetto progetto) throws Exception {
+    public void assegnaProgetto(Laboratorio laboratorio, Progetto progetto) throws Exception {
 
         String sql = ("update Laboratorio set progetto = " + progetto.getCup() + " where nome_lab = '" + laboratorio.getNome() + "'");
         try {
@@ -89,23 +126,13 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
 
     }
 
-    @Override
-    public int getNumeroLaboratoriAssegnati(Progetto progetto) throws Exception {
-        int c = 0;
-        String sql = ("Select count(*) as conto from laboratorio where laboratorio.progetto = " + progetto.getCup());
-        try {
-            Connection connection = connectionController.getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                c = resultSet.getInt("conto");
-            }
-            return c;
-        } catch (SQLException e) {
-            throw new Exception(e);
-        }
-
-    }
+    /**
+     * funzione che riporta l'id del referente del laboratorio
+     *
+     * @param laboratorio
+     * @return
+     * @throws Exception
+     */
 
     @Override
     public int getIdReferente(Laboratorio laboratorio) throws Exception {

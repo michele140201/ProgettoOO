@@ -17,6 +17,13 @@ public class ProgettoDAOImpl implements ProgettoDAO {
         this.connectionController = connectionController;
     }
 
+    /**
+     * funzione che riporta tutti i progetti nel database
+     *
+     * @return
+     * @throws Exception
+     */
+
     @Override
     public List<Progetto> getProgetti() throws Exception {
         List<Progetto> progetti = new ArrayList<>();
@@ -39,6 +46,13 @@ public class ProgettoDAOImpl implements ProgettoDAO {
 
     }
 
+    /**
+     * funzione che genera il cup di un progetto
+     *
+     * @return
+     * @throws Exception
+     */
+
     private int generaCup() throws Exception {
         int cup = 1;
         String sql = ("SELECT max(cup) as massimo from progetto");
@@ -56,6 +70,13 @@ public class ProgettoDAOImpl implements ProgettoDAO {
 
     }
 
+    /**
+     * funzione che inserisce un nuovo progetto nel database
+     *
+     * @param progetto
+     * @throws Exception
+     */
+
     @Override
     public void inserisci(Progetto progetto) throws Exception {
         progetto.setCup(generaCup());
@@ -70,6 +91,13 @@ public class ProgettoDAOImpl implements ProgettoDAO {
 
     }
 
+    /**
+     * funzione che rimuove un progetto nel database
+     *
+     * @param progetto
+     * @throws Exception
+     */
+
     @Override
     public void rimuovi(Progetto progetto) throws Exception {
         String sql = ("Delete from progetto where progetto.cup = " + progetto.getCup());
@@ -83,9 +111,16 @@ public class ProgettoDAOImpl implements ProgettoDAO {
 
     }
 
+    /**
+     * funzione che setta un nuovo referente nel progetto
+     *
+     * @param dipendente
+     * @param progetto
+     * @throws Exception
+     */
+
     @Override
     public void setReferente(Dipendente dipendente, Progetto progetto) throws Exception {
-        int id;
         String sql;
         if (dipendente != null) {
             sql = ("Update progetto set referente = " + dipendente.getId() + " where cup = " + progetto.getCup());
@@ -104,6 +139,13 @@ public class ProgettoDAOImpl implements ProgettoDAO {
 
     }
 
+    /**
+     * funzione che setta un nuovo responsabile nel progetto
+     *
+     * @param dipendente
+     * @param progetto
+     * @throws Exception
+     */
     @Override
     public void setResponsabile(Dipendente dipendente, Progetto progetto) throws Exception {
 

@@ -11,9 +11,6 @@ public class DialogoNuovoProgetto extends JPanel {
     private JTextField textField4;
     private JTextField inserimentoNuovoProgettoTextField;
 
-    /**
-     * Creazione della finestra di inserimento di un nuovo Progetto
-     */
     public DialogoNuovoProgetto() {
         add(pannello);
         setSize(500, 300);

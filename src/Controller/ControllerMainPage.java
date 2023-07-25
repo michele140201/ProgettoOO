@@ -27,7 +27,7 @@ public class ControllerMainPage {
         this.progettoDAO = progettoDAO;
         this.guImain = guImain;
         guImain.setDipendenti(inizializzaDipendenti());
-        guImain.setLaboratori(laboratorioDAO.getLaboratoriAssegnati());
+        guImain.setLaboratori(laboratorioDAO.getLaboratori());
         guImain.setProgetti(inzializzaProgetti());
         guImain.setLaboratoriDipendenti();
         guImain.setProgettiLaboratorio();
@@ -36,11 +36,13 @@ public class ControllerMainPage {
         guImain.setReferenteProgetto();
         guImain.setLaboratoriProgetto();
         guImain.setResponsabiliProgetto();
-        //todo setlaboratori e set progetti
-
-
     }
 
+    /**
+     * gestisce l'aggiunta di un dipendente nel database e nella tabella
+     *
+     * @param dipendente
+     */
     public void aggiungiDipendente(Dipendente dipendente) {
 
         try {
@@ -55,11 +57,21 @@ public class ControllerMainPage {
         }
     }
 
+    /**
+     * inserisce i dipendenti nella tabella
+     *
+     * @throws Exception
+     */
+
     public void mostraTuttiDipendenti() throws Exception {
         guImain.setDipendenti(inizializzaDipendenti());
     }
 
-
+    /**
+     * gestisce il licenziamento di un dipendente nel database e nella tabella
+     *
+     * @param dipendente
+     */
     public void licenziaDipendente(Dipendente dipendente) {
         try {
             if (dipendente.getId() != laboratorioDAO.getIdReferente(dipendente.getLaboratorio())) {
@@ -76,6 +88,12 @@ public class ControllerMainPage {
         }
     }
 
+    /**
+     * gestisce l'assegnazione di un dipendente ad un laboratorio
+     *
+     * @param dipendente
+     * @param laboratorio
+     */
     public void AssegnaLaboratorio(Dipendente dipendente, Laboratorio laboratorio) {
         try {
             dipendenteDAO.setLaboratorio(laboratorio, dipendente);
@@ -86,6 +104,11 @@ public class ControllerMainPage {
         }
     }
 
+    /**
+     * gestisce l'eliminazione di un laboratorio
+     *
+     * @param laboratorio
+     */
     public void eliminaLaboratorio(Laboratorio laboratorio) {
         try {
             laboratorioDAO.rimuovi(laboratorio);
@@ -98,7 +121,11 @@ public class ControllerMainPage {
         }
     }
 
-
+    /**
+     * gestisce la creazione di un nuovo laboratorio
+     *
+     * @param laboratorio
+     */
     public void nuovoLaboratorio(Laboratorio laboratorio) {
         try {
             laboratorioDAO.inserisci(laboratorio);
@@ -109,6 +136,12 @@ public class ControllerMainPage {
             guImain.showErrorMessage("Errore nel Database");
         }
     }
+
+    /**
+     * gestisce l'eliminazione di un progetto
+     *
+     * @param progetto
+     */
 
     public void EliminaProgetto(Progetto progetto) {
         try {
@@ -122,6 +155,11 @@ public class ControllerMainPage {
         }
     }
 
+    /**
+     * rende un dipendente non più dirigente
+     *
+     * @param dipendente
+     */
 
     public void degrada(Dipendente dipendente) {
         try {
@@ -137,6 +175,13 @@ public class ControllerMainPage {
         }
     }
 
+
+    /**
+     * rende un dipendente responsabile del progetto selezionato
+     *
+     * @param dipendente
+     * @param progetto
+     */
     public void setResponsabile(Dipendente dipendente, Progetto progetto) {
         try {
             progettoDAO.setResponsabile(dipendente, progetto);
@@ -148,6 +193,12 @@ public class ControllerMainPage {
         }
     }
 
+    /**
+     * rende un dipendente  referente del progetto selezionato
+     *
+     * @param dipendente
+     * @param progetto
+     */
     public void setReferenteProgetto(Dipendente dipendente, Progetto progetto) {
         try {
             progettoDAO.setReferente(dipendente, progetto);
@@ -159,6 +210,12 @@ public class ControllerMainPage {
         }
     }
 
+    /**
+     * funzione che chiede al database quando un dipendente è diventato dirigente e ritorna il risultato
+     *
+     * @param dipendente
+     * @return
+     */
     public Date getDataPromozione(Dipendente dipendente) {
         try {
             Date dataCambio = cambioRuoloDAO.getDataPromozione(dipendente);
@@ -170,6 +227,11 @@ public class ControllerMainPage {
         }
     }
 
+    /**
+     * rende un dipendente selezionato dirigente
+     *
+     * @param dipendente
+     */
     public void promuovi(Dipendente dipendente) {
         try {
             if (!dipendente.isDirigente()) {
@@ -186,7 +248,12 @@ public class ControllerMainPage {
         }
     }
 
-
+    /**
+     * effettua l'aggiornamento di un progetto
+     *
+     * @param progetto
+     * @param laboratorio
+     */
     public void aggiornaProgettoLaboratorio(Progetto progetto, Laboratorio laboratorio) {
         try {
             Dipendente referente = laboratorio.getProgetto().getReferente();
@@ -213,7 +280,7 @@ public class ControllerMainPage {
             }
 
 
-            laboratorioDAO.riassegnaProgetto(laboratorio, progetto);
+            laboratorioDAO.assegnaProgetto(laboratorio, progetto);
             guImain.showInfoMessage("Aggiornamento Riuscito");
             guImain.aggiornaProgettoLaboratorio(laboratorio, progetto);
 
@@ -223,15 +290,11 @@ public class ControllerMainPage {
         }
     }
 
-
-    public void riassegnaDipendente(Laboratorio laboratorio, Dipendente dipendente) {
-        try {
-            laboratorioDAO.riassegnaDipendente(laboratorio, dipendente);
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore nel Database");
-        }
-    }
+    /**
+     * funzione che si occupa della creazione di un nuovo progetto
+     *
+     * @param progetto
+     */
 
     public void nuovoProgetto(Progetto progetto) {
         try {
@@ -243,10 +306,16 @@ public class ControllerMainPage {
         }
     }
 
+    /**
+     * funzione che si occupa di settare il referente del laboratorio selezionato
+     *
+     * @param dipendente
+     * @param laboratorio
+     */
 
     public void setReferenteLaboratorio(Dipendente dipendente, Laboratorio laboratorio) {
         try {
-            laboratorioDAO.riassegnaDipendente(laboratorio, dipendente);
+            laboratorioDAO.assegnaDipendente(laboratorio, dipendente);
             guImain.aggiornaReferenteLaboratorio(laboratorio, dipendente);
         } catch (Exception e) {
             e.printStackTrace();
@@ -254,15 +323,34 @@ public class ControllerMainPage {
         }
     }
 
+    /**
+     * funzione che inizializza i progetti
+     *
+     * @return
+     * @throws Exception
+     */
+
     private List<Progetto> inzializzaProgetti() throws Exception {
         List<Progetto> progetti = progettoDAO.getProgetti();
         return progetti;
     }
 
+    /**
+     * funzione che inizializza i dipendenti
+     *
+     * @return
+     * @throws Exception
+     */
     private List<Dipendente> inizializzaDipendenti() throws Exception {
         List<Dipendente> dipendenti = dipendenteDAO.getDipendenti();
         return dipendenti;
     }
+
+    /**
+     * funzione che si occupa della visualizzazione degli scatti di carriera di un dipendente
+     *
+     * @param dipendente
+     */
 
     public void getVisualizzaCarriera(Dipendente dipendente) {
         Date ora = Date.valueOf(LocalDate.now());

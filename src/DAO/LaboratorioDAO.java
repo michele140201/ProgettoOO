@@ -8,17 +8,15 @@ import java.util.*;
 
 public interface LaboratorioDAO {
 
-    List<Laboratorio> getLaboratoriAssegnati() throws Exception;
+    List<Laboratorio> getLaboratori() throws Exception;
 
     void inserisci(Laboratorio laboratorio) throws Exception;
 
     void rimuovi(Laboratorio laboratorio) throws Exception;
 
-    void riassegnaDipendente(Laboratorio laboratorio, Dipendente dipendente) throws Exception;
+    void assegnaDipendente(Laboratorio laboratorio, Dipendente dipendente) throws Exception;
 
-    void riassegnaProgetto(Laboratorio laboratorio, Progetto progetto) throws Exception;
-
-    int getNumeroLaboratoriAssegnati(Progetto progetto) throws Exception;
+    void assegnaProgetto(Laboratorio laboratorio, Progetto progetto) throws Exception;
 
     int getIdReferente(Laboratorio laboratorio) throws Exception;
 }

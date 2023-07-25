@@ -38,6 +38,13 @@ public class CambioRuoloDAOImpl implements CambioRuoloDAO {
         }
     }
 
+    /**
+     * funzione per memorizzare nel database quando un dipendente diventa dirigente
+     *
+     * @param dipendente
+     * @throws Exception
+     */
+
     @Override
     public void setDataPromozione(Dipendente dipendente) throws Exception {
         String data = LocalDate.now().toString();

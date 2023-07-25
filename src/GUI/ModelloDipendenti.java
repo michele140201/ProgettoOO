@@ -23,10 +23,6 @@ public class ModelloDipendenti extends AbstractTableModel {
     }
 
 
-    public void rimuoviDipendentiAssegnati() {
-
-    }
-
     public List<Dipendente> getDipendenti() {
         return dipendenti;
     }

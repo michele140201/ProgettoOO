@@ -12,15 +12,9 @@ public class DialogoNuovoLaboratorio extends JPanel {
     private JComboBox<Laboratorio.Topic> topicJComboBox;
     private JPanel pannello;
 
-    /**
-     * Creazione della finestra di inserimento di un nuovo laboratorio
-     */
     public DialogoNuovoLaboratorio() {
         add(pannello);
         setSize(500, 300);
-/**
- * Aggiunge alla combo box tutti i topic nel sistema
- */
         for (Laboratorio.Topic topic : Laboratorio.Topic.values()) {
             topicJComboBox.addItem(topic);
         }
