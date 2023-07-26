@@ -162,7 +162,7 @@ public class GUImain extends JFrame {
         });
         eliminaProgettoButton.addActionListener(event -> {
             Progetto progetto = getProgettoSelezionato();
-            controllerMainPage.EliminaProgetto(progetto);
+            controllerMainPage.eliminaProgetto(progetto);
         });
         inserimentoProgettoButton.addActionListener(new ActionListener() {
             @Override
@@ -775,7 +775,7 @@ public class GUImain extends JFrame {
         conferma.addActionListener(Event -> {
             Laboratorio laboratorio = (Laboratorio) LaboratorioComboBox.getSelectedItem();
             Dipendente dipendente = getDipendenteSelezionato();
-            controllerMainPage.AssegnaLaboratorio(dipendente, laboratorio);
+            controllerMainPage.assegnaLaboratorio(dipendente, laboratorio);
             getModelloDipendenti().fireTableDataChanged();
             dialogoAssegnazioneDipendenteLaboratorio.setVisible(false);
         });

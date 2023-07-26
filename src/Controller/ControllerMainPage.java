@@ -94,7 +94,7 @@ public class ControllerMainPage {
      * @param dipendente
      * @param laboratorio
      */
-    public void AssegnaLaboratorio(Dipendente dipendente, Laboratorio laboratorio) {
+    public void assegnaLaboratorio(Dipendente dipendente, Laboratorio laboratorio) {
         try {
             dipendenteDAO.setLaboratorio(laboratorio, dipendente);
             guImain.aggiornaLaboratorioDipendente(laboratorio, dipendente);
@@ -143,7 +143,7 @@ public class ControllerMainPage {
      * @param progetto
      */
 
-    public void EliminaProgetto(Progetto progetto) {
+    public void eliminaProgetto(Progetto progetto) {
         try {
             progettoDAO.rimuovi(progetto);
             guImain.aggiornaTabelleDopoEliminazioneProgetto(progetto);
@@ -262,7 +262,8 @@ public class ControllerMainPage {
                 if (referente.getLaboratorio() != null) {
                     if (referente.getLaboratorio().getNome().equals(laboratorio.getNome())) {
                         progettoDAO.setReferente(null, laboratorio.getProgetto());
-                        laboratorio.getProgetto().setReferente(null);
+                        Dipendente dipendente = new Dipendente();
+                        laboratorio.getProgetto().setReferente(dipendente);
                     }
                 }
 
@@ -271,9 +272,9 @@ public class ControllerMainPage {
             if (responsabile != null) {
                 if (responsabile.getLaboratorio() != null) {
                     if (responsabile.getLaboratorio().getNome().equals(laboratorio.getNome())) {
-                        Dipendente dipendente = new Dipendente(Integer.valueOf(null));
+                        Dipendente dipendente = new Dipendente();
                         progettoDAO.setResponsabile(null, laboratorio.getProgetto());
-                        laboratorio.getProgetto().setResponsabile(null);
+                        laboratorio.getProgetto().setResponsabile(dipendente);
                     }
                 }
 
