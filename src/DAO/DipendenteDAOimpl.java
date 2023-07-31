@@ -6,6 +6,7 @@ import Model.Laboratorio;
 import Model.Progetto;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class DipendenteDAOimpl implements DipendenteDAO {
     @Override
     public void insertDipendente(Dipendente dipendente) throws Exception {
         dipendente.setId(generaId());
-        String sql = "insert into Dipendente(nome,cognome,data_n, id_dip,dirigente, data_assunzione)  values('" + dipendente.getNome() + "','" + dipendente.getCognome() + "','" + dipendente.getDataNascita() + "','" + dipendente.getId() + "','" + dipendente.isDirigente() + "','" + dipendente.getDataAssunzione() + "')";
+        String sql = "insert into Dipendente(nome,cognome,data_n, id_dip,dirigente, data_assunzione , data_promozione)  values('" + dipendente.getNome() + "','" + dipendente.getCognome() + "','" + dipendente.getDataNascita() + "','" + dipendente.getId() + "','" + dipendente.isDirigente() + "','" + dipendente.getDataAssunzione() + "','" + dipendente.getDataPromozione() + "')";
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
@@ -118,7 +119,7 @@ public class DipendenteDAOimpl implements DipendenteDAO {
 
     @Override
     public void promuovi(Dipendente dipendente) throws Exception {
-        String sql = ("update Dipendente set Dirigente = 'yes' where Dipendente.id_dip = " + dipendente.getId());
+        String sql = ("update Dipendente set Dirigente = 'yes' , data_promozione = '" + Date.valueOf(LocalDate.now()) + "' where Dipendente.id_dip = " + dipendente.getId());
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
@@ -137,7 +138,7 @@ public class DipendenteDAOimpl implements DipendenteDAO {
 
     @Override
     public void degrada(Dipendente dipendente) throws Exception {
-        String sql = ("update Dipendente set Dirigente = 'no' where Dipendente.id_dip = " + dipendente.getId());
+        String sql = ("update Dipendente set Dirigente = 'no' , data_promozione = null where Dipendente.id_dip = " + dipendente.getId());
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();
@@ -164,7 +165,7 @@ public class DipendenteDAOimpl implements DipendenteDAO {
             List<Dipendente> dipendenti = new ArrayList<>();
             while (resultSet.next()) {
                 Laboratorio laboratorio = new Laboratorio(resultSet.getString("nome_lab"));
-                Dipendente dipendente = new Dipendente(resultSet.getString("Nome"), resultSet.getString("Cognome"), resultSet.getInt("id_dip"), resultSet.getBoolean("Dirigente"), resultSet.getDate("data_assunzione"), resultSet.getDate("data_n"), laboratorio);
+                Dipendente dipendente = new Dipendente(resultSet.getString("Nome"), resultSet.getString("Cognome"), resultSet.getInt("id_dip"), resultSet.getBoolean("Dirigente"), resultSet.getDate("data_assunzione"), resultSet.getDate("data_n"), laboratorio , resultSet.getDate("data_promozione"));
                 dipendenti.add(dipendente);
             }
             return dipendenti;

@@ -17,12 +17,10 @@ public class ControllerMainPage {
     private final ProgettoDAO progettoDAO;
     private final DipendenteDAO dipendenteDAO;
     private final LaboratorioDAO laboratorioDAO;
-    private final CambioRuoloDAO cambioRuoloDAO;
     private final GUImain guImain;
 
-    public ControllerMainPage(DipendenteDAO dipendenteDAO, ProgettoDAO progettoDAO, LaboratorioDAO laboratorioDAO, CambioRuoloDAO cambioRuoloDAO, GUImain guImain) throws Exception {
+    public ControllerMainPage(DipendenteDAO dipendenteDAO, ProgettoDAO progettoDAO, LaboratorioDAO laboratorioDAO, GUImain guImain) throws Exception {
         this.dipendenteDAO = dipendenteDAO;
-        this.cambioRuoloDAO = cambioRuoloDAO;
         this.laboratorioDAO = laboratorioDAO;
         this.progettoDAO = progettoDAO;
         this.guImain = guImain;
@@ -165,7 +163,7 @@ public class ControllerMainPage {
         try {
             if (dipendente.isDirigente()) {
                 dipendenteDAO.degrada(dipendente);
-                cambioRuoloDAO.removePromozione(dipendente);
+                guImain.degradaDipendente(dipendente);
             } else {
                 guImain.showErrorMessage("IMPOSSIBILE DEGRADARE!");
             }
@@ -211,23 +209,6 @@ public class ControllerMainPage {
     }
 
     /**
-     * funzione che chiede al database quando un dipendente è diventato dirigente e ritorna il risultato
-     *
-     * @param dipendente
-     * @return
-     */
-    public Date getDataPromozione(Dipendente dipendente) {
-        try {
-            Date dataCambio = cambioRuoloDAO.getDataPromozione(dipendente);
-            return dataCambio;
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Errore nel Database");
-            return null;
-        }
-    }
-
-    /**
      * rende un dipendente selezionato dirigente
      *
      * @param dipendente
@@ -236,8 +217,7 @@ public class ControllerMainPage {
         try {
             if (!dipendente.isDirigente()) {
                 dipendenteDAO.promuovi(dipendente);
-                cambioRuoloDAO.setDataPromozione(dipendente);
-                dipendente.setDirigente(true);
+                guImain.promuoviDipendente(dipendente);
                 guImain.showInfoMessage("Promosso!");
             } else {
                 guImain.showErrorMessage("IMPOSSIBILE PROMUOVERE!");
@@ -362,7 +342,7 @@ public class ControllerMainPage {
         dataDipendenteMiddle = dataDipendenteMiddle.plusYears(3);
         LocalDate senior = dataAssunzione.toLocalDate();
         senior = senior.plusYears(7);
-        Date dataCambio = getDataPromozione(dipendente);
+        Date dataCambio = (Date) dipendente.getDataPromozione();
         if (dataCambio != null) {
             if (Anni < 3) {
                 JOptionPane.showMessageDialog(null, " " + dipendente.getNome() + " " + dipendente.getCognome() + "\nDipendente junior : " + dipendente.getDataAssunzione() + "\nDirigente : " + dataCambio);

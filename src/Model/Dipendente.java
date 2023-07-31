@@ -11,23 +11,46 @@ public class Dipendente {
     private Date dataAssunzione;
     private Date dataNascita;
     private Laboratorio laboratorio;
+    private Date dataPromozione;
 
-    public Dipendente(String nome, String cognome, int id, boolean dirigente, Date dataAssunzione, Date dataNascita) {
-        this(nome, cognome, id, dirigente, dataAssunzione, dataNascita, null);
+    public Date getDataPromozione() {
+        return dataPromozione;
     }
 
-    public Dipendente(String nome, String cognome, boolean dirigente, Date dataAssunzione, Date dataNascita) {
-        this(nome, cognome, 0, dirigente, dataAssunzione, dataNascita, null);
+    public void setDataPromozione(Date dataPromozione) {
+        this.dataPromozione = dataPromozione;
     }
 
-    public Dipendente(String nome, String cognome, int id, boolean dirigente, Date dataAssunzione, Date dataNascita, Laboratorio laboratorio) {
-        setNome(nome);
-        setCognome(cognome);
-        setId(id);
-        setDirigente(dirigente);
-        setDataAssunzione(dataAssunzione);
-        setDataNascita(dataNascita);
-        setLaboratorio(laboratorio);
+    public Dipendente(String nome, String cognome, int id, boolean dirigente, Date dataAssunzione, Date dataNascita , Date dataPromozione) {
+        this(nome, cognome, id, dirigente, dataAssunzione, dataNascita, null , dataPromozione);
+    }
+
+
+
+    public Dipendente(String nome, String cognome, boolean dirigente, Date dataAssunzione, Date dataNascita , Date dataPromozione) {
+        this(nome, cognome, 0, dirigente, dataAssunzione, dataNascita, null , dataPromozione);
+    }
+
+    public Dipendente(String nome, String cognome, int id, boolean dirigente, Date dataAssunzione, Date dataNascita, Laboratorio laboratorio , Date dataPromozione) {
+        if(dirigente == true){
+            setNome(nome);
+            setCognome(cognome);
+            setId(id);
+            setDirigente(true);
+            setDataAssunzione(dataAssunzione);
+            setDataNascita(dataNascita);
+            setLaboratorio(laboratorio);
+            setDataPromozione(dataPromozione);
+        }else{
+            setNome(nome);
+            setCognome(cognome);
+            setId(id);
+            setDirigente(false);
+            setDataAssunzione(dataAssunzione);
+            setDataNascita(dataNascita);
+            setLaboratorio(laboratorio);
+            setDataPromozione(null);
+        }
     }
 
     public Dipendente(int id) {

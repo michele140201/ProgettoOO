@@ -682,7 +682,7 @@ public class GUImain extends JFrame {
             int Anno = (int) AnnoNascita.getValue();
             Anno = Anno - 1900;
             Date DatadiN = converti(Giorno, mese, Anno);
-            Dipendente dipendente = new Dipendente(Nome, Cognome, Dir, Date.valueOf(LocalDate.now()), DatadiN);
+            Dipendente dipendente = new Dipendente(Nome, Cognome, Dir, Date.valueOf(LocalDate.now()), DatadiN , Date.valueOf(LocalDate.now()));
             controllerMainPage.aggiungiDipendente(dipendente);
             NomeInserito.setText("");
             CognomeInserito.setText("");
@@ -1124,6 +1124,16 @@ public class GUImain extends JFrame {
             }
         }
         getModelloDipendenti().fireTableDataChanged();
+    }
+
+    public void degradaDipendente(Dipendente dipendente){
+        dipendente.setDataPromozione(null);
+        dipendente.setDirigente(false);
+    }
+
+    public void promuoviDipendente(Dipendente dipendente){
+        dipendente.setDataPromozione(Date.valueOf(LocalDate.now()));
+        dipendente.setDirigente(true);
     }
 
 }
