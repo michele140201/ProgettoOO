@@ -438,4 +438,32 @@ public class ControllerMainPage {
         }
     }
 
+    public void rimuoviDipendenti(List<Dipendente> dipendenti){
+        int i = 0;
+        while (i < dipendenti.size()) {
+            if (dipendenti.get(i).getLaboratorio().getNome() != null) {
+                guImain.rimuoviDipendente(dipendenti.get(i));
+            } else {
+                i++;
+            }
+        }
+    }
+
+    public List<Dipendente> listaDipendenti(List<Dipendente> dipendenti , Progetto progetto){
+        TimeUnit time = TimeUnit.DAYS;
+        List<Dipendente> dipendentiScelti = new ArrayList<>();
+        for (Dipendente dipendente : dipendenti) {
+            for (Laboratorio laboratorio : progetto.getLaboratori()) {
+                if (dipendente.getLaboratorio().getNome() != null) {
+                    if (dipendente.getLaboratorio().getNome().equals(laboratorio.getNome())) {
+                        if (time.convert(Date.valueOf(LocalDate.now()).getTime() - dipendente.getDataAssunzione().getTime(), TimeUnit.MILLISECONDS) / 365 >= 7)
+                            dipendentiScelti.add(dipendente);
+                    }
+                }
+            }
+
+        }
+        return dipendentiScelti;
+    }
+
 }

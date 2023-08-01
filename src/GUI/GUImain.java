@@ -715,17 +715,9 @@ public class GUImain extends JFrame {
 
     private void setComboBoxReferenteProgetto(JComboBox comboBox, Progetto progetto) {
         comboBox.removeAllItems();
-        TimeUnit time = TimeUnit.DAYS;
-        for (Dipendente dipendente : getModelloDipendenti().getDipendenti()) {
-            for (Laboratorio laboratorio : progetto.getLaboratori()) {
-                if (dipendente.getLaboratorio().getNome() != null) {
-                    if (dipendente.getLaboratorio().getNome().equals(laboratorio.getNome())) {
-                        if (time.convert(Date.valueOf(LocalDate.now()).getTime() - dipendente.getDataAssunzione().getTime(), TimeUnit.MILLISECONDS) / 365 >= 7)
-                            comboBox.addItem(dipendente);
-                    }
-                }
-            }
-
+        List<Dipendente> dipendenti =  controllerMainPage.listaDipendenti(getModelloDipendenti().getDipendenti() , progetto);
+        for (Dipendente dipendente : dipendenti) {
+            comboBox.addItem(dipendente);
         }
     }
 
@@ -885,15 +877,8 @@ public class GUImain extends JFrame {
      */
 
     public void rimuoviDipendentiAssegnati() {
-        int i = 0;
         List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
-        while (i < dipendenti.size()) {
-            if (dipendenti.get(i).getLaboratorio().getNome() != null) {
-                rimuoviDipendente(dipendenti.get(i));
-            } else {
-                i++;
-            }
-        }
+        controllerMainPage.rimuoviDipendenti(dipendenti);
     }
 
     /**
@@ -903,7 +888,7 @@ public class GUImain extends JFrame {
     public void setLaboratoriDipendenti() {
         List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
         List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
-
+        controllerMainPage.setLaboratorioDipendenti(dipendenti, laboratori);
     }
 
     /**
