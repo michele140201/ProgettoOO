@@ -55,7 +55,13 @@ public class DipendenteDAOimpl implements DipendenteDAO {
     @Override
     public void insertDipendente(Dipendente dipendente) throws Exception {
         dipendente.setId(generaId());
-        String sql = "insert into Dipendente(nome,cognome,data_n, id_dip,dirigente, data_assunzione , data_promozione)  values('" + dipendente.getNome() + "','" + dipendente.getCognome() + "','" + dipendente.getDataNascita() + "','" + dipendente.getId() + "','" + dipendente.isDirigente() + "','" + dipendente.getDataAssunzione() + "','" + dipendente.getDataPromozione() + "')";
+        String sql;
+        if(dipendente.isDirigente()){
+            sql = "insert into Dipendente(nome,cognome,data_n, id_dip,dirigente, data_assunzione , data_promozione)  values('" + dipendente.getNome() + "','" + dipendente.getCognome() + "','" + dipendente.getDataNascita() + "','" + dipendente.getId() + "','" + dipendente.isDirigente() + "','" + dipendente.getDataAssunzione() + "','" + dipendente.getDataPromozione() + "')";
+
+        }else{
+            sql = "insert into Dipendente(nome,cognome,data_n, id_dip,dirigente, data_assunzione)  values('" + dipendente.getNome() + "','" + dipendente.getCognome() + "','" + dipendente.getDataNascita() + "','" + dipendente.getId() + "','" + dipendente.isDirigente() + "','" + dipendente.getDataAssunzione() + "')";
+        }
         try {
             Connection connection = connectionController.getConnection();
             Statement statement = connection.createStatement();

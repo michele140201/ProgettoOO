@@ -50,7 +50,7 @@ public class GUImain extends JFrame {
     private JTextField dirigenteTextField;
     private JTextField nomeTextField;
     private JTextField cognomeTextField;
-    private JTextField CognomeInserito;
+    private JTextField cognomeInseritoTextField;
     private JComboBox mesiNascita;
     private JComboBox dirigenteBox;
     private JButton assumiButton;
@@ -59,7 +59,7 @@ public class GUImain extends JFrame {
     private JTextField meseDiNascitaTextField;
     private JTextField annoDiNascitaTextField;
     private JSpinner AnnoNascita;
-    private JTextField NomeInserito;
+    private JTextField nomeInseritoTextField;
     private JButton mostraDipendentiNonAssegnatiButton;
     private JButton mostraTuttiDipendentiButton;
     private JTable tabellaDipendenti;
@@ -672,20 +672,19 @@ public class GUImain extends JFrame {
 
     private void inizializzaFormAssunzione() {
         assumiButton.addActionListener(event -> {
-            String Nome = NomeInserito.getText();
-            String Cognome = CognomeInserito.getText();
-            String dir = (String) dirigenteBox.getSelectedItem();
-            Boolean Dir;
-            Dir = dir.equals("SI");
-            int Giorno = (int) GiornoNascita.getValue();
+            String nome = nomeInseritoTextField.getText();
+            String cognome = cognomeInseritoTextField.getText();
+            String value = (String) dirigenteBox.getSelectedItem();
+            Boolean dir;
+            dir = value.equals("SI");
+            int giorno = (int) GiornoNascita.getValue();
             String mese = (String) mesiNascita.getSelectedItem();
-            int Anno = (int) AnnoNascita.getValue();
-            Anno = Anno - 1900;
-            Date DatadiN = converti(Giorno, mese, Anno);
-            Dipendente dipendente = new Dipendente(Nome, Cognome, Dir, Date.valueOf(LocalDate.now()), DatadiN , Date.valueOf(LocalDate.now()));
-            controllerMainPage.aggiungiDipendente(dipendente);
-            NomeInserito.setText("");
-            CognomeInserito.setText("");
+            int anno = (int) AnnoNascita.getValue();
+            anno = anno - 1900;
+            Date datadiN = converti(giorno, mese, anno);
+            controllerMainPage.aggiungiDipendente(nome, cognome, dir, Date.valueOf(LocalDate.now()) , datadiN , Date.valueOf(LocalDate.now()));
+            nomeInseritoTextField.setText("");
+            cognomeInseritoTextField.setText("");
         });
     }
 

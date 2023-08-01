@@ -37,13 +37,17 @@ public class ControllerMainPage {
     }
 
     /**
-     * gestisce l'aggiunta di un dipendente nel database e nella tabella
-     *
-     * @param dipendente
+     * crea un nuovo dipendente
+     * @param nome
+     * @param cognome
+     * @param dir
+     * @param datadiN
      */
-    public void aggiungiDipendente(Dipendente dipendente) {
+    public void aggiungiDipendente(String nome , String cognome , boolean dir ,Date dataAssunzione,  Date datadiN , Date dataPromozione) {
 
         try {
+            Dipendente dipendente = new Dipendente(nome, cognome, dir, dataAssunzione , datadiN , dataPromozione);
+            System.out.println(dipendente.getDataAssunzione());
             dipendenteDAO.insertDipendente(dipendente);
             Laboratorio laboratorio = new Laboratorio();
             dipendente.setLaboratorio(laboratorio);
