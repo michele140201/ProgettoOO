@@ -210,7 +210,9 @@ public class GUImain extends JFrame {
             Progetto progetto = getProgettoSelezionato();
             if (progetto.getLaboratori().size() > 0) {
                 setComboBoxReferenteProgetto(referenteProgettoComboBox, progetto);
-                dialodoAssegnazioneReferente.setVisible(true);
+                if(referenteProgettoComboBox.getItemCount() > 0)
+                    dialodoAssegnazioneReferente.setVisible(true);
+                else showErrorMessage("Nessun referente da poter assegnare");
             } else {
                 showErrorMessage("Nessun laboratorio assegnato");
             }
