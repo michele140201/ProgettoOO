@@ -180,7 +180,7 @@ public class GUImain extends JFrame {
             dialogoNuovoLaboratorio.setVisible(false);
             String nome = interfacciaLaboratorio.getNome();
             Laboratorio.Topic topic = interfacciaLaboratorio.getTopic();
-            controllerMainPage.nuovoLaboratorio(nome , topic);
+            controllerMainPage.nuovoLaboratorio(nome, topic);
             interfacciaLaboratorio.clear();
         });
         eliminaSedeButton.addActionListener(event -> {
@@ -903,13 +903,7 @@ public class GUImain extends JFrame {
     public void setLaboratoriDipendenti() {
         List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
         List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
-        for (Dipendente dipendente : dipendenti) {
-            for (Laboratorio laboratorio : laboratori) {
-                if (laboratorio.getNome() == dipendente.getLaboratorio().getNome()) {
-                    dipendente.setLaboratorio(laboratorio);
-                }
-            }
-        }
+
     }
 
     /**
@@ -919,13 +913,7 @@ public class GUImain extends JFrame {
     public void setProgettiLaboratorio() {
         List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
         List<Progetto> progetti = getModelloProgetti().getProgetti();
-        for (Laboratorio laboratorio : laboratori) {
-            for (Progetto progetto : progetti) {
-                if (progetto.getCup() == laboratorio.getProgetto().getCup()) {
-                    laboratorio.setProgetto(progetto);
-                }
-            }
-        }
+        controllerMainPage.setProgettoLaboratori(laboratori , progetti);
     }
 
     /**
@@ -935,13 +923,7 @@ public class GUImain extends JFrame {
     public void setReferenteLaboratorio() {
         List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
         List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
-        for (Laboratorio laboratorio : laboratori) {
-            for (Dipendente dipendente : dipendenti) {
-                if (laboratorio.getReferente().getId() == dipendente.getId()) {
-                    laboratorio.setReferente(dipendente);
-                }
-            }
-        }
+        controllerMainPage.setReferenteLaboratori(laboratori , dipendenti);
     }
 
     /**
@@ -951,13 +933,7 @@ public class GUImain extends JFrame {
     public void setReferenteProgetto() {
         List<Progetto> progetti = getModelloProgetti().getProgetti();
         List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
-        for (Progetto progetto : progetti) {
-            for (Dipendente dipendente : dipendenti) {
-                if (progetto.getReferente().getId() == dipendente.getId()) {
-                    progetto.setReferente(dipendente);
-                }
-            }
-        }
+        controllerMainPage.setReferenteProgetti(progetti, dipendenti);
     }
 
     /**
@@ -967,13 +943,7 @@ public class GUImain extends JFrame {
     public void setResponsabiliProgetto() {
         List<Progetto> progetti = getModelloProgetti().getProgetti();
         List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
-        for (Progetto progetto : progetti) {
-            for (Dipendente dipendente : dipendenti) {
-                if (progetto.getResponsabile().getId() == dipendente.getId()) {
-                    progetto.setResponsabile(dipendente);
-                }
-            }
-        }
+        controllerMainPage.setResponsabileProgetti(progetti, dipendenti);
     }
 
     /**
@@ -983,7 +953,7 @@ public class GUImain extends JFrame {
     public void setLaboratoriProgetto() {
         List<Progetto> progetti = getModelloProgetti().getProgetti();
         List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
-        controllerMainPage.setLaboratoriProgetto(progetti , laboratori);
+        controllerMainPage.setLaboratoriProgetto(progetti, laboratori);
     }
 
     /**
@@ -1121,5 +1091,3 @@ public class GUImain extends JFrame {
     }
 
 }
-
-

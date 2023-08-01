@@ -388,4 +388,54 @@ public class ControllerMainPage {
         }
     }
 
+    public void setReferenteProgetti(List<Progetto> progetti , List<Dipendente> dipendenti){
+        for (Progetto progetto : progetti) {
+            for (Dipendente dipendente : dipendenti) {
+                if (progetto.getReferente().getId() == dipendente.getId()) {
+                    progetto.setReferente(dipendente);
+                }
+            }
+        }
+    }
+
+    public void setResponsabileProgetti(List<Progetto> progetti , List<Dipendente> dipendenti){
+        for (Progetto progetto : progetti) {
+            for (Dipendente dipendente : dipendenti) {
+                if (progetto.getResponsabile().getId() == dipendente.getId()) {
+                    progetto.setResponsabile(dipendente);
+                }
+            }
+        }
+    }
+
+    public void setReferenteLaboratori(List<Laboratorio> laboratori , List<Dipendente> dipendenti){
+        for (Laboratorio laboratorio : laboratori) {
+            for (Dipendente dipendente : dipendenti) {
+                if (laboratorio.getReferente().getId() == dipendente.getId()) {
+                    laboratorio.setReferente(dipendente);
+                }
+            }
+        }
+    }
+
+    public void setProgettoLaboratori(List<Laboratorio> laboratori , List<Progetto> progetti){
+        for (Laboratorio laboratorio : laboratori) {
+            for (Progetto progetto : progetti) {
+                if (progetto.getCup() == laboratorio.getProgetto().getCup()) {
+                    laboratorio.setProgetto(progetto);
+                }
+            }
+        }
+    }
+
+    public void setLaboratorioDipendenti(List<Dipendente> dipendenti , List<Laboratorio> laboratori){
+        for (Dipendente dipendente : dipendenti) {
+            for (Laboratorio laboratorio : laboratori) {
+                if (laboratorio.getNome() == dipendente.getLaboratorio().getNome()) {
+                    dipendente.setLaboratorio(laboratorio);
+                }
+            }
+        }
+    }
+
 }
