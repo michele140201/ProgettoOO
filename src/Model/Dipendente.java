@@ -72,7 +72,7 @@ public class Dipendente {
 
     @Override
     public String toString() {
-        if (getNome() != null)
+        if (getId() > 0)
             return getNome() + " " + getCognome() + " " + getId();
         else {
             return "Non Assegnato";

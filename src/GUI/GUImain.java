@@ -33,9 +33,6 @@ public class GUImain extends JFrame {
     private final JComboBox<Dipendente> responsabileProgettoComboBox = new JComboBox<>();
     private final JComboBox<Progetto> progettoLaboratorioComboBox = new JComboBox<>();
     private final JComboBox<Dipendente> referenteLaboratorioComboBox = new JComboBox<>();
-    private final Dipendente dipendenteVuoto = new Dipendente();
-    private final Progetto progettoVuoto = new Progetto();
-    private final Laboratorio laboratorioVuoto = new Laboratorio();
     String[] ValoriDirigenteBox = {"NO", "SI"};
     String[] Mesi = {"Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"};
     private SpinnerNumberModel YearModel;
@@ -53,7 +50,7 @@ public class GUImain extends JFrame {
     private JTextField cognomeInseritoTextField;
     private JComboBox mesiNascita;
     private JComboBox dirigenteBox;
-    private JButton assumiButton;
+    private JButton nuovoDipendenteButton;
     private JSpinner GiornoNascita;
     private JTextField giornoDiNascitaTextField;
     private JTextField meseDiNascitaTextField;
@@ -100,7 +97,6 @@ public class GUImain extends JFrame {
         comboBox = new JComboBox<>();
         Lab = new JComboBox<>();
 
-
         JDialog dialogoInserimentoProgetto = new JDialog();
         dialogoInserimentoProgetto.setLayout(new BorderLayout());
         dialogoInserimentoProgetto.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
@@ -117,13 +113,13 @@ public class GUImain extends JFrame {
         dialogoNuovoLaboratorio.pack();
         dialogoNuovoLaboratorio.setLocationRelativeTo(null);
 
-
         mesiNascita.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 sceltaMese();
             }
         });
+
         dirigenteBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -167,8 +163,8 @@ public class GUImain extends JFrame {
         inserimentoProgettoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Progetto progetto = InterfacciaProgetto.getProgetto();
-                controllerMainPage.nuovoProgetto(progetto);
+                String nome = InterfacciaProgetto.getProgetto();
+                controllerMainPage.nuovoProgetto(nome);
                 dialogoInserimentoProgetto.setVisible(false);
                 InterfacciaProgetto.clear();
             }
@@ -182,8 +178,9 @@ public class GUImain extends JFrame {
         });
         creaNuovoLaboratorioButton.addActionListener(event -> {
             dialogoNuovoLaboratorio.setVisible(false);
-            Laboratorio laboratorio = interfacciaLaboratorio.getLaboratorio();
-            controllerMainPage.nuovoLaboratorio(laboratorio);
+            String nome = interfacciaLaboratorio.getNome();
+            Laboratorio.Topic topic = interfacciaLaboratorio.getTopic();
+            controllerMainPage.nuovoLaboratorio(nome , topic);
             interfacciaLaboratorio.clear();
         });
         eliminaSedeButton.addActionListener(event -> {
@@ -523,10 +520,6 @@ public class GUImain extends JFrame {
      */
 
     public void aggiungiLaboratorio(Laboratorio laboratorio) {
-        Dipendente dipendente = new Dipendente();
-        laboratorio.setReferente(dipendente);
-        Progetto progetto = new Progetto();
-        laboratorio.setProgetto(progetto);
         getModelloLaboratori().aggiungiLaboratorio(laboratorio);
     }
 
@@ -671,7 +664,7 @@ public class GUImain extends JFrame {
      */
 
     private void inizializzaFormAssunzione() {
-        assumiButton.addActionListener(event -> {
+        nuovoDipendenteButton.addActionListener(event -> {
             String nome = nomeInseritoTextField.getText();
             String cognome = cognomeInseritoTextField.getText();
             String value = (String) dirigenteBox.getSelectedItem();
@@ -682,7 +675,7 @@ public class GUImain extends JFrame {
             int anno = (int) AnnoNascita.getValue();
             anno = anno - 1900;
             Date datadiN = converti(giorno, mese, anno);
-            controllerMainPage.aggiungiDipendente(nome, cognome, dir, Date.valueOf(LocalDate.now()) , datadiN , Date.valueOf(LocalDate.now()));
+            controllerMainPage.aggiungiDipendente(nome, cognome, dir, Date.valueOf(LocalDate.now()), datadiN, Date.valueOf(LocalDate.now()));
             nomeInseritoTextField.setText("");
             cognomeInseritoTextField.setText("");
         });
@@ -990,15 +983,7 @@ public class GUImain extends JFrame {
     public void setLaboratoriProgetto() {
         List<Progetto> progetti = getModelloProgetti().getProgetti();
         List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
-        for (Progetto progetto : progetti) {
-            List<Laboratorio> laboratoriProgetto = new ArrayList<>();
-            for (Laboratorio laboratorio : laboratori) {
-                if (progetto.getNome() == laboratorio.getProgetto().getNome()) {
-                    laboratoriProgetto.add(laboratorio);
-                }
-            }
-            progetto.setLaboratori(laboratoriProgetto);
-        }
+        controllerMainPage.setLaboratoriProgetto(progetti , laboratori);
     }
 
     /**
@@ -1082,13 +1067,13 @@ public class GUImain extends JFrame {
     public void aggiornaTabelleDopoLicenziamento(Dipendente dipendente) {
         for (Progetto progetto : getModelloProgetti().getProgetti()) {
             if (progetto.getResponsabile().getId() == dipendente.getId()) {
-                progetto.setResponsabile(dipendenteVuoto);
+                controllerMainPage.rimuoviResponsabile(progetto);
             }
         }
 
         for (Progetto progetto : getModelloProgetti().getProgetti()) {
             if (progetto.getReferente().getId() == dipendente.getId()) {
-                progetto.setReferente(dipendenteVuoto);
+                controllerMainPage.rimuoviReferente(progetto);
             }
         }
         getModelloProgetti().fireTableDataChanged();
@@ -1103,7 +1088,7 @@ public class GUImain extends JFrame {
     public void aggiornaTabelleDopoEliminazioneProgetto(Progetto progetto) {
         for (Laboratorio laboratorio : getModelloLaboratori().getLaboratori()) {
             if (laboratorio.getProgetto().getCup() == progetto.getCup()) {
-                laboratorio.setProgetto(progettoVuoto);
+                controllerMainPage.rimuoviProgetto(laboratorio);
             }
         }
         getModelloLaboratori().fireTableDataChanged();
@@ -1119,18 +1104,18 @@ public class GUImain extends JFrame {
         for (Dipendente dipendente : getModelloDipendenti().getDipendenti()) {
             if (dipendente.getLaboratorio().getNome() != null) {
                 if (dipendente.getLaboratorio().getNome().equals(laboratorio.getNome()))
-                    dipendente.setLaboratorio(laboratorioVuoto);
+                    controllerMainPage.rimuoviLaboratorio(dipendente);
             }
         }
         getModelloDipendenti().fireTableDataChanged();
     }
 
-    public void degradaDipendente(Dipendente dipendente){
+    public void degradaDipendente(Dipendente dipendente) {
         dipendente.setDataPromozione(null);
         dipendente.setDirigente(false);
     }
 
-    public void promuoviDipendente(Dipendente dipendente){
+    public void promuoviDipendente(Dipendente dipendente) {
         dipendente.setDataPromozione(Date.valueOf(LocalDate.now()));
         dipendente.setDirigente(true);
     }

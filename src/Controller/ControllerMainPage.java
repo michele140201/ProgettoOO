@@ -6,6 +6,7 @@ import Model.Dipendente;
 import javax.swing.*;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -18,35 +19,29 @@ public class ControllerMainPage {
     private final DipendenteDAO dipendenteDAO;
     private final LaboratorioDAO laboratorioDAO;
     private final GUImain guImain;
+    private final Dipendente dipendenteVuoto = new Dipendente();
+    private final Laboratorio laboratorioVuoto = new Laboratorio();
+    private final Progetto progettoVuoto = new Progetto();
 
-    public ControllerMainPage(DipendenteDAO dipendenteDAO, ProgettoDAO progettoDAO, LaboratorioDAO laboratorioDAO, GUImain guImain) throws Exception {
+    public ControllerMainPage(DipendenteDAO dipendenteDAO, ProgettoDAO progettoDAO, LaboratorioDAO laboratorioDAO, GUImain guImain){
         this.dipendenteDAO = dipendenteDAO;
         this.laboratorioDAO = laboratorioDAO;
         this.progettoDAO = progettoDAO;
         this.guImain = guImain;
-        guImain.setDipendenti(inizializzaDipendenti());
-        guImain.setLaboratori(laboratorioDAO.getLaboratori());
-        guImain.setProgetti(inzializzaProgetti());
-        guImain.setLaboratoriDipendenti();
-        guImain.setProgettiLaboratorio();
-        guImain.setReferenteLaboratorio();
-        guImain.setProgettiLaboratorio();
-        guImain.setReferenteProgetto();
-        guImain.setLaboratoriProgetto();
-        guImain.setResponsabiliProgetto();
     }
 
     /**
      * crea un nuovo dipendente
+     *
      * @param nome
      * @param cognome
      * @param dir
      * @param datadiN
      */
-    public void aggiungiDipendente(String nome , String cognome , boolean dir ,Date dataAssunzione,  Date datadiN , Date dataPromozione) {
+    public void aggiungiDipendente(String nome, String cognome, boolean dir, Date dataAssunzione, Date datadiN, Date dataPromozione) {
 
         try {
-            Dipendente dipendente = new Dipendente(nome, cognome, dir, dataAssunzione , datadiN , dataPromozione);
+            Dipendente dipendente = new Dipendente(nome, cognome, dir, dataAssunzione, datadiN, dataPromozione);
             System.out.println(dipendente.getDataAssunzione());
             dipendenteDAO.insertDipendente(dipendente);
             Laboratorio laboratorio = new Laboratorio();
@@ -66,7 +61,8 @@ public class ControllerMainPage {
      */
 
     public void mostraTuttiDipendenti() throws Exception {
-        guImain.setDipendenti(inizializzaDipendenti());
+        List<Dipendente> dipendenti = dipendenteDAO.getDipendenti();
+        guImain.setDipendenti(dipendenti);
     }
 
     /**
@@ -123,14 +119,12 @@ public class ControllerMainPage {
         }
     }
 
-    /**
-     * gestisce la creazione di un nuovo laboratorio
-     *
-     * @param laboratorio
-     */
-    public void nuovoLaboratorio(Laboratorio laboratorio) {
+    public void nuovoLaboratorio(String nome , Laboratorio.Topic topic) {
         try {
+            Laboratorio laboratorio = new Laboratorio(nome , topic);
             laboratorioDAO.inserisci(laboratorio);
+            laboratorio.setReferente(dipendenteVuoto);
+            laboratorio.setProgetto(progettoVuoto);
             guImain.aggiungiLaboratorio(laboratorio);
             guImain.showInfoMessage("Inserimento Riuscito!");
         } catch (Exception e) {
@@ -166,8 +160,20 @@ public class ControllerMainPage {
     public void degrada(Dipendente dipendente) {
         try {
             if (dipendente.isDirigente()) {
-                dipendenteDAO.degrada(dipendente);
-                guImain.degradaDipendente(dipendente);
+                Progetto progetto = dipendente.getLaboratorio().getProgetto();
+                if(progetto != null){
+                    if(progetto.getResponsabile().getId() == dipendente.getId()){
+                        guImain.showErrorMessage("IMPOSSIBILE DEGRADARE");
+                    }else{
+                        dipendenteDAO.degrada(dipendente);
+                        guImain.degradaDipendente(dipendente);
+                        guImain.showInfoMessage("DEGRADATO!");
+                    }
+                }else {
+                    dipendenteDAO.degrada(dipendente);
+                    guImain.degradaDipendente(dipendente);
+                    guImain.showInfoMessage("DEGRADATO!");
+                }
             } else {
                 guImain.showErrorMessage("IMPOSSIBILE DEGRADARE!");
             }
@@ -278,12 +284,15 @@ public class ControllerMainPage {
     /**
      * funzione che si occupa della creazione di un nuovo progetto
      *
-     * @param progetto
+     * @param
      */
 
-    public void nuovoProgetto(Progetto progetto) {
+    public void nuovoProgetto(String nome) {
         try {
+            Progetto progetto = new Progetto(nome);
             progettoDAO.inserisci(progetto);
+            progetto.setReferente(dipendenteVuoto);
+            progetto.setResponsabile(dipendenteVuoto);
             guImain.aggiungiProgetto(progetto);
         } catch (Exception e) {
             e.printStackTrace();
@@ -308,28 +317,7 @@ public class ControllerMainPage {
         }
     }
 
-    /**
-     * funzione che inizializza i progetti
-     *
-     * @return
-     * @throws Exception
-     */
 
-    private List<Progetto> inzializzaProgetti() throws Exception {
-        List<Progetto> progetti = progettoDAO.getProgetti();
-        return progetti;
-    }
-
-    /**
-     * funzione che inizializza i dipendenti
-     *
-     * @return
-     * @throws Exception
-     */
-    private List<Dipendente> inizializzaDipendenti() throws Exception {
-        List<Dipendente> dipendenti = dipendenteDAO.getDipendenti();
-        return dipendenti;
-    }
 
     /**
      * funzione che si occupa della visualizzazione degli scatti di carriera di un dipendente
@@ -369,4 +357,35 @@ public class ControllerMainPage {
             }
         }
     }
+
+    public void rimuoviReferente(Progetto progetto) {
+        progetto.setReferente(dipendenteVuoto);
+    }
+
+    public void rimuoviResponsabile(Progetto progetto) {
+        progetto.setResponsabile(dipendenteVuoto);
+    }
+
+    public void rimuoviLaboratorio(Dipendente dipendente) {
+        dipendente.setLaboratorio(laboratorioVuoto);
+    }
+
+    public void rimuoviProgetto(Laboratorio laboratorio) {
+        laboratorio.setProgetto(progettoVuoto);
+    }
+
+
+
+    public void setLaboratoriProgetto(List<Progetto> progetti , List<Laboratorio> laboratori){
+        for (Progetto progetto : progetti) {
+            List<Laboratorio> laboratoriProgetto = new ArrayList<>();
+            for (Laboratorio laboratorio : laboratori) {
+                if (progetto.getNome() == laboratorio.getProgetto().getNome()) {
+                    laboratoriProgetto.add(laboratorio);
+                }
+            }
+            progetto.setLaboratori(laboratoriProgetto);
+        }
+    }
+
 }

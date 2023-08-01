@@ -58,7 +58,7 @@ public class Progetto {
 
     @Override
     public String toString() {
-        if(getNome() != null)
+        if(getCup() > 0)
             return getNome();
         else
             return "Non Assegnato";

@@ -21,8 +21,12 @@ public class DialogoNuovoLaboratorio extends JPanel {
 
     }
 
-    public Laboratorio getLaboratorio() {
-        return new Laboratorio(nomeJTextField.getText(), (Laboratorio.Topic) topicJComboBox.getSelectedItem());
+    public String getNome(){
+        return nomeJTextField.getText();
+    }
+
+    public Laboratorio.Topic getTopic(){
+        return (Laboratorio.Topic) topicJComboBox.getSelectedItem();
     }
 
     public void clear() {
