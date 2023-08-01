@@ -287,17 +287,18 @@ public class ControllerMainPage {
      * @param
      */
 
-    public void nuovoProgetto(String nome) {
+    public Progetto nuovoProgetto(String nome){
         try {
             Progetto progetto = new Progetto(nome);
             progettoDAO.inserisci(progetto);
             progetto.setReferente(dipendenteVuoto);
             progetto.setResponsabile(dipendenteVuoto);
-            guImain.aggiungiProgetto(progetto);
+            return progetto;
         } catch (Exception e) {
             e.printStackTrace();
             guImain.showErrorMessage("Errore nel Database");
         }
+        return null;
     }
 
     /**
@@ -449,7 +450,7 @@ public class ControllerMainPage {
         }
     }
 
-    public List<Dipendente> listaDipendenti(List<Dipendente> dipendenti , Progetto progetto){
+    public List<Dipendente> listaReferentiProgettoPossibili(List<Dipendente> dipendenti , Progetto progetto){
         TimeUnit time = TimeUnit.DAYS;
         List<Dipendente> dipendentiScelti = new ArrayList<>();
         for (Dipendente dipendente : dipendenti) {
@@ -462,6 +463,35 @@ public class ControllerMainPage {
                 }
             }
 
+        }
+        return dipendentiScelti;
+    }
+
+    public List<Dipendente> listaReferentiLaboratorioPossibili(List<Dipendente> dipendenti , Laboratorio laboratorio){
+        TimeUnit time = TimeUnit.DAYS;
+        List<Dipendente> dipendentiScelti = new ArrayList<>();
+        for (Dipendente dipendente : dipendenti) {
+            if (dipendente.getLaboratorio().getNome() != null) {
+                if (dipendente.getLaboratorio().getNome().equals(laboratorio.getNome())) {
+                    if (time.convert(Date.valueOf(LocalDate.now()).getTime() - dipendente.getDataAssunzione().getTime(), TimeUnit.MILLISECONDS) / 365 >= 7)
+                        dipendentiScelti.add(dipendente);
+                }
+            }
+        }
+        return dipendentiScelti;
+    }
+
+    public List<Dipendente> listaResponsabiliProgettoPossibili(List<Dipendente> dipendenti , Progetto progetto){
+        List<Dipendente> dipendentiScelti = new ArrayList<>();
+        for (Dipendente dipendente : dipendenti) {
+            for (Laboratorio laboratorio : progetto.getLaboratori()) {
+                if (dipendente.getLaboratorio().getNome() != null) {
+                    if (dipendente.getLaboratorio().getNome().equals(laboratorio.getNome())) {
+                        if (dipendente.isDirigente())
+                            dipendentiScelti.add(dipendente);
+                    }
+                }
+            }
         }
         return dipendentiScelti;
     }

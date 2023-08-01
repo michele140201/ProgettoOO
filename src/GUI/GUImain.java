@@ -13,7 +13,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -164,7 +163,8 @@ public class GUImain extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String nome = InterfacciaProgetto.getProgetto();
-                controllerMainPage.nuovoProgetto(nome);
+                Progetto progetto = controllerMainPage.nuovoProgetto(nome);
+                getModelloProgetti().aggiungiProgetto(progetto);
                 dialogoInserimentoProgetto.setVisible(false);
                 InterfacciaProgetto.clear();
             }
@@ -227,12 +227,11 @@ public class GUImain extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JDialog dialogoAssegnazioneResponsabile = schermataDialogoAssegnazioneResponsabileProgetto();
-                List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
                 Progetto progetto = getProgettoSelezionato();
-                List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
                 if (progetto.getLaboratori().size() > 0) {
                     setResponsabiliProgettoComboBox(responsabileProgettoComboBox, progetto);
-                    dialogoAssegnazioneResponsabile.setVisible(true);
+                    if(responsabileProgettoComboBox.getItemCount() > 0)
+                        dialogoAssegnazioneResponsabile.setVisible(true);
                 } else {
                     showErrorMessage("Nessun laboratorio assegnato");
                 }
@@ -534,20 +533,6 @@ public class GUImain extends JFrame {
     }
 
     /**
-     * funzione per aggiungere un progetto alla tabella
-     *
-     * @param progetto
-     */
-
-    public void aggiungiProgetto(Progetto progetto) {
-        Dipendente responsabile = new Dipendente();
-        progetto.setResponsabile(responsabile);
-        Dipendente referente = new Dipendente();
-        progetto.setReferente(referente);
-        getModelloProgetti().aggiungiProgetto(progetto);
-    }
-
-    /**
      * funzione per rimuovere un progetto dalla tabella
      *
      * @param progetto
@@ -715,7 +700,7 @@ public class GUImain extends JFrame {
 
     private void setComboBoxReferenteProgetto(JComboBox comboBox, Progetto progetto) {
         comboBox.removeAllItems();
-        List<Dipendente> dipendenti =  controllerMainPage.listaDipendenti(getModelloDipendenti().getDipendenti() , progetto);
+        List<Dipendente> dipendenti =  controllerMainPage.listaReferentiProgettoPossibili(getModelloDipendenti().getDipendenti() , progetto);
         for (Dipendente dipendente : dipendenti) {
             comboBox.addItem(dipendente);
         }
@@ -730,14 +715,9 @@ public class GUImain extends JFrame {
 
     private void setComboBoxReferenteLaboratorio(JComboBox comboBox, Laboratorio laboratorio) {
         comboBox.removeAllItems();
-        TimeUnit time = TimeUnit.DAYS;
-        for (Dipendente dipendente : getModelloDipendenti().getDipendenti()) {
-            if (dipendente.getLaboratorio().getNome() != null) {
-                if (dipendente.getLaboratorio().getNome().equals(laboratorio.getNome())) {
-                    if (time.convert(Date.valueOf(LocalDate.now()).getTime() - dipendente.getDataAssunzione().getTime(), TimeUnit.MILLISECONDS) / 365 >= 7)
-                        comboBox.addItem(dipendente);
-                }
-            }
+        List<Dipendente> dipendenti = controllerMainPage.listaReferentiLaboratorioPossibili(getModelloDipendenti().getDipendenti() , laboratorio);
+        for (Dipendente dipendente : dipendenti) {
+            comboBox.addItem(dipendente);
         }
     }
 
@@ -974,17 +954,15 @@ public class GUImain extends JFrame {
 
     public void setResponsabiliProgettoComboBox(JComboBox comboBox, Progetto progetto) {
         comboBox.removeAllItems();
-        for (Dipendente dipendente : getModelloDipendenti().getDipendenti()) {
-            for (Laboratorio laboratorio : progetto.getLaboratori()) {
-                if (dipendente.getLaboratorio().getNome() != null) {
-                    if (dipendente.getLaboratorio().getNome().equals(laboratorio.getNome())) {
-                        if (dipendente.isDirigente())
-                            comboBox.addItem(dipendente);
-                    }
-                }
+        List<Dipendente> dipendenti = controllerMainPage.listaResponsabiliProgettoPossibili(getModelloDipendenti().getDipendenti() , progetto);
+        if(dipendenti.size() > 0){
+            for (Dipendente dipendente : dipendenti) {
+                comboBox.addItem(dipendente);
             }
-
+        }else{
+            showErrorMessage("Nessun responsabile da assegnare");
         }
+
     }
 
     /**
