@@ -14,12 +14,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 public class GUImain extends JFrame {
     private final JComboBox Lab;
+    private final DialogoNuovoDipendente InterfacciaDipendente = new DialogoNuovoDipendente();
     private final DialogoNuovoProgetto InterfacciaProgetto = new DialogoNuovoProgetto();
+    private final JButton inserimentoDipendenteButton = new JButton("Inserisci");
     private final JButton inserimentoProgettoButton = new JButton("Inserisci");
     private final JButton creaNuovoLaboratorioButton = new JButton("Inserisci");
     private final DialogoNuovoLaboratorio interfacciaLaboratorio = new DialogoNuovoLaboratorio();
@@ -78,12 +79,13 @@ public class GUImain extends JFrame {
     private JButton apriFinestraAssegnazioneReferenteLaboratorioButton;
     private JButton assegnaResponsabileButton;
     private JButton dialogoReferenteProgettiButton;
+    private JButton assumiDipendenteButton;
     private ControllerMainPage controllerMainPage;
     private JDialog dialogoAssegnazioneDipendenteLaboratorio;
 
     public GUImain() {
         setContentPane(PannelloPrincipale);
-        setSize(1000, 300);
+        setSize(500, 300);
         setLocationRelativeTo(null);
         setBackground(Color.CYAN);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -95,6 +97,14 @@ public class GUImain extends JFrame {
         inizializzaFormAssunzione();
         comboBox = new JComboBox<>();
         Lab = new JComboBox<>();
+
+        JDialog dialogoInserimentoDipendente = new JDialog();
+        dialogoInserimentoDipendente.setLayout(new BorderLayout());
+        dialogoInserimentoDipendente.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+        dialogoInserimentoDipendente.add(InterfacciaDipendente);
+        dialogoInserimentoDipendente.add(inserimentoDipendenteButton, BorderLayout.PAGE_END);
+        dialogoInserimentoDipendente.pack();
+        dialogoInserimentoDipendente.setLocationRelativeTo(null);
 
         JDialog dialogoInserimentoProgetto = new JDialog();
         dialogoInserimentoProgetto.setLayout(new BorderLayout());
@@ -111,6 +121,10 @@ public class GUImain extends JFrame {
         dialogoNuovoLaboratorio.add(creaNuovoLaboratorioButton, BorderLayout.PAGE_END);
         dialogoNuovoLaboratorio.pack();
         dialogoNuovoLaboratorio.setLocationRelativeTo(null);
+
+        assumiDipendenteButton.addActionListener(event ->{
+            dialogoInserimentoDipendente.setVisible(true);
+        });
 
         mesiNascita.addActionListener(new ActionListener() {
             @Override
@@ -159,6 +173,17 @@ public class GUImain extends JFrame {
             Progetto progetto = getProgettoSelezionato();
             controllerMainPage.eliminaProgetto(progetto);
         });
+
+        inserimentoDipendenteButton.addActionListener(event->{
+            String nome = InterfacciaDipendente.getNome();
+            String cognome = InterfacciaDipendente.getCognome();
+            boolean dirigente = InterfacciaDipendente.getDirigente();
+            Date dataNascita = InterfacciaDipendente.getDataNascita();
+            controllerMainPage.aggiungiDipendente(nome, cognome, dirigente, Date.valueOf(LocalDate.now()), dataNascita, Date.valueOf(LocalDate.now()));
+            dialogoInserimentoDipendente.setVisible(false);
+            InterfacciaDipendente.clear();
+        });
+
         inserimentoProgettoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -667,6 +692,8 @@ public class GUImain extends JFrame {
             cognomeInseritoTextField.setText("");
         });
     }
+
+
 
     /**
      * funzione che setta il controller della gui

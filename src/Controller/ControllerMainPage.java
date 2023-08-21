@@ -48,6 +48,7 @@ public class ControllerMainPage {
             dipendente.setLaboratorio(laboratorio);
             guImain.aggiungiDipendente(dipendente);
             guImain.showInfoMessage("Dipendente Assunto!");
+            //todo gestire l'inserimento di nome e cognome validi
         } catch (Exception e) {
             e.printStackTrace();
             guImain.showErrorMessage("OPS! Qualcosa è andato storto");
