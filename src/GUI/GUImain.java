@@ -40,21 +40,14 @@ public class GUImain extends JFrame {
     private SpinnerNumberModel GiorniModel30;
     private SpinnerNumberModel GiorniModel31;
     private JTabbedPane PannelloPrincipale;
-    private JPanel Assumi;
     private JPanel Visual;
     private JPanel Progetti;
     private JPanel Laboratori;
-    private JTextField dirigenteTextField;
-    private JTextField nomeTextField;
-    private JTextField cognomeTextField;
     private JTextField cognomeInseritoTextField;
     private JComboBox mesiNascita;
     private JComboBox dirigenteBox;
     private JButton nuovoDipendenteButton;
     private JSpinner GiornoNascita;
-    private JTextField giornoDiNascitaTextField;
-    private JTextField meseDiNascitaTextField;
-    private JTextField annoDiNascitaTextField;
     private JSpinner AnnoNascita;
     private JTextField nomeInseritoTextField;
     private JButton mostraDipendentiNonAssegnatiButton;
@@ -85,16 +78,14 @@ public class GUImain extends JFrame {
 
     public GUImain() {
         setContentPane(PannelloPrincipale);
-        setSize(500, 300);
+        setSize(1000, 1000);
         setLocationRelativeTo(null);
         setBackground(Color.CYAN);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        inizializzaInserimentoDipendente();
         inizializzaTabellaDipendenti();
         inizializzaTabellaLaboratori();
         inizializzaTabellaProgetti();
         inizializzaPulsantiGrado();
-        inizializzaFormAssunzione();
         comboBox = new JComboBox<>();
         Lab = new JComboBox<>();
 
@@ -126,19 +117,6 @@ public class GUImain extends JFrame {
             dialogoInserimentoDipendente.setVisible(true);
         });
 
-        mesiNascita.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                sceltaMese();
-            }
-        });
-
-        dirigenteBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setDirigente();
-            }
-        });
 
         licenziaButton.addActionListener(event -> controllerMainPage.licenziaDipendente(getDipendenteSelezionato()));
 
@@ -179,7 +157,11 @@ public class GUImain extends JFrame {
             String cognome = InterfacciaDipendente.getCognome();
             boolean dirigente = InterfacciaDipendente.getDirigente();
             Date dataNascita = InterfacciaDipendente.getDataNascita();
-            controllerMainPage.aggiungiDipendente(nome, cognome, dirigente, Date.valueOf(LocalDate.now()), dataNascita, Date.valueOf(LocalDate.now()));
+            if(nome != null && cognome != null){
+                controllerMainPage.aggiungiDipendente(nome, cognome, dirigente, Date.valueOf(LocalDate.now()), dataNascita, Date.valueOf(LocalDate.now()));
+            }else {
+                throw new RuntimeException("Dati inseriti errati");
+            }
             dialogoInserimentoDipendente.setVisible(false);
             InterfacciaDipendente.clear();
         });
