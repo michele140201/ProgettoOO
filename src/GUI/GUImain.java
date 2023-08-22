@@ -91,6 +91,7 @@ public class GUImain extends JFrame {
 
         JDialog dialogoInserimentoDipendente = new JDialog();
         dialogoInserimentoDipendente.setLayout(new BorderLayout());
+        dialogoInserimentoDipendente.setModal(true);
         dialogoInserimentoDipendente.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
         dialogoInserimentoDipendente.add(InterfacciaDipendente);
         dialogoInserimentoDipendente.add(inserimentoDipendenteButton, BorderLayout.PAGE_END);
@@ -99,19 +100,21 @@ public class GUImain extends JFrame {
 
         JDialog dialogoInserimentoProgetto = new JDialog();
         dialogoInserimentoProgetto.setLayout(new BorderLayout());
+        dialogoInserimentoProgetto.setModal(true);
         dialogoInserimentoProgetto.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
         dialogoInserimentoProgetto.add(InterfacciaProgetto);
         dialogoInserimentoProgetto.add(inserimentoProgettoButton, BorderLayout.PAGE_END);
         dialogoInserimentoProgetto.pack();
         dialogoInserimentoProgetto.setLocationRelativeTo(null);
 
-        JDialog dialogoNuovoLaboratorio = new JDialog();
-        dialogoNuovoLaboratorio.setLayout(new BorderLayout());
-        dialogoNuovoLaboratorio.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
-        dialogoNuovoLaboratorio.add(interfacciaLaboratorio);
-        dialogoNuovoLaboratorio.add(creaNuovoLaboratorioButton, BorderLayout.PAGE_END);
-        dialogoNuovoLaboratorio.pack();
-        dialogoNuovoLaboratorio.setLocationRelativeTo(null);
+        JDialog dialogoInserimentoLaboratorio = new JDialog();
+        dialogoInserimentoLaboratorio.setLayout(new BorderLayout());
+        dialogoInserimentoLaboratorio.setModal(true);
+        dialogoInserimentoLaboratorio.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+        dialogoInserimentoLaboratorio.add(interfacciaLaboratorio);
+        dialogoInserimentoLaboratorio.add(creaNuovoLaboratorioButton, BorderLayout.PAGE_END);
+        dialogoInserimentoLaboratorio.pack();
+        dialogoInserimentoLaboratorio.setLocationRelativeTo(null);
 
         assumiDipendenteButton.addActionListener(event ->{
             dialogoInserimentoDipendente.setVisible(true);
@@ -157,13 +160,15 @@ public class GUImain extends JFrame {
             String cognome = InterfacciaDipendente.getCognome();
             boolean dirigente = InterfacciaDipendente.getDirigente();
             Date dataNascita = InterfacciaDipendente.getDataNascita();
-            if(nome != null && cognome != null){
-                controllerMainPage.aggiungiDipendente(nome, cognome, dirigente, Date.valueOf(LocalDate.now()), dataNascita, Date.valueOf(LocalDate.now()));
-            }else {
+            if(nome.isEmpty() || cognome.isEmpty()){
+                showErrorMessage("Dati inseriti errati");
                 throw new RuntimeException("Dati inseriti errati");
+            }else {
+                controllerMainPage.aggiungiDipendente(nome, cognome, dirigente, Date.valueOf(LocalDate.now()), dataNascita, Date.valueOf(LocalDate.now()));
+                dialogoInserimentoDipendente.setVisible(false);
+                InterfacciaDipendente.clear();
             }
-            dialogoInserimentoDipendente.setVisible(false);
-            InterfacciaDipendente.clear();
+
         });
 
         inserimentoProgettoButton.addActionListener(new ActionListener() {
@@ -180,11 +185,11 @@ public class GUImain extends JFrame {
         nuovoLaboratorioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dialogoNuovoLaboratorio.setVisible(true);
+                dialogoInserimentoLaboratorio.setVisible(true);
             }
         });
         creaNuovoLaboratorioButton.addActionListener(event -> {
-            dialogoNuovoLaboratorio.setVisible(false);
+            dialogoInserimentoLaboratorio.setVisible(false);
             String nome = interfacciaLaboratorio.getNome();
             Laboratorio.Topic topic = interfacciaLaboratorio.getTopic();
             controllerMainPage.nuovoLaboratorio(nome, topic);

@@ -21,6 +21,13 @@ public class ControllerAvvio {
         inizializzaGui();
     }
 
+    /**
+     * Metodo che permette l'inizializzazione dell'interfaccia grafica
+     * inizializzando tutte le tabelle con i dati che gli vengono forniti
+     * dal database tramite i DAO
+     * @throws Exception
+     */
+
     private void inizializzaGui() throws Exception {
         guimain.setDipendenti(inizializzaDipendenti());
         guimain.setLaboratori(laboratorioDAO.getLaboratori());

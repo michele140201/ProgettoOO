@@ -14,6 +14,12 @@ public class ConnectionController {
         Class.forName("org.postgresql.Driver");
     }
 
+    /**
+     * Metodo che permette di connettersi ad un database generico
+     * Modificando le variabili è possibile accedere ad un qualsiasi database ed utilizzare quei dati
+     * @return
+     * @throws SQLException
+     */
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(dbname, username, password);
     }

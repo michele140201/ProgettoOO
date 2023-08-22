@@ -31,7 +31,8 @@ public class ControllerMainPage {
     }
 
     /**
-     * crea un nuovo dipendente
+     * Metodo che si occupa di creare e aggiungere al database
+     * un nuovo dipendente con i dati fornitogli dall'utente
      *
      * @param nome
      * @param cognome
@@ -42,13 +43,11 @@ public class ControllerMainPage {
 
         try {
             Dipendente dipendente = new Dipendente(nome, cognome, dir, dataAssunzione, datadiN, dataPromozione);
-            System.out.println(dipendente.getDataAssunzione());
             dipendenteDAO.insertDipendente(dipendente);
             Laboratorio laboratorio = new Laboratorio();
             dipendente.setLaboratorio(laboratorio);
             guImain.aggiungiDipendente(dipendente);
             guImain.showInfoMessage("Dipendente Assunto!");
-            //todo gestire l'inserimento di nome e cognome validi
         } catch (Exception e) {
             e.printStackTrace();
             guImain.showErrorMessage("OPS! Qualcosa è andato storto");
@@ -56,7 +55,10 @@ public class ControllerMainPage {
     }
 
     /**
-     * inserisce i dipendenti nella tabella
+     * Metodo che inserisce nella tabella tutti i dipendenti
+     * presenti nel database.
+     * Funzione che permette quindi, nel caso in cui sia stato premuto il pulsante
+     * per vedere solo i dipendenti assegnati, di visualizzarli di nuovo tutti
      *
      * @throws Exception
      */
@@ -67,7 +69,10 @@ public class ControllerMainPage {
     }
 
     /**
-     * gestisce il licenziamento di un dipendente nel database e nella tabella
+     * Metodo che gestisce il licenziamento di un dipendente
+     * Se un dipendente è referente di laboratorio, allora
+     * il metodo impedisce il licenziamento e manda un
+     * messaggio di errore
      *
      * @param dipendente
      */
@@ -88,8 +93,9 @@ public class ControllerMainPage {
     }
 
     /**
-     * gestisce l'assegnazione di un dipendente ad un laboratorio
-     *
+     * Metodo che riceve il dipendente selezionato dall'utente e
+     * a quale laboratorio desidera assegnarlo, esegue l'assegnazione
+     * e aggiorna le tabelle
      * @param dipendente
      * @param laboratorio
      */
@@ -104,7 +110,8 @@ public class ControllerMainPage {
     }
 
     /**
-     * gestisce l'eliminazione di un laboratorio
+     * Metodo che gestisce l'eliminazione di un laboratorio
+     * selezionato dall'utente
      *
      * @param laboratorio
      */
@@ -119,6 +126,14 @@ public class ControllerMainPage {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Metodo che si occupa della creazione e dell'inserimento di un nuovo laboratorio
+     * all'interno del database con i dati fornitogli dall'utente,
+     * occupandosi di aggiornare le tabelle
+     * @param nome
+     * @param topic
+     */
 
     public void nuovoLaboratorio(String nome , Laboratorio.Topic topic) {
         try {
@@ -135,7 +150,8 @@ public class ControllerMainPage {
     }
 
     /**
-     * gestisce l'eliminazione di un progetto
+     * Metodo che si occupa di eliminare il progetto selezionato dall'utente
+     * sia dalle tabelle che dal database
      *
      * @param progetto
      */
@@ -153,7 +169,13 @@ public class ControllerMainPage {
     }
 
     /**
-     * rende un dipendente non più dirigente
+     * Metodo che si occupa del degradamento di un database.
+     * Il metodo controlla che sia possibile effettuare l'operazione e
+     * in particolare verifica che il dipendente selezionato:
+     * -Sia un dirigente
+     * -Non sia responsabile di progetto
+     * In caso non si verifichi una delle due cose, viene mandato
+     * all'utente un messaggio di errore
      *
      * @param dipendente
      */
@@ -186,7 +208,9 @@ public class ControllerMainPage {
 
 
     /**
-     * rende un dipendente responsabile del progetto selezionato
+     * Metodo che rende il dipendente selezionato responsabile
+     * del progetto assegnato al suo laboratorio di appartenenza.
+     * Il metodo si occupa di aggiornare sia le tabelle che il database.
      *
      * @param dipendente
      * @param progetto
@@ -203,7 +227,9 @@ public class ControllerMainPage {
     }
 
     /**
-     * rende un dipendente  referente del progetto selezionato
+     * Metodo che rende il dipendente selezionato referente
+     *  del progetto assegnato al suo laboratorio di appartenenza.
+     * Il metodo si occupa di aggiornare sia le tabelle che il database.
      *
      * @param dipendente
      * @param progetto
@@ -220,8 +246,9 @@ public class ControllerMainPage {
     }
 
     /**
-     * rende un dipendente selezionato dirigente
-     *
+     * Metodo che permette la promozione di un dipendente a dirigente.
+     * Un dipendente, per essere promosso, non deve essere già un dirigente,
+     * e nel caso già lo sia viene mandato all'utente un messaggio di errore
      * @param dipendente
      */
     public void promuovi(Dipendente dipendente) {
@@ -240,7 +267,11 @@ public class ControllerMainPage {
     }
 
     /**
-     * effettua l'aggiornamento di un progetto
+     * Metodo che si occupa dell'aggiornamento di un progetto dopo che un laboratorio
+     * viene eliminato, o viene assegnato un altro progetto a quel laboratorio.
+     * In particolare, verifica se il referente o il responsabile del progetto
+     * appartenessero a quel laboratorio e, nel caso, assegna al suo posto un
+     * dipendente vuoto, ovvero un dipendente con id 0.
      *
      * @param progetto
      * @param laboratorio
@@ -253,8 +284,7 @@ public class ControllerMainPage {
                 if (referente.getLaboratorio() != null) {
                     if (referente.getLaboratorio().getNome().equals(laboratorio.getNome())) {
                         progettoDAO.setReferente(null, laboratorio.getProgetto());
-                        Dipendente dipendente = new Dipendente();
-                        laboratorio.getProgetto().setReferente(dipendente);
+                        laboratorio.getProgetto().setReferente(dipendenteVuoto);
                     }
                 }
 
@@ -263,9 +293,8 @@ public class ControllerMainPage {
             if (responsabile != null) {
                 if (responsabile.getLaboratorio() != null) {
                     if (responsabile.getLaboratorio().getNome().equals(laboratorio.getNome())) {
-                        Dipendente dipendente = new Dipendente();
                         progettoDAO.setResponsabile(null, laboratorio.getProgetto());
-                        laboratorio.getProgetto().setResponsabile(dipendente);
+                        laboratorio.getProgetto().setResponsabile(dipendenteVuoto);
                     }
                 }
 
@@ -283,7 +312,8 @@ public class ControllerMainPage {
     }
 
     /**
-     * funzione che si occupa della creazione di un nuovo progetto
+     *Metodo che si occupa della creazione di un nuovo progetto
+     *e dell'inseriment
      *
      * @param
      */
