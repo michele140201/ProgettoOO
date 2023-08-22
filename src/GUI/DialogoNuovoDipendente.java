@@ -137,6 +137,7 @@ public class DialogoNuovoDipendente extends JPanel {
 
     public java.sql.Date converti(int Giorno, String Mese, int Anno) {
         int month = convertiInNumero(Mese);
+
         java.sql.Date gdn = new java.sql.Date(Anno, month, Giorno);
         return gdn;
     }

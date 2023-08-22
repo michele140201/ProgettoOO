@@ -310,7 +310,7 @@ public class ControllerMainPage {
             guImain.showErrorMessage("Errore nel Database");
         }
     }
-
+//todo finire i commenti
     /**
      *Metodo che si occupa della creazione di un nuovo progetto
      *e dell'inseriment

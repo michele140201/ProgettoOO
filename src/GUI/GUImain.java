@@ -330,101 +330,6 @@ public class GUImain extends JFrame {
         }
     }
 
-    /**
-     * funzione per inizializzare la combobox dirigente
-     */
-
-    public void setDirigente() {
-        String bool = (String) dirigenteBox.getSelectedItem();
-        Dir = bool.equals("SI");
-    }
-
-    /**
-     * funzione per convertire i dati in una data
-     *
-     * @param Giorno
-     * @param Mese
-     * @param Anno
-     * @return
-     */
-
-    public java.sql.Date converti(int Giorno, String Mese, int Anno) {
-        int month = convertiInNumero(Mese);
-        java.sql.Date gdn = new java.sql.Date(Anno, month, Giorno);
-        return gdn;
-    }
-
-    /**
-     * funzione per convertire i mesi in numeri
-     *
-     * @param mese
-     * @return
-     */
-
-    public int convertiInNumero(String mese) {
-        int i = 0;
-        switch (mese) {
-            case "Gennaio":
-                i = 0;
-                break;
-            case "Febbraio":
-                i = 1;
-                break;
-            case "Marzo":
-                i = 2;
-                break;
-            case "Aprile":
-                i = 3;
-                break;
-            case "Maggio":
-                i = 4;
-                break;
-            case "Giugno":
-                i = 5;
-                break;
-            case "Luglio":
-                i = 6;
-                break;
-            case "Agosto":
-                i = 7;
-                break;
-            case "Settembre":
-                i = 8;
-                break;
-            case "Ottobre":
-                i = 9;
-                break;
-            case "Novembre":
-                i = 10;
-                break;
-            case "Dicembre":
-                i = 11;
-                break;
-        }
-        return i;
-    }
-
-    /**
-     * funzione per aggiornare i giorni dello spinner in base al mese inserito
-     */
-
-    public void sceltaMese() {
-        int i = 0;
-        String MeseScelto = (String) mesiNascita.getSelectedItem();
-        if (MeseScelto.equals("Febbraio")) {
-            i = (int) GiornoNascita.getValue();
-            if (i > 28) i = 28;
-            GiornoNascita.setModel(GiorniModel28);
-            GiorniModel28.setValue(i);
-        } else if (MeseScelto.equals("Novembre") || MeseScelto.equals("Giugno") || MeseScelto.equals("Aprile") || MeseScelto.equals("Settembre")) {
-            i = (int) GiornoNascita.getValue();
-            if (i > 30) i = 30;
-            GiornoNascita.setModel(GiorniModel30);
-            GiorniModel30.setValue(i);
-        } else {
-            GiornoNascita.setModel(GiorniModel31);
-        }
-    }
 
     /**
      * funzione per inizializzare la tabella dipendenti
@@ -657,29 +562,6 @@ public class GUImain extends JFrame {
             getModelloDipendenti().fireTableDataChanged();
         });
     }
-
-    /**
-     * funzione che inizializza il form assunzione
-     */
-
-    private void inizializzaFormAssunzione() {
-        nuovoDipendenteButton.addActionListener(event -> {
-            String nome = nomeInseritoTextField.getText();
-            String cognome = cognomeInseritoTextField.getText();
-            String value = (String) dirigenteBox.getSelectedItem();
-            Boolean dir;
-            dir = value.equals("SI");
-            int giorno = (int) GiornoNascita.getValue();
-            String mese = (String) mesiNascita.getSelectedItem();
-            int anno = (int) AnnoNascita.getValue();
-            anno = anno - 1900;
-            Date datadiN = converti(giorno, mese, anno);
-            controllerMainPage.aggiungiDipendente(nome, cognome, dir, Date.valueOf(LocalDate.now()), datadiN, Date.valueOf(LocalDate.now()));
-            nomeInseritoTextField.setText("");
-            cognomeInseritoTextField.setText("");
-        });
-    }
-
 
 
     /**
