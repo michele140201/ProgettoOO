@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Classe che rappresenta un dipendente dell'azienda
  */
-
+//todo commenti ai model, alla gui e ai DAO. Finire anche i commenti dei costruttori e delle classi
 public class Dipendente {
 
     private String nome;
@@ -18,36 +18,9 @@ public class Dipendente {
     private Date dataPromozione;
 
     /**
-     * Crea un nuovo dipendente con i dati che gli vengono forniti
-     * @param nome nome del dipendente
-     * @param cognome cognome del dipendente
-     * @param id id del dipendente
-     * @param dirigente dato che indica se il dipendente è dirigente
-     * @param dataAssunzione quando è stato assunto il dipendente
-     * @param dataNascita data di nascita del dipendente
-     * @param dataPromozione quando è stato promosso il dipendente
-     */
-
-    public Dipendente(String nome, String cognome, int id, boolean dirigente, Date dataAssunzione, Date dataNascita , Date dataPromozione) {
-        this(nome, cognome, id, dirigente, dataAssunzione, dataNascita, null , dataPromozione);
-    }
-
-    /**
-     * Crea un nuovo dipendente con i dati che gli vengono forniti
-     * @param nome nome del dipendente
-     * @param cognome cognome del dipendente
-     * @param dirigente dato che indica se il dipendente è dirigente
-     * @param dataAssunzione quando è stato assunto il dipendente
-     * @param dataNascita data di nascita del dipendente
-     * @param dataPromozione quando è stato promosso il dipendente
-     */
-
-    public Dipendente(String nome, String cognome, boolean dirigente, Date dataAssunzione, Date dataNascita , Date dataPromozione) {
-        this(nome, cognome, 0, dirigente, dataAssunzione, dataNascita, null , dataPromozione);
-    }
-
-    /**
-     * Crea un nuovo dipendente con i dati che gli vengono forniti.
+     * Costruttore generico di un nuovo dipendente
+     * che distingue il caso in cui il dipendente
+     * sia un dirigente da quello in cui non lo è
      *
      * @param nome
      * @param cognome
@@ -80,6 +53,37 @@ public class Dipendente {
             setDataPromozione(null);
         }
     }
+
+    /**
+     * Crea un nuovo dipendente con i dati che gli vengono forniti
+     * @param nome nome del dipendente
+     * @param cognome cognome del dipendente
+     * @param id id del dipendente
+     * @param dirigente dato che indica se il dipendente è dirigente
+     * @param dataAssunzione quando è stato assunto il dipendente
+     * @param dataNascita data di nascita del dipendente
+     * @param dataPromozione quando è stato promosso il dipendente
+     */
+
+    public Dipendente(String nome, String cognome, int id, boolean dirigente, Date dataAssunzione, Date dataNascita , Date dataPromozione) {
+        this(nome, cognome, id, dirigente, dataAssunzione, dataNascita, null , dataPromozione);
+    }
+
+    /**
+     * Costruttore del dipendente nullo, che quindi ha come id 0
+     * @param nome nome del dipendente
+     * @param cognome cognome del dipendente
+     * @param dirigente dato che indica se il dipendente è dirigente
+     * @param dataAssunzione quando è stato assunto il dipendente
+     * @param dataNascita data di nascita del dipendente
+     * @param dataPromozione quando è stato promosso il dipendente
+     */
+
+    public Dipendente(String nome, String cognome, boolean dirigente, Date dataAssunzione, Date dataNascita , Date dataPromozione) {
+        this(nome, cognome, 0, dirigente, dataAssunzione, dataNascita, null , dataPromozione);
+    }
+
+
 
     public Dipendente(int id) {
         setId(id);
