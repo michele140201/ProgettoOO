@@ -2,6 +2,10 @@ package Model;
 
 import java.util.Date;
 
+/**
+ * Classe che rappresenta un dipendente dell'azienda
+ */
+
 public class Dipendente {
 
     private String nome;
@@ -13,23 +17,47 @@ public class Dipendente {
     private Laboratorio laboratorio;
     private Date dataPromozione;
 
-    public Date getDataPromozione() {
-        return dataPromozione;
-    }
-
-    public void setDataPromozione(Date dataPromozione) {
-        this.dataPromozione = dataPromozione;
-    }
+    /**
+     * Crea un nuovo dipendente con i dati che gli vengono forniti
+     * @param nome nome del dipendente
+     * @param cognome cognome del dipendente
+     * @param id id del dipendente
+     * @param dirigente dato che indica se il dipendente è dirigente
+     * @param dataAssunzione quando è stato assunto il dipendente
+     * @param dataNascita data di nascita del dipendente
+     * @param dataPromozione quando è stato promosso il dipendente
+     */
 
     public Dipendente(String nome, String cognome, int id, boolean dirigente, Date dataAssunzione, Date dataNascita , Date dataPromozione) {
         this(nome, cognome, id, dirigente, dataAssunzione, dataNascita, null , dataPromozione);
     }
 
-
+    /**
+     * Crea un nuovo dipendente con i dati che gli vengono forniti
+     * @param nome nome del dipendente
+     * @param cognome cognome del dipendente
+     * @param dirigente dato che indica se il dipendente è dirigente
+     * @param dataAssunzione quando è stato assunto il dipendente
+     * @param dataNascita data di nascita del dipendente
+     * @param dataPromozione quando è stato promosso il dipendente
+     */
 
     public Dipendente(String nome, String cognome, boolean dirigente, Date dataAssunzione, Date dataNascita , Date dataPromozione) {
         this(nome, cognome, 0, dirigente, dataAssunzione, dataNascita, null , dataPromozione);
     }
+
+    /**
+     * Crea un nuovo dipendente con i dati che gli vengono forniti.
+     *
+     * @param nome
+     * @param cognome
+     * @param id
+     * @param dirigente
+     * @param dataAssunzione
+     * @param dataNascita
+     * @param laboratorio
+     * @param dataPromozione
+     */
 
     public Dipendente(String nome, String cognome, int id, boolean dirigente, Date dataAssunzione, Date dataNascita, Laboratorio laboratorio , Date dataPromozione) {
         if(dirigente == true){
@@ -133,5 +161,13 @@ public class Dipendente {
 
     public void setCognome(String cognome) {
         this.cognome = cognome;
+    }
+
+    public Date getDataPromozione() {
+        return dataPromozione;
+    }
+
+    public void setDataPromozione(Date dataPromozione) {
+        this.dataPromozione = dataPromozione;
     }
 }

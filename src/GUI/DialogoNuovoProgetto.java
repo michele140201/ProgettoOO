@@ -16,9 +16,19 @@ public class DialogoNuovoProgetto extends JPanel {
         setSize(500, 300);
     }
 
+    /**
+     * Metodo che ritorna il nome
+     * inserito dall'utente
+     * @return
+     */
+
     public String getProgetto() {
         return nomeTextField.getText();
     }
+
+    /**
+     * Metodo che pulisce il campo nome
+     */
 
     public void clear() {
         nomeTextField.setText(" ");

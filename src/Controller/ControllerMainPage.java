@@ -39,15 +39,21 @@ public class ControllerMainPage {
      * @param dir
      * @param datadiN
      */
-    public void aggiungiDipendente(String nome, String cognome, boolean dir, Date dataAssunzione, Date datadiN, Date dataPromozione) {
+    public void nuovoDipendente(String nome, String cognome, boolean dir, Date dataAssunzione, Date datadiN, Date dataPromozione) {
 
         try {
-            Dipendente dipendente = new Dipendente(nome, cognome, dir, dataAssunzione, datadiN, dataPromozione);
-            dipendenteDAO.insertDipendente(dipendente);
-            Laboratorio laboratorio = new Laboratorio();
-            dipendente.setLaboratorio(laboratorio);
-            guImain.aggiungiDipendente(dipendente);
-            guImain.showInfoMessage("Dipendente Assunto!");
+            if(nome.isEmpty() || cognome.isEmpty()) {
+                guImain.showErrorMessage("Dati inseriti errati");
+                throw new RuntimeException("Dati inseriti errati");
+            }else{
+                Dipendente dipendente = new Dipendente(nome, cognome, dir, dataAssunzione, datadiN, dataPromozione);
+                dipendenteDAO.insertDipendente(dipendente);
+                Laboratorio laboratorio = new Laboratorio();
+                dipendente.setLaboratorio(laboratorio);
+                guImain.aggiungiDipendente(dipendente);
+                guImain.showInfoMessage("Dipendente Assunto!");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             guImain.showErrorMessage("OPS! Qualcosa è andato storto");

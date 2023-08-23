@@ -10,22 +10,17 @@ import java.sql.Date;
 import javax.swing.*;
 import javax.swing.table.TableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.List;
 
 
 public class GUImain extends JFrame {
-    private final JComboBox Lab;
     private final DialogoNuovoDipendente interfacciaDipendente = new DialogoNuovoDipendente();
     private final DialogoNuovoProgetto interfacciaProgetto = new DialogoNuovoProgetto();
     private final DialogoNuovoLaboratorio interfacciaLaboratorio = new DialogoNuovoLaboratorio();
     private final JButton creaNuovoDipendenteButton = new JButton("Inserisci");
     private final JButton creaNuovoProgettoButton = new JButton("Inserisci");
     private final JButton creaNuovoLaboratorioButton = new JButton("Inserisci");
-    private final JComboBox comboBox;
-    private final JButton confermaResponsabileButton = new JButton("Conferma");
     private final JComboBox<Laboratorio> laboratoriComboBox = new JComboBox<>();
     private final JComboBox<Dipendente> referenteProgettoComboBox = new JComboBox<>();
     private final JComboBox<Dipendente> responsabileProgettoComboBox = new JComboBox<>();
@@ -50,63 +45,27 @@ public class GUImain extends JFrame {
     private JButton eliminaProgettoButton;
     private JTable tabellaLaboratori;
     private JScrollPane PannelloLaboratori;
-    private JButton nuovoLaboratorioButton;
+    private JButton dialogoNuovoLaboratorioButton;
     private JButton eliminaSedeButton;
     private JButton assegnaProgettoButton;
     private JButton apriFinestraAssegnazioneReferenteLaboratorioButton;
     private JButton assegnaResponsabileButton;
     private JButton dialogoReferenteProgettiButton;
-    private JButton assumiDipendenteButton;
+    private JButton dialogoNuovoDipendenteButton;
     private ControllerMainPage controllerMainPage;
     private JDialog dialogoAssegnazioneDipendenteLaboratorio;
+    private JDialog dialogoInserimentoDipendente = new JDialog();
+    private JDialog dialogoInserimentoProgetto = new JDialog();
+    private JDialog dialogoInserimentoLaboratorio = new JDialog();
 
     public GUImain() {
-        setContentPane(PannelloPrincipale);
-        setSize(1000, 1000);
-        setLocationRelativeTo(null);
-        setBackground(Color.CYAN);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        inizializzaTabellaDipendenti();
-        inizializzaTabellaLaboratori();
-        inizializzaTabellaProgetti();
-        inizializzaPulsantiGrado();
-        comboBox = new JComboBox<>();
-        Lab = new JComboBox<>();
+        inizializzaGui();
 
-        JDialog dialogoInserimentoDipendente = new JDialog();
-        dialogoInserimentoDipendente.setLayout(new BorderLayout());
-        dialogoInserimentoDipendente.setModal(true);
-        dialogoInserimentoDipendente.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
-        dialogoInserimentoDipendente.add(interfacciaDipendente);
-        dialogoInserimentoDipendente.add(creaNuovoDipendenteButton, BorderLayout.PAGE_END);
-        dialogoInserimentoDipendente.pack();
-        dialogoInserimentoDipendente.setLocationRelativeTo(null);
-
-        JDialog dialogoInserimentoProgetto = new JDialog();
-        dialogoInserimentoProgetto.setLayout(new BorderLayout());
-        dialogoInserimentoProgetto.setModal(true);
-        dialogoInserimentoProgetto.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
-        dialogoInserimentoProgetto.add(interfacciaProgetto);
-        dialogoInserimentoProgetto.add(creaNuovoProgettoButton, BorderLayout.PAGE_END);
-        dialogoInserimentoProgetto.pack();
-        dialogoInserimentoProgetto.setLocationRelativeTo(null);
-
-        JDialog dialogoInserimentoLaboratorio = new JDialog();
-        dialogoInserimentoLaboratorio.setLayout(new BorderLayout());
-        dialogoInserimentoLaboratorio.setModal(true);
-        dialogoInserimentoLaboratorio.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
-        dialogoInserimentoLaboratorio.add(interfacciaLaboratorio);
-        dialogoInserimentoLaboratorio.add(creaNuovoLaboratorioButton, BorderLayout.PAGE_END);
-        dialogoInserimentoLaboratorio.pack();
-        dialogoInserimentoLaboratorio.setLocationRelativeTo(null);
-
-        assumiDipendenteButton.addActionListener(event ->{
+        dialogoNuovoDipendenteButton.addActionListener(event ->{
             dialogoInserimentoDipendente.setVisible(true);
         });
 
-
         licenziaButton.addActionListener(event -> controllerMainPage.licenziaDipendente(getDipendenteSelezionato()));
-
 
         mostraTuttiDipendentiButton.addActionListener(event -> {
             try {
@@ -116,62 +75,34 @@ public class GUImain extends JFrame {
             }
         });
 
-        mostraDipendentiNonAssegnatiButton.addActionListener(event -> {
-            rimuoviDipendentiAssegnati();
-        });
+        mostraDipendentiNonAssegnatiButton.addActionListener(event -> rimuoviDipendentiAssegnati());
 
-        visualizzaCarrieraButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                buttonVisualizzaCarriera();
-            }
-        });
+        visualizzaCarrieraButton.addActionListener(event -> buttonVisualizzaCarriera());
 
         //ACTION LISTENER DI PROGETTO
-        nuovoProgettoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dialogoInserimentoProgetto.setVisible(true);
-            }
-        });
-        eliminaProgettoButton.addActionListener(event -> {
-            Progetto progetto = getProgettoSelezionato();
-            controllerMainPage.eliminaProgetto(progetto);
-        });
+        nuovoProgettoButton.addActionListener(event -> dialogoInserimentoProgetto.setVisible(true));
+
+        eliminaProgettoButton.addActionListener(event -> controllerMainPage.eliminaProgetto(getProgettoSelezionato()));
 
         creaNuovoDipendenteButton.addActionListener(event->{
             String nome = interfacciaDipendente.getNome();
             String cognome = interfacciaDipendente.getCognome();
             boolean dirigente = interfacciaDipendente.getDirigente();
             Date dataNascita = interfacciaDipendente.getDataNascita();
-            if(nome.isEmpty() || cognome.isEmpty()){
-                showErrorMessage("Dati inseriti errati");
-                throw new RuntimeException("Dati inseriti errati");
-            }else {
-                controllerMainPage.aggiungiDipendente(nome, cognome, dirigente, Date.valueOf(LocalDate.now()), dataNascita, Date.valueOf(LocalDate.now()));
-                dialogoInserimentoDipendente.setVisible(false);
-                interfacciaDipendente.clear();
-            }
+            controllerMainPage.nuovoDipendente(nome, cognome, dirigente, Date.valueOf(LocalDate.now()), dataNascita, Date.valueOf(LocalDate.now()));
 
         });
 
-        creaNuovoProgettoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        creaNuovoProgettoButton.addActionListener(event -> {
                 String nome = interfacciaProgetto.getProgetto();
                 Progetto progetto = controllerMainPage.nuovoProgetto(nome);
                 getModelloProgetti().aggiungiProgetto(progetto);
                 dialogoInserimentoProgetto.setVisible(false);
                 interfacciaProgetto.clear();
-            }
         });
         //ACTION LISTENER DI LABORATORIO
-        nuovoLaboratorioButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dialogoInserimentoLaboratorio.setVisible(true);
-            }
-        });
+        dialogoNuovoLaboratorioButton.addActionListener(event -> dialogoInserimentoLaboratorio.setVisible(true));
+
         creaNuovoLaboratorioButton.addActionListener(event -> {
             dialogoInserimentoLaboratorio.setVisible(false);
             String nome = interfacciaLaboratorio.getNome();
@@ -179,23 +110,21 @@ public class GUImain extends JFrame {
             controllerMainPage.nuovoLaboratorio(nome, topic);
             interfacciaLaboratorio.clear();
         });
-        eliminaSedeButton.addActionListener(event -> {
-            Laboratorio laboratorio = getLaboratorioSelezionato();
-            controllerMainPage.eliminaLaboratorio(laboratorio);
-        });
-        apriFinestraAssegnazioneReferenteLaboratorioButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JDialog dialogoAssegnazioneReferenteLaboratorio = schermataDialogoAssegnazioneReferenteLaboratorio();
-                setComboBoxReferenteLaboratorio(referenteLaboratorioComboBox, getLaboratorioSelezionato());
-                if (referenteLaboratorioComboBox.getItemCount() > 0) {
-                    dialogoAssegnazioneReferenteLaboratorio.setVisible(true);
-                } else {
-                    showErrorMessage("Nessun dipendente da assegnare come referente");
-                }
 
+        eliminaSedeButton.addActionListener(event -> {
+            controllerMainPage.eliminaLaboratorio(getLaboratorioSelezionato());
+        });
+
+        apriFinestraAssegnazioneReferenteLaboratorioButton.addActionListener(event -> {
+            JDialog dialogoAssegnazioneReferenteLaboratorio = schermataDialogoAssegnazioneReferenteLaboratorio();
+            setComboBoxReferenteLaboratorio(referenteLaboratorioComboBox, getLaboratorioSelezionato());
+            if (referenteLaboratorioComboBox.getItemCount() > 0) {
+                dialogoAssegnazioneReferenteLaboratorio.setVisible(true);
+            } else {
+                showErrorMessage("Nessun dipendente da assegnare come referente");
             }
         });
+
         assegnaLaboratorioDipendenteButton.addActionListener(event -> {
             dialogoAssegnazioneDipendenteLaboratorio = schermataDialogoAssegnazioneLaboratorioDipendente();
             dialogoAssegnazioneDipendenteLaboratorio.setVisible(true);
@@ -213,17 +142,14 @@ public class GUImain extends JFrame {
                 showErrorMessage("Nessun laboratorio assegnato");
             }
         });
-        assegnaProgettoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+
+        assegnaProgettoButton.addActionListener(event -> {
                 JDialog dialogoAssegnazioneProgettoLaboratorio = schermataAssegnazioneProgettiLaboratorio();
-                setProgettoLaboratorioComboBox(progettoLaboratorioComboBox);
+                setProgettiLaboratorioComboBox(progettoLaboratorioComboBox);
                 dialogoAssegnazioneProgettoLaboratorio.setVisible(true);
-            }
         });
-        assegnaResponsabileButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+
+        assegnaResponsabileButton.addActionListener(event -> {
                 JDialog dialogoAssegnazioneResponsabile = schermataDialogoAssegnazioneResponsabileProgetto();
                 Progetto progetto = getProgettoSelezionato();
                 if (progetto.getLaboratori().size() > 0) {
@@ -233,25 +159,21 @@ public class GUImain extends JFrame {
                 } else {
                     showErrorMessage("Nessun laboratorio assegnato");
                 }
-            }
-        });
-        confermaResponsabileButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Dipendente dipendente = (Dipendente) comboBox.getSelectedItem();
-                controllerMainPage.setResponsabile(dipendente, getProgettoSelezionato());
-            }
         });
     }
 
-    /**
-     * Funzione per creare una tabella
-     *
-     * @param tab
-     * @param modello
-     * @param nome
-     * @return
-     */
+    private void inizializzaGui(){
+        setContentPane(PannelloPrincipale);
+        setSize(1000, 1000);
+        setLocationRelativeTo(null);
+        setBackground(Color.CYAN);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        inizializzaTabellaDipendenti();
+        inizializzaTabellaLaboratori();
+        inizializzaTabellaProgetti();
+        inizializzaPulsantiGrado();
+        inizializzaDialoghi();
+    }
 
     private JTable creaTabella(JScrollPane tab, TableModel modello, String nome) {
         JTable tabella = new JTable(modello) {
@@ -300,12 +222,15 @@ public class GUImain extends JFrame {
     }
 
     /**
-     * funzione per inserire i progetti nella combobox
+     * Metodo per selezionare quali progetti
+     * sono idonei per essere assegnati ad un laboratorio.
+     * Un progetto per essere idoneo deve avere
+     * massimo 2 laboratori assegnati
      *
      * @param comboBox
      */
 
-    private void setProgettoLaboratorioComboBox(JComboBox comboBox) {
+    private void setProgettiLaboratorioComboBox(JComboBox comboBox) {
         comboBox.removeAllItems();
         for (Progetto progetto : getModelloProgetti().getProgetti()) {
             if (progetto.getLaboratori().size() < 3) {
@@ -382,6 +307,8 @@ public class GUImain extends JFrame {
 
     public void aggiungiDipendente(Dipendente dipendente) {
         getModelloDipendenti().aggiungiDipendente(dipendente);
+        dialogoInserimentoDipendente.setVisible(false);
+        interfacciaDipendente.clear();
     }
 
     /**
@@ -914,6 +841,32 @@ public class GUImain extends JFrame {
     public void promuoviDipendente(Dipendente dipendente) {
         dipendente.setDataPromozione(Date.valueOf(LocalDate.now()));
         dipendente.setDirigente(true);
+    }
+
+    private void inizializzaDialoghi(){
+        dialogoInserimentoDipendente.setLayout(new BorderLayout());
+        dialogoInserimentoDipendente.setModal(true);
+        dialogoInserimentoDipendente.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+        dialogoInserimentoDipendente.add(interfacciaDipendente);
+        dialogoInserimentoDipendente.add(creaNuovoDipendenteButton, BorderLayout.PAGE_END);
+        dialogoInserimentoDipendente.pack();
+        dialogoInserimentoDipendente.setLocationRelativeTo(null);
+
+        dialogoInserimentoProgetto.setLayout(new BorderLayout());
+        dialogoInserimentoProgetto.setModal(true);
+        dialogoInserimentoProgetto.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+        dialogoInserimentoProgetto.add(interfacciaProgetto);
+        dialogoInserimentoProgetto.add(creaNuovoProgettoButton, BorderLayout.PAGE_END);
+        dialogoInserimentoProgetto.pack();
+        dialogoInserimentoProgetto.setLocationRelativeTo(null);
+
+        dialogoInserimentoLaboratorio.setLayout(new BorderLayout());
+        dialogoInserimentoLaboratorio.setModal(true);
+        dialogoInserimentoLaboratorio.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+        dialogoInserimentoLaboratorio.add(interfacciaLaboratorio);
+        dialogoInserimentoLaboratorio.add(creaNuovoLaboratorioButton, BorderLayout.PAGE_END);
+        dialogoInserimentoLaboratorio.pack();
+        dialogoInserimentoLaboratorio.setLocationRelativeTo(null);
     }
 
 }

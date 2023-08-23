@@ -88,7 +88,7 @@
               <text value="Visualizza Carriera"/>
             </properties>
           </component>
-          <component id="cec04" class="javax.swing.JButton" binding="assumiDipendenteButton" default-binding="true">
+          <component id="cec04" class="javax.swing.JButton" binding="dialogoNuovoDipendenteButton" default-binding="true">
             <constraints>
               <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -174,7 +174,7 @@
               </component>
             </children>
           </scrollpane>
-          <component id="ad948" class="javax.swing.JButton" binding="nuovoLaboratorioButton" default-binding="true">
+          <component id="ad948" class="javax.swing.JButton" binding="dialogoNuovoLaboratorioButton" default-binding="true">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>

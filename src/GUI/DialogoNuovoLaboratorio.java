@@ -13,21 +13,47 @@ public class DialogoNuovoLaboratorio extends JPanel {
     private JPanel pannello;
 
     public DialogoNuovoLaboratorio() {
+        inizializzaFormLaboratorio();
+
+    }
+
+    /**
+     * Metodo che inizializza il form di
+     * creazione nuovo laboratorio
+     */
+
+    private void inizializzaFormLaboratorio(){
         add(pannello);
         setSize(500, 300);
         for (Laboratorio.Topic topic : Laboratorio.Topic.values()) {
             topicJComboBox.addItem(topic);
         }
-
     }
+
+    /**
+     * Metodo che ritorna il nome
+     * inserito dall'utente
+     * @return
+     */
 
     public String getNome(){
         return nomeJTextField.getText();
     }
 
+    /**
+     * Metodo che ritorna il topic
+     * selezionato dall'utente
+     * @return
+     */
+
     public Laboratorio.Topic getTopic(){
         return (Laboratorio.Topic) topicJComboBox.getSelectedItem();
     }
+
+    /**
+     * Metodo che pulisce il campo
+     * di inserimento nome
+     */
 
     public void clear() {
         nomeJTextField.setText(" ");
