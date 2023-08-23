@@ -18,38 +18,23 @@ import java.util.List;
 
 public class GUImain extends JFrame {
     private final JComboBox Lab;
-    private final DialogoNuovoDipendente InterfacciaDipendente = new DialogoNuovoDipendente();
-    private final DialogoNuovoProgetto InterfacciaProgetto = new DialogoNuovoProgetto();
-    private final JButton inserimentoDipendenteButton = new JButton("Inserisci");
-    private final JButton inserimentoProgettoButton = new JButton("Inserisci");
-    private final JButton creaNuovoLaboratorioButton = new JButton("Inserisci");
+    private final DialogoNuovoDipendente interfacciaDipendente = new DialogoNuovoDipendente();
+    private final DialogoNuovoProgetto interfacciaProgetto = new DialogoNuovoProgetto();
     private final DialogoNuovoLaboratorio interfacciaLaboratorio = new DialogoNuovoLaboratorio();
+    private final JButton creaNuovoDipendenteButton = new JButton("Inserisci");
+    private final JButton creaNuovoProgettoButton = new JButton("Inserisci");
+    private final JButton creaNuovoLaboratorioButton = new JButton("Inserisci");
     private final JComboBox comboBox;
-    private final JButton AssegnazioneProgettoButton = new JButton("Conferma");
     private final JButton confermaResponsabileButton = new JButton("Conferma");
-    private final int currentYear = LocalDate.now().getYear();
-    private final JComboBox<Laboratorio> LaboratorioComboBox = new JComboBox<>();
+    private final JComboBox<Laboratorio> laboratoriComboBox = new JComboBox<>();
     private final JComboBox<Dipendente> referenteProgettoComboBox = new JComboBox<>();
     private final JComboBox<Dipendente> responsabileProgettoComboBox = new JComboBox<>();
     private final JComboBox<Progetto> progettoLaboratorioComboBox = new JComboBox<>();
     private final JComboBox<Dipendente> referenteLaboratorioComboBox = new JComboBox<>();
-    String[] ValoriDirigenteBox = {"NO", "SI"};
-    String[] Mesi = {"Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"};
-    private SpinnerNumberModel YearModel;
-    private SpinnerNumberModel GiorniModel28;
-    private SpinnerNumberModel GiorniModel30;
-    private SpinnerNumberModel GiorniModel31;
     private JTabbedPane PannelloPrincipale;
     private JPanel Visual;
     private JPanel Progetti;
     private JPanel Laboratori;
-    private JTextField cognomeInseritoTextField;
-    private JComboBox mesiNascita;
-    private JComboBox dirigenteBox;
-    private JButton nuovoDipendenteButton;
-    private JSpinner GiornoNascita;
-    private JSpinner AnnoNascita;
-    private JTextField nomeInseritoTextField;
     private JButton mostraDipendentiNonAssegnatiButton;
     private JButton mostraTuttiDipendentiButton;
     private JTable tabellaDipendenti;
@@ -63,7 +48,6 @@ public class GUImain extends JFrame {
     private JTable tabellaProgetti;
     private JButton nuovoProgettoButton;
     private JButton eliminaProgettoButton;
-    private boolean Dir;
     private JTable tabellaLaboratori;
     private JScrollPane PannelloLaboratori;
     private JButton nuovoLaboratorioButton;
@@ -93,8 +77,8 @@ public class GUImain extends JFrame {
         dialogoInserimentoDipendente.setLayout(new BorderLayout());
         dialogoInserimentoDipendente.setModal(true);
         dialogoInserimentoDipendente.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
-        dialogoInserimentoDipendente.add(InterfacciaDipendente);
-        dialogoInserimentoDipendente.add(inserimentoDipendenteButton, BorderLayout.PAGE_END);
+        dialogoInserimentoDipendente.add(interfacciaDipendente);
+        dialogoInserimentoDipendente.add(creaNuovoDipendenteButton, BorderLayout.PAGE_END);
         dialogoInserimentoDipendente.pack();
         dialogoInserimentoDipendente.setLocationRelativeTo(null);
 
@@ -102,8 +86,8 @@ public class GUImain extends JFrame {
         dialogoInserimentoProgetto.setLayout(new BorderLayout());
         dialogoInserimentoProgetto.setModal(true);
         dialogoInserimentoProgetto.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
-        dialogoInserimentoProgetto.add(InterfacciaProgetto);
-        dialogoInserimentoProgetto.add(inserimentoProgettoButton, BorderLayout.PAGE_END);
+        dialogoInserimentoProgetto.add(interfacciaProgetto);
+        dialogoInserimentoProgetto.add(creaNuovoProgettoButton, BorderLayout.PAGE_END);
         dialogoInserimentoProgetto.pack();
         dialogoInserimentoProgetto.setLocationRelativeTo(null);
 
@@ -155,30 +139,30 @@ public class GUImain extends JFrame {
             controllerMainPage.eliminaProgetto(progetto);
         });
 
-        inserimentoDipendenteButton.addActionListener(event->{
-            String nome = InterfacciaDipendente.getNome();
-            String cognome = InterfacciaDipendente.getCognome();
-            boolean dirigente = InterfacciaDipendente.getDirigente();
-            Date dataNascita = InterfacciaDipendente.getDataNascita();
+        creaNuovoDipendenteButton.addActionListener(event->{
+            String nome = interfacciaDipendente.getNome();
+            String cognome = interfacciaDipendente.getCognome();
+            boolean dirigente = interfacciaDipendente.getDirigente();
+            Date dataNascita = interfacciaDipendente.getDataNascita();
             if(nome.isEmpty() || cognome.isEmpty()){
                 showErrorMessage("Dati inseriti errati");
                 throw new RuntimeException("Dati inseriti errati");
             }else {
                 controllerMainPage.aggiungiDipendente(nome, cognome, dirigente, Date.valueOf(LocalDate.now()), dataNascita, Date.valueOf(LocalDate.now()));
                 dialogoInserimentoDipendente.setVisible(false);
-                InterfacciaDipendente.clear();
+                interfacciaDipendente.clear();
             }
 
         });
 
-        inserimentoProgettoButton.addActionListener(new ActionListener() {
+        creaNuovoProgettoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String nome = InterfacciaProgetto.getProgetto();
+                String nome = interfacciaProgetto.getProgetto();
                 Progetto progetto = controllerMainPage.nuovoProgetto(nome);
                 getModelloProgetti().aggiungiProgetto(progetto);
                 dialogoInserimentoProgetto.setVisible(false);
-                InterfacciaProgetto.clear();
+                interfacciaProgetto.clear();
             }
         });
         //ACTION LISTENER DI LABORATORIO
@@ -358,25 +342,6 @@ public class GUImain extends JFrame {
         tabellaProgetti = creaTabella(PannelloProgetti, modello, "Progetti");
     }
 
-    /**
-     * funzione per inizializzare la schermata di inserimento nuovo dipendente
-     */
-
-    private void inizializzaInserimentoDipendente() {
-        for (int i = 0; i < 12; i++) {
-            mesiNascita.addItem(Mesi[i]);
-
-        }
-        dirigenteBox.setEditable(true);
-        dirigenteBox.addItem(ValoriDirigenteBox[0]);
-        dirigenteBox.addItem(ValoriDirigenteBox[1]);
-        YearModel = new SpinnerNumberModel(currentYear - 30, currentYear - 80, currentYear - 18, 1);
-        AnnoNascita.setModel(YearModel);
-        GiorniModel28 = new SpinnerNumberModel(1, 1, 28, 1);
-        GiorniModel30 = new SpinnerNumberModel(1, 1, 30, 1);
-        GiorniModel31 = new SpinnerNumberModel(1, 1, 31, 1);
-        GiornoNascita.setModel(GiorniModel31);
-    }
 
     /**
      * funzione per inserire i dipendenti nella tabella
@@ -629,13 +594,13 @@ public class GUImain extends JFrame {
         JDialog dialogo = creaDialogo();
         dialogo.add(new JLabel("Quale Laboratorio vuoi assegnargli"), BorderLayout.PAGE_START);
         List<Laboratorio> laboratory = getModelloLaboratori().getLaboratori();
-        setComboBoxLaboratorioDipendente(LaboratorioComboBox, laboratory);
-        dialogo.add(LaboratorioComboBox, BorderLayout.CENTER);
+        setComboBoxLaboratorioDipendente(laboratoriComboBox, laboratory);
+        dialogo.add(laboratoriComboBox, BorderLayout.CENTER);
         JButton conferma = new JButton("Conferma");
         dialogo.add(conferma, BorderLayout.PAGE_END);
         dialogo.pack();
         conferma.addActionListener(Event -> {
-            Laboratorio laboratorio = (Laboratorio) LaboratorioComboBox.getSelectedItem();
+            Laboratorio laboratorio = (Laboratorio) laboratoriComboBox.getSelectedItem();
             Dipendente dipendente = getDipendenteSelezionato();
             controllerMainPage.assegnaLaboratorio(dipendente, laboratorio);
             getModelloDipendenti().fireTableDataChanged();
@@ -756,7 +721,7 @@ public class GUImain extends JFrame {
 
     public void rimuoviDipendentiAssegnati() {
         List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
-        controllerMainPage.rimuoviDipendenti(dipendenti);
+        controllerMainPage.rimuoviDipendentiAssegnati(dipendenti);
     }
 
     /**
@@ -766,7 +731,7 @@ public class GUImain extends JFrame {
     public void setLaboratoriDipendenti() {
         List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
         List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
-        controllerMainPage.setLaboratorioDipendenti(dipendenti, laboratori);
+        controllerMainPage.setLaboratoriDipendente(dipendenti, laboratori);
     }
 
     /**
@@ -776,7 +741,7 @@ public class GUImain extends JFrame {
     public void setProgettiLaboratorio() {
         List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
         List<Progetto> progetti = getModelloProgetti().getProgetti();
-        controllerMainPage.setProgettoLaboratori(laboratori , progetti);
+        controllerMainPage.setProgettiLaboratorio(laboratori , progetti);
     }
 
     /**
@@ -786,7 +751,7 @@ public class GUImain extends JFrame {
     public void setReferenteLaboratorio() {
         List<Laboratorio> laboratori = getModelloLaboratori().getLaboratori();
         List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
-        controllerMainPage.setReferenteLaboratori(laboratori , dipendenti);
+        controllerMainPage.setReferentiLaboratorio(laboratori , dipendenti);
     }
 
     /**
@@ -796,7 +761,7 @@ public class GUImain extends JFrame {
     public void setReferenteProgetto() {
         List<Progetto> progetti = getModelloProgetti().getProgetti();
         List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
-        controllerMainPage.setReferenteProgetti(progetti, dipendenti);
+        controllerMainPage.setReferentiProgetto(progetti, dipendenti);
     }
 
     /**
@@ -806,7 +771,7 @@ public class GUImain extends JFrame {
     public void setResponsabiliProgetto() {
         List<Progetto> progetti = getModelloProgetti().getProgetti();
         List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
-        controllerMainPage.setResponsabileProgetti(progetti, dipendenti);
+        controllerMainPage.setResponsabiliProgetto(progetti, dipendenti);
     }
 
     /**

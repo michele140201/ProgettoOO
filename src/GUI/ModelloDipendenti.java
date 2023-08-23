@@ -1,14 +1,13 @@
 package GUI;
 
 
-import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
 import Model.Dipendente;
-import Model.Laboratorio;
 
 public class ModelloDipendenti extends AbstractTableModel {
 
@@ -22,40 +21,86 @@ public class ModelloDipendenti extends AbstractTableModel {
         setDipendenti(dipendenti);
     }
 
+    /**
+     * Metodo che ritorna tutti i dipendenti
+     * presenti nella Tabella
+     * @return
+     */
 
     public List<Dipendente> getDipendenti() {
         return dipendenti;
     }
+
+    /**
+     * Metodo che permette di settare i dipendenti della Tabella
+     * con i dipendenti che gli vengono passati
+     * @param dipendenti
+     */
 
     public void setDipendenti(List<Dipendente> dipendenti) {
         this.dipendenti = dipendenti;
         fireTableDataChanged();
     }
 
+    /**
+     * Metodo che aggiunge un dipendente
+     * alla Tabella
+     * @param dipendente
+     */
 
     public void aggiungiDipendente(Dipendente dipendente) {
         this.dipendenti.add(dipendente);
         fireTableDataChanged();
     }
 
+    /**
+     * Metodo che rimuove il dipendente selezionato
+     * dalla Tabella
+     * @param dipendente
+     */
+
     public void rimuoviDipendente(Dipendente dipendente) {
         this.dipendenti.remove(dipendente);
         fireTableDataChanged();
     }
 
+    /**
+     * Metodo che ritorna il dipendente
+     * della riga selezionata
+     * @param rowIndex
+     * @return
+     */
+
     public Dipendente getDipendente(int rowIndex) {
         return dipendenti.get(rowIndex);
     }
+
+    /**
+     * Metodo che ritorna quanti dipendenti sono presenti nella Tabella
+     * @return
+     */
 
     @Override
     public int getRowCount() {
         return dipendenti.size();
     }
 
+    /**
+     * Metodo che ritorna quante colonne presenta la Tabella
+     * @return
+     */
+
     @Override
     public int getColumnCount() {
         return 7;
     }
+
+    /**
+     * Metodo che ritorna il valore della Tabella nel punto selezionato
+     * @param rowIndex        the row whose value is to be queried
+     * @param columnIndex     the column whose value is to be queried
+     * @return
+     */
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
@@ -83,6 +128,12 @@ public class ModelloDipendenti extends AbstractTableModel {
                 return null;
         }
     }
+
+    /**
+     * Metodo che ritorna il nome della colonna selezionata
+     * @param column  the column being queried
+     * @return
+     */
 
     @Override
     public String getColumnName(int column) {

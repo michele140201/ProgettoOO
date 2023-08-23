@@ -20,38 +20,89 @@ public class ModelloLaboratori extends AbstractTableModel {
         setLaboratori(laboratori);
     }
 
+    /**
+     * Metodo che ritorna tutti i laboratori
+     * presenti nella Tabella
+     * @return
+     */
+
     public List<Laboratorio> getLaboratori() {
         return laboratori;
     }
+
+    /**
+     * Metodo che setta nella Tabella
+     * i laboratori che gli vengono passati
+     * @param laboratori
+     */
 
     public void setLaboratori(List<Laboratorio> laboratori) {
         this.laboratori = laboratori;
         fireTableDataChanged();
     }
 
+    /**
+     * Metodo che aggiunge un laboratorio
+     * alla Tabella
+     * @param laboratorio
+     */
+
     public void aggiungiLaboratorio(Laboratorio laboratorio) {
         laboratori.add(laboratorio);
         fireTableDataChanged();
     }
+
+    /**
+     * Metodo che rimuove il laboratorio selezionato
+     * dalla Tabella
+     * @param laboratorio
+     */
 
     public void rimuoviLaboratorio(Laboratorio laboratorio) {
         laboratori.remove(laboratorio);
         fireTableDataChanged();
     }
 
+    /**
+     * Metodo che ritorna il Laboratorio
+     * della riga selezionata
+     * @param rowIndex
+     * @return
+     */
+
     public Laboratorio getLaboratorio(int rowIndex) {
         return laboratori.get(rowIndex);
     }
+
+    /**
+     * Metodo che ritorna quanti laboratori
+     * ci sono nella Tabella
+     * @return
+     */
 
     @Override
     public int getRowCount() {
         return laboratori.size();
     }
 
+    /**
+     * Metodo che ritorna quante colonne
+     * ci sono nella Tabella
+     * @return
+     */
+
     @Override
     public int getColumnCount() {
         return 4;
     }
+
+    /**
+     * Metodo che restituisce il valore nella Tabella
+     * nel punto selezionato
+     * @param rowIndex        the row whose value is to be queried
+     * @param columnIndex     the column whose value is to be queried
+     * @return
+     */
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
@@ -73,6 +124,13 @@ public class ModelloLaboratori extends AbstractTableModel {
                 return null;
         }
     }
+
+    /**
+     * Metodo che restituisce il nome della
+     * colonna selezionata
+     * @param column  the column being queried
+     * @return
+     */
 
     @Override
     public String getColumnName(int column) {

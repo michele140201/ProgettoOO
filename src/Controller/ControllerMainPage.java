@@ -310,10 +310,10 @@ public class ControllerMainPage {
             guImain.showErrorMessage("Errore nel Database");
         }
     }
-//todo finire i commenti
+
     /**
      *Metodo che si occupa della creazione di un nuovo progetto
-     *e dell'inseriment
+     *e dell'inserimento di questo nei database e nelle tabelle
      *
      * @param
      */
@@ -333,7 +333,8 @@ public class ControllerMainPage {
     }
 
     /**
-     * funzione che si occupa di settare il referente del laboratorio selezionato
+     * Metodo che assegna il dipendente selezionato come referente del laboratorio
+     * selezionato
      *
      * @param dipendente
      * @param laboratorio
@@ -352,7 +353,10 @@ public class ControllerMainPage {
 
 
     /**
-     * funzione che si occupa della visualizzazione degli scatti di carriera di un dipendente
+     *Metodo che si occupa di mostrare all'utente gli scatti di carriera di un dipendente.
+     *Il metodo divide gli utenti in due categorie :
+     * i dirigenti e i non dirigenti, per entrambi gli scatti sono identici nel layout, solo che i dirigenti
+     * hanno anche la data di promozione a dirigente nello scatto di carriera
      *
      * @param dipendente
      */
@@ -390,23 +394,53 @@ public class ControllerMainPage {
         }
     }
 
+    /**
+     * Metodo che serve a rimuovere il referente di progetto,
+     * settandolo con il dipendente vuoto, ovvero un dipendente con id 0
+     * @param progetto
+     */
     public void rimuoviReferente(Progetto progetto) {
         progetto.setReferente(dipendenteVuoto);
     }
+
+    /**
+     * Metodo che serve a rimuovere il responsabile di progetto,
+     * settandolo con il dipendente vuoto, ovvero un dipendente con id 0
+     * @param progetto
+     */
 
     public void rimuoviResponsabile(Progetto progetto) {
         progetto.setResponsabile(dipendenteVuoto);
     }
 
+    /**
+     * Metodo che serve a rimuovere il laboratorio assegnato ad un
+     * dipendente settandolo con il laboratorio vuoto,
+     * ovvero un laboratorio con nome null
+     * * @param dipendente
+     */
+
     public void rimuoviLaboratorio(Dipendente dipendente) {
         dipendente.setLaboratorio(laboratorioVuoto);
     }
+
+    /**
+     * Metodo che serve a rimuovere il progetto assegnato ad un
+     * laboratorio settandolo con il progetto vuoto,
+     * ovvero un progetto con cup 0
+     * @param laboratorio
+     */
 
     public void rimuoviProgetto(Laboratorio laboratorio) {
         laboratorio.setProgetto(progettoVuoto);
     }
 
-
+    /**
+     * Metodo che si occupa di trovare e settare per ogni progetto i laboratori
+     * ai quali è assegnato
+     * @param progetti
+     * @param laboratori
+     */
 
     public void setLaboratoriProgetto(List<Progetto> progetti , List<Laboratorio> laboratori){
         for (Progetto progetto : progetti) {
@@ -420,7 +454,14 @@ public class ControllerMainPage {
         }
     }
 
-    public void setReferenteProgetti(List<Progetto> progetti , List<Dipendente> dipendenti){
+    /**
+     * Metodo che si occupa di trovare e settare per ogni progetto
+     * il referente a lui assegnato
+     * @param progetti
+     * @param dipendenti
+     */
+
+    public void setReferentiProgetto(List<Progetto> progetti , List<Dipendente> dipendenti){
         for (Progetto progetto : progetti) {
             for (Dipendente dipendente : dipendenti) {
                 if (progetto.getReferente().getId() == dipendente.getId()) {
@@ -430,7 +471,14 @@ public class ControllerMainPage {
         }
     }
 
-    public void setResponsabileProgetti(List<Progetto> progetti , List<Dipendente> dipendenti){
+    /**
+     *  Metodo che si occupa di trovare e settare per ogni progetto
+     *  il responsabile a lui assegnato
+     * @param progetti
+     * @param dipendenti
+     */
+
+    public void setResponsabiliProgetto(List<Progetto> progetti , List<Dipendente> dipendenti){
         for (Progetto progetto : progetti) {
             for (Dipendente dipendente : dipendenti) {
                 if (progetto.getResponsabile().getId() == dipendente.getId()) {
@@ -440,7 +488,14 @@ public class ControllerMainPage {
         }
     }
 
-    public void setReferenteLaboratori(List<Laboratorio> laboratori , List<Dipendente> dipendenti){
+    /**
+     *  Metodo che si occupa di trovare e settare per ogni laboratorio
+     *  il referente a lui assegnato
+     * @param laboratori
+     * @param dipendenti
+     */
+
+    public void setReferentiLaboratorio(List<Laboratorio> laboratori , List<Dipendente> dipendenti){
         for (Laboratorio laboratorio : laboratori) {
             for (Dipendente dipendente : dipendenti) {
                 if (laboratorio.getReferente().getId() == dipendente.getId()) {
@@ -450,7 +505,14 @@ public class ControllerMainPage {
         }
     }
 
-    public void setProgettoLaboratori(List<Laboratorio> laboratori , List<Progetto> progetti){
+    /**
+     *  Metodo che si occupa di trovare e settare per ogni laboratorio
+     *  il progetto a lui assegnato
+     * @param laboratori
+     * @param progetti
+     */
+
+    public void setProgettiLaboratorio(List<Laboratorio> laboratori , List<Progetto> progetti){
         for (Laboratorio laboratorio : laboratori) {
             for (Progetto progetto : progetti) {
                 if (progetto.getCup() == laboratorio.getProgetto().getCup()) {
@@ -460,7 +522,14 @@ public class ControllerMainPage {
         }
     }
 
-    public void setLaboratorioDipendenti(List<Dipendente> dipendenti , List<Laboratorio> laboratori){
+    /**
+     *  Metodo che si occupa di trovare e settare per ogni dipendente
+     *  il laboratorio a lui assegnato
+     * @param dipendenti
+     * @param laboratori
+     */
+
+    public void setLaboratoriDipendente(List<Dipendente> dipendenti , List<Laboratorio> laboratori){
         for (Dipendente dipendente : dipendenti) {
             for (Laboratorio laboratorio : laboratori) {
                 if (laboratorio.getNome() == dipendente.getLaboratorio().getNome()) {
@@ -470,7 +539,13 @@ public class ControllerMainPage {
         }
     }
 
-    public void rimuoviDipendenti(List<Dipendente> dipendenti){
+    /**
+     * Metodo che si occupa di rimuovere dalla tabella
+     * tutti i dipendenti che hanno un laboratorio
+     * @param dipendenti
+     */
+
+    public void rimuoviDipendentiAssegnati(List<Dipendente> dipendenti){
         int i = 0;
         while (i < dipendenti.size()) {
             if (dipendenti.get(i).getLaboratorio().getNome() != null) {
@@ -480,6 +555,15 @@ public class ControllerMainPage {
             }
         }
     }
+
+    /**
+     * Metodo che si occupa di selezionare quali dipendenti
+     * sono idonei per essere assegnati come referenti del
+     * progetto selezionato
+     * @param dipendenti
+     * @param progetto
+     * @return
+     */
 
     public List<Dipendente> listaReferentiProgettoPossibili(List<Dipendente> dipendenti , Progetto progetto){
         TimeUnit time = TimeUnit.DAYS;
@@ -498,6 +582,15 @@ public class ControllerMainPage {
         return dipendentiScelti;
     }
 
+    /**
+     *  Metodo che si occupa di selezionare quali dipendenti
+     *  sono idonei per essere assegnati come referenti del
+     *  laboratorio selezionato
+     * @param dipendenti
+     * @param laboratorio
+     * @return
+     */
+
     public List<Dipendente> listaReferentiLaboratorioPossibili(List<Dipendente> dipendenti , Laboratorio laboratorio){
         TimeUnit time = TimeUnit.DAYS;
         List<Dipendente> dipendentiScelti = new ArrayList<>();
@@ -511,6 +604,15 @@ public class ControllerMainPage {
         }
         return dipendentiScelti;
     }
+
+    /**
+     *  Metodo che si occupa di selezionare quali dipendenti
+     *  sono idonei per essere assegnati come responsabili del
+     *  progetto selezionato
+     * @param dipendenti
+     * @param progetto
+     * @return
+     */
 
     public List<Dipendente> listaResponsabiliProgettoPossibili(List<Dipendente> dipendenti , Progetto progetto){
         List<Dipendente> dipendentiScelti = new ArrayList<>();

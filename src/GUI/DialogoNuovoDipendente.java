@@ -1,7 +1,5 @@
 package GUI;
 
-import Model.Dipendente;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,7 +20,7 @@ public class DialogoNuovoDipendente extends JPanel {
     private JSpinner GiornoNascita;
     private JSpinner AnnoNascita;
     private JTextField nomeInseritoTextField;
-    String[] Mesi = {"Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"};
+
     private SpinnerNumberModel YearModel;
     private SpinnerNumberModel GiorniModel28;
     private SpinnerNumberModel GiorniModel30;
@@ -30,8 +28,8 @@ public class DialogoNuovoDipendente extends JPanel {
     private final int currentYear = LocalDate.now().getYear();
 
     public DialogoNuovoDipendente(){
-        add(Assumi);
         inizializzaInserimentoDipendente();
+
         mesiNascita.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -39,7 +37,17 @@ public class DialogoNuovoDipendente extends JPanel {
             }
         });
     }
-    public void sceltaMese() {
+
+    /**
+     * Metodo che permette in base al mese
+     * scelto dall'utente di settare qual è
+     * l'ultimo giorno selezionabile:
+     * -Se il mese è Febbraio, allora l'ultimo giorno sarà 28
+     * -Se il mese ha 30 giorni, allora l'ultimo giorno sarà 30
+     * -Se il mese ha 31 giorni, allora avrà 31 giorni
+      */
+
+    private void sceltaMese() {
         int i = 0;
         String MeseScelto = (String) mesiNascita.getSelectedItem();
         if (MeseScelto.equals("Febbraio")) {
@@ -57,9 +65,16 @@ public class DialogoNuovoDipendente extends JPanel {
         }
     }
 
+    /**
+     * Metodo che inizializza il
+     * form di assunzione di un nuovo
+     * dipendente
+     */
+
     private void inizializzaInserimentoDipendente() {
-        for (int i = 0; i < 12; i++) {
-            mesiNascita.addItem(Mesi[i]);
+        add(Assumi);
+        for (Mese mese : Mese.values()) {
+            mesiNascita.addItem(mese);
 
         }
         dirigenteBox.setEditable(true);
@@ -73,78 +88,87 @@ public class DialogoNuovoDipendente extends JPanel {
         GiornoNascita.setModel(GiorniModel31);
     }
 
+    /**
+     * Metodo che ritorna la data relativa
+     * al giorno, al mese e all'anno che
+     * gli vengono passati
+     * @param Giorno
+     * @param mese
+     * @param Anno
+     * @return
+     */
+
+    private java.sql.Date converti(int Giorno, Mese mese, int Anno) {
+        return new java.sql.Date(Anno, mese.ordinal() , Giorno);
+    }
+
+    /**
+     * Metodo che ritorna il nome
+     * inserito dall'utente
+     * @return
+     */
+
     public String getNome() {
         return nomeInseritoTextField.getText();
     }
 
+    /**
+     * Metodo che ritorna il cognome
+     * inserito dall' utente
+     * @return
+     */
+
     public String getCognome(){
         return cognomeInseritoTextField.getText();
     }
+
+    /**
+     * Metodo che ritorna se il
+     * nuovo dipendente deve essere assunto
+     * come dirigente o meno
+     * @return
+     */
 
     public boolean getDirigente(){
         return dirigenteBox.getSelectedItem().equals("SI");
 
     }
 
+    /**
+     * Metodo che converte i dati inseriti dall'utente
+     * relativi alla data di nascita del dipendente
+     * in una data
+     * @return
+     */
+
     public Date getDataNascita(){
-        Date datadiN = converti((int)GiornoNascita.getValue(), (String) mesiNascita.getSelectedItem(),(int) AnnoNascita.getValue() - 1900);
-        return datadiN;
+        return converti((int)GiornoNascita.getValue(), (Mese) mesiNascita.getSelectedItem(),(int) AnnoNascita.getValue() - 1900);
     }
 
 
-    public int convertiInNumero(String mese) {
-        int i = 0;
-        switch (mese) {
-            case "Gennaio":
-                i = 0;
-                break;
-            case "Febbraio":
-                i = 1;
-                break;
-            case "Marzo":
-                i = 2;
-                break;
-            case "Aprile":
-                i = 3;
-                break;
-            case "Maggio":
-                i = 4;
-                break;
-            case "Giugno":
-                i = 5;
-                break;
-            case "Luglio":
-                i = 6;
-                break;
-            case "Agosto":
-                i = 7;
-                break;
-            case "Settembre":
-                i = 8;
-                break;
-            case "Ottobre":
-                i = 9;
-                break;
-            case "Novembre":
-                i = 10;
-                break;
-            case "Dicembre":
-                i = 11;
-                break;
-        }
-        return i;
-    }
-
-    public java.sql.Date converti(int Giorno, String Mese, int Anno) {
-        int month = convertiInNumero(Mese);
-
-        java.sql.Date gdn = new java.sql.Date(Anno, month, Giorno);
-        return gdn;
-    }
+    /**
+     * Metodo che rimuove tutti i dati
+     * all'interno del campo nome e cognome
+     */
 
     public void clear(){
         nomeInseritoTextField.setText(null);
         cognomeInseritoTextField.setText(null);
+    }
+
+    private enum Mese{
+        Gennaio,
+        Febbraio,
+        Marzo,
+        Aprile,
+        Maggio,
+        Giugno,
+        Luglio,
+        Agosto,
+        Settembre,
+        Ottobre,
+        Novembre,
+        Dicembre
     }
 
 }

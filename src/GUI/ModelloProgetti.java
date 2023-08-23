@@ -18,39 +18,89 @@ public class ModelloProgetti extends AbstractTableModel {
         setProgetti(progetti);
     }
 
+    /**
+     * Metodo che ritorna tutti i progetti
+     * presenti nella Tabella
+     * @return
+     */
+
     public List<Progetto> getProgetti() {
         return progetti;
     }
+
+    /**
+     * Metodo che setta i progetti nella Tabella
+     * con quelli che gli vengono passati
+     * @param progetti
+     */
 
     public void setProgetti(List<Progetto> progetti) {
         this.progetti = progetti;
         fireTableDataChanged();
     }
 
+    /**
+     * Metodo che aggiunge un progetto
+     * alla Tabella
+     * @param progetto
+     */
+
     public void aggiungiProgetto(Progetto progetto) {
         progetti.add(progetto);
         fireTableDataChanged();
     }
+
+    /**
+     * Metodo che rimuove il progetto selezionato
+     * dalla Tabella
+     * @param progetto
+     */
 
     public void rimuoviProgetto(Progetto progetto) {
         progetti.remove(progetto);
         fireTableDataChanged();
     }
 
+    /**
+     * Metodo che ritorna il Progetto
+     * della riga selezionata
+     * @param rowIndex
+     * @return
+     */
 
     public Progetto getProgetto(int rowIndex) {
         return progetti.get(rowIndex);
     }
+
+    /**
+     *Metodo che ritorna quanti progetti
+     * ci sono nella Tabella
+     * @return
+     */
 
     @Override
     public int getRowCount() {
         return progetti.size();
     }
 
+    /**
+     * Metodo che ritorna quante colonne
+     * ci sono nella Tabella
+     * @return
+     */
+
     @Override
     public int getColumnCount() {
         return 4;
     }
+
+    /**
+     * Metodo che ritorna il valore
+     * nel punto selezionato
+     * @param rowIndex        the row whose value is to be queried
+     * @param columnIndex     the column whose value is to be queried
+     * @return
+     */
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
@@ -72,6 +122,13 @@ public class ModelloProgetti extends AbstractTableModel {
                 return null;
         }
     }
+
+    /**
+     * Metodo che ritorna il nome
+     * della colonna selezionata
+     * @param column  the column being queried
+     * @return
+     */
 
     @Override
     public String getColumnName(int column) {
