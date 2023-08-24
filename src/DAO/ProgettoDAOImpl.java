@@ -33,9 +33,9 @@ public class ProgettoDAOImpl implements ProgettoDAO {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                Dipendente dipendente = new Dipendente(resultSet.getInt("referente"));
+                Dipendente referente = new Dipendente(resultSet.getInt("referente"));
                 Dipendente responsabile = new Dipendente(resultSet.getInt("responsabile"));
-                Progetto progetto = new Progetto(resultSet.getString("nome_p"), resultSet.getInt("CUP"), dipendente, responsabile);
+                Progetto progetto = new Progetto(resultSet.getString("nome_p"), resultSet.getInt("CUP"), referente, responsabile);
                 progetti.add(progetto);
             }
             return progetti;
