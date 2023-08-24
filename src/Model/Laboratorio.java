@@ -19,7 +19,8 @@ public class Laboratorio {
      */
 
     public Laboratorio(String nome, Topic topic, Progetto progetto, Dipendente referente) {
-        this(nome, topic);
+        setNome(nome);
+        setTopic(topic);
         setProgetto(progetto);
         setReferente(referente);
     }
@@ -29,7 +30,7 @@ public class Laboratorio {
      */
 
     public Laboratorio(){
-        setNome(null);
+        this(null , null , null , null);
     }
 
     /**
@@ -39,7 +40,7 @@ public class Laboratorio {
      */
 
     public Laboratorio(String nome){
-        setNome(nome);
+        this(nome , null , null , null);
     }
 
     /**
@@ -49,8 +50,7 @@ public class Laboratorio {
      */
 
     public Laboratorio(String nome, Topic topic) {
-        setNome(nome);
-        setTopic(topic);
+        this(nome , topic , null , null);
     }
 
     /**

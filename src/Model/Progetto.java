@@ -2,12 +2,24 @@ package Model;
 
 import java.util.List;
 
+/**
+ * Classe che rappresenta un progetto dell'azienda
+ */
+
 public class Progetto {
     private int cup;
     private String nome;
     private Dipendente referente;
     private Dipendente responsabile;
     private List<Laboratorio> laboratori;
+
+    /**
+     * Crea un nuovo progetto con i dati che gli vengono passati
+     * @param cup cup del progetto
+     * @param nome nome del progetto
+     * @param referente
+     * @param responsabile
+     */
 
     public Progetto(int cup, String nome, Dipendente referente, Dipendente responsabile) {
         this(nome);

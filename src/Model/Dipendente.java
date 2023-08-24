@@ -84,25 +84,6 @@ public class Dipendente {
     }
 
     /**
-     * Crea un nuovo dipendente con i dati che gli vengono forniti
-     * @param nome nome del dipendente
-     * @param cognome cognome del dipendente
-     * @param dirigente dato che indica se il dipendente è dirigente
-     * @param dataAssunzione quando è stato assunto il dipendente
-     * @param dataNascita data di nascita del dipendente
-     * @param laboratorio laboratorio a cui è assegnato il dipendente
-     */
-
-    public Dipendente(String nome, String cognome, Boolean dirigente, Date dataAssunzione, java.sql.Date dataNascita, Laboratorio laboratorio) {
-        setNome(nome);
-        setCognome(cognome);
-        setDirigente(dirigente);
-        setDataAssunzione(dataAssunzione);
-        setDataNascita(dataNascita);
-        setLaboratorio(laboratorio);
-    }
-
-    /**
      * Crea un dipendente che ha come unico campo l'id.
      * Serve per il recupero dei dati dal database
      * @param id id del dipendente
@@ -117,7 +98,7 @@ public class Dipendente {
      */
 
     public Dipendente(){
-        setId(0);
+        this(0);
     }
 
 
