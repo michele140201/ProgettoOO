@@ -84,13 +84,12 @@ public class Dipendente {
     }
 
     /**
-     * Crea un dipendente che ha come unico campo l'id.
-     * Serve per il recupero dei dati dal database
+     * Crea un dipendente con l'id fornitogli
      * @param id id del dipendente
      */
 
     public Dipendente(int id) {
-        setId(id);
+        this(null , null , id , false , null , null , null , null);
     }
 
     /**

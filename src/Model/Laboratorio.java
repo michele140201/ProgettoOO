@@ -34,8 +34,7 @@ public class Laboratorio {
     }
 
     /**
-     * Crea un laboratorio che ha come unico campo l'id.
-     * Serve per il recupero dei dati dal database
+     * Crea un laboratorio con il nome fornitogli
      * @param nome nome del laboratorio
      */
 

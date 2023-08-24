@@ -52,6 +52,7 @@ public class ControllerMainPage {
                 dipendente.setLaboratorio(laboratorio);
                 guImain.aggiungiDipendente(dipendente);
                 guImain.showInfoMessage("Dipendente Assunto!");
+
             }
 
         } catch (Exception e) {
