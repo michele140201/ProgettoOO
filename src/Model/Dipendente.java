@@ -103,7 +103,7 @@ public class Dipendente {
     }
 
     /**
-     * crea un dipendente che ha come unico campo l'id.
+     * Crea un dipendente che ha come unico campo l'id.
      * Serve per il recupero dei dati dal database
      * @param id id del dipendente
      */
