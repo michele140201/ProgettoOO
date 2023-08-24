@@ -2,17 +2,19 @@ package Controller;
 
 import GUI.GUImain;
 import Model.Dipendente;
-
 import javax.swing.*;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 import DAO.*;
 import Model.Laboratorio;
 import Model.Progetto;
+
+/**
+ * Classe che si occupa di gestire tutte le operazioni che coinvolgono l'interfaccia grafica
+ */
 
 public class ControllerMainPage {
     private final ProgettoDAO progettoDAO;
@@ -22,6 +24,14 @@ public class ControllerMainPage {
     private final Dipendente dipendenteVuoto = new Dipendente();
     private final Laboratorio laboratorioVuoto = new Laboratorio();
     private final Progetto progettoVuoto = new Progetto();
+
+    /**
+     * Costruttore che setta i dao con quelli fornitogli
+     * @param dipendenteDAO oggetto per gestire i dati della tabella dipendente
+     * @param progettoDAO oggetto per gestire i dati della tabella progetto
+     * @param laboratorioDAO oggetto per gestire i dati della tabella laboratorio
+     * @param guImain interfaccia grafica del programma
+     */
 
     public ControllerMainPage(DipendenteDAO dipendenteDAO, ProgettoDAO progettoDAO, LaboratorioDAO laboratorioDAO, GUImain guImain){
         this.dipendenteDAO = dipendenteDAO;
@@ -34,10 +44,10 @@ public class ControllerMainPage {
      * Metodo che si occupa di creare e aggiungere al database
      * un nuovo dipendente con i dati fornitogli dall'utente
      *
-     * @param nome
-     * @param cognome
-     * @param dir
-     * @param datadiN
+     * @param nome nome del dipendente
+     * @param cognome cognome del dipendente
+     * @param dir se il dipendente assunto è dirigente
+     * @param datadiN data di nascita del dipendente
      */
     public void nuovoDipendente(String nome, String cognome, boolean dir, Date dataAssunzione, Date datadiN, Date dataPromozione) {
 
@@ -67,7 +77,7 @@ public class ControllerMainPage {
      * Funzione che permette quindi, nel caso in cui sia stato premuto il pulsante
      * per vedere solo i dipendenti assegnati, di visualizzarli di nuovo tutti
      *
-     * @throws Exception
+     * @throws Exception eccezione nel recupero dati dal database
      */
 
     public void mostraTuttiDipendenti() throws Exception {
@@ -81,7 +91,7 @@ public class ControllerMainPage {
      * il metodo impedisce il licenziamento e manda un
      * messaggio di errore
      *
-     * @param dipendente
+     * @param dipendente dipendente da licenziare
      */
     public void licenziaDipendente(Dipendente dipendente) {
         try {
@@ -103,8 +113,8 @@ public class ControllerMainPage {
      * Metodo che riceve il dipendente selezionato dall'utente e
      * a quale laboratorio desidera assegnarlo, esegue l'assegnazione
      * e aggiorna le tabelle
-     * @param dipendente
-     * @param laboratorio
+     * @param dipendente dipendente selezionato
+     * @param laboratorio laboratorio scelto
      */
     public void assegnaLaboratorio(Dipendente dipendente, Laboratorio laboratorio) {
         try {
@@ -120,7 +130,7 @@ public class ControllerMainPage {
      * Metodo che gestisce l'eliminazione di un laboratorio
      * selezionato dall'utente
      *
-     * @param laboratorio
+     * @param laboratorio laboratorio da eliminare
      */
     public void eliminaLaboratorio(Laboratorio laboratorio) {
         try {
@@ -138,8 +148,8 @@ public class ControllerMainPage {
      * Metodo che si occupa della creazione e dell'inserimento di un nuovo laboratorio
      * all'interno del database con i dati fornitogli dall'utente,
      * occupandosi di aggiornare le tabelle
-     * @param nome
-     * @param topic
+     * @param nome nome del laboratorio
+     * @param topic topic del laboratorio
      */
 
     public void nuovoLaboratorio(String nome , Laboratorio.Topic topic) {
@@ -160,7 +170,7 @@ public class ControllerMainPage {
      * Metodo che si occupa di eliminare il progetto selezionato dall'utente
      * sia dalle tabelle che dal database
      *
-     * @param progetto
+     * @param progetto progetto da eliminare
      */
 
     public void eliminaProgetto(Progetto progetto) {
@@ -184,7 +194,7 @@ public class ControllerMainPage {
      * In caso non si verifichi una delle due cose, viene mandato
      * all'utente un messaggio di errore
      *
-     * @param dipendente
+     * @param dipendente dipendente da degradare
      */
 
     public void degrada(Dipendente dipendente) {
@@ -219,8 +229,8 @@ public class ControllerMainPage {
      * del progetto assegnato al suo laboratorio di appartenenza.
      * Il metodo si occupa di aggiornare sia le tabelle che il database.
      *
-     * @param dipendente
-     * @param progetto
+     * @param dipendente dipendente che diventa responsabile
+     * @param progetto progetto selezionato
      */
     public void setResponsabile(Dipendente dipendente, Progetto progetto) {
         try {
@@ -238,8 +248,8 @@ public class ControllerMainPage {
      *  del progetto assegnato al suo laboratorio di appartenenza.
      * Il metodo si occupa di aggiornare sia le tabelle che il database.
      *
-     * @param dipendente
-     * @param progetto
+     * @param dipendente dipendente che diventa referente
+     * @param progetto progetto selezionato
      */
     public void setReferenteProgetto(Dipendente dipendente, Progetto progetto) {
         try {
@@ -256,7 +266,7 @@ public class ControllerMainPage {
      * Metodo che permette la promozione di un dipendente a dirigente.
      * Un dipendente, per essere promosso, non deve essere già un dirigente,
      * e nel caso già lo sia viene mandato all'utente un messaggio di errore
-     * @param dipendente
+     * @param dipendente dipendente da promuovere
      */
     public void promuovi(Dipendente dipendente) {
         try {
@@ -280,8 +290,8 @@ public class ControllerMainPage {
      * appartenessero a quel laboratorio e, nel caso, assegna al suo posto un
      * dipendente vuoto, ovvero un dipendente con id 0.
      *
-     * @param progetto
-     * @param laboratorio
+     * @param progetto progetto da aggiornare
+     * @param laboratorio laboratorio eliminato
      */
     public void aggiornaProgettoLaboratorio(Progetto progetto, Laboratorio laboratorio) {
         try {
@@ -322,7 +332,7 @@ public class ControllerMainPage {
      *Metodo che si occupa della creazione di un nuovo progetto
      *e dell'inserimento di questo nei database e nelle tabelle
      *
-     * @param
+     * @param nome nome del progetto
      */
 
     public Progetto nuovoProgetto(String nome){
@@ -343,8 +353,8 @@ public class ControllerMainPage {
      * Metodo che assegna il dipendente selezionato come referente del laboratorio
      * selezionato
      *
-     * @param dipendente
-     * @param laboratorio
+     * @param dipendente dipendente che diventa referente
+     * @param laboratorio laboratorio selezionato
      */
 
     public void setReferenteLaboratorio(Dipendente dipendente, Laboratorio laboratorio) {
@@ -365,7 +375,7 @@ public class ControllerMainPage {
      * i dirigenti e i non dirigenti, per entrambi gli scatti sono identici nel layout, solo che i dirigenti
      * hanno anche la data di promozione a dirigente nello scatto di carriera
      *
-     * @param dipendente
+     * @param dipendente dipendente selezionato
      */
 
     public void getVisualizzaCarriera(Dipendente dipendente) {
@@ -404,7 +414,7 @@ public class ControllerMainPage {
     /**
      * Metodo che serve a rimuovere il referente di progetto,
      * settandolo con il dipendente vuoto, ovvero un dipendente con id 0
-     * @param progetto
+     * @param progetto progetto a cui rimuovere il referente
      */
     public void rimuoviReferente(Progetto progetto) {
         progetto.setReferente(dipendenteVuoto);
@@ -413,7 +423,7 @@ public class ControllerMainPage {
     /**
      * Metodo che serve a rimuovere il responsabile di progetto,
      * settandolo con il dipendente vuoto, ovvero un dipendente con id 0
-     * @param progetto
+     * @param progetto progetto a cui rimuovere il responsabile
      */
 
     public void rimuoviResponsabile(Progetto progetto) {
@@ -424,7 +434,7 @@ public class ControllerMainPage {
      * Metodo che serve a rimuovere il laboratorio assegnato ad un
      * dipendente settandolo con il laboratorio vuoto,
      * ovvero un laboratorio con nome null
-     * * @param dipendente
+     * * @param dipendente dipendente a cui rimuovere il laboratorio
      */
 
     public void rimuoviLaboratorio(Dipendente dipendente) {
@@ -435,7 +445,7 @@ public class ControllerMainPage {
      * Metodo che serve a rimuovere il progetto assegnato ad un
      * laboratorio settandolo con il progetto vuoto,
      * ovvero un progetto con cup 0
-     * @param laboratorio
+     * @param laboratorio laboratorio a cui rimuovere il progetto
      */
 
     public void rimuoviProgetto(Laboratorio laboratorio) {
@@ -445,8 +455,8 @@ public class ControllerMainPage {
     /**
      * Metodo che si occupa di trovare e settare per ogni progetto i laboratori
      * ai quali è assegnato
-     * @param progetti
-     * @param laboratori
+     * @param progetti progetti del database
+     * @param laboratori laboratori del database
      */
 
     public void setLaboratoriProgetto(List<Progetto> progetti , List<Laboratorio> laboratori){
@@ -464,8 +474,8 @@ public class ControllerMainPage {
     /**
      * Metodo che si occupa di trovare e settare per ogni progetto
      * il referente a lui assegnato
-     * @param progetti
-     * @param dipendenti
+     * @param progetti progetti del database
+     * @param dipendenti dipendenti del database
      */
 
     public void setReferentiProgetto(List<Progetto> progetti , List<Dipendente> dipendenti){
@@ -481,8 +491,8 @@ public class ControllerMainPage {
     /**
      *  Metodo che si occupa di trovare e settare per ogni progetto
      *  il responsabile a lui assegnato
-     * @param progetti
-     * @param dipendenti
+     * @param progetti progetti del database
+     * @param dipendenti dipendenti del database
      */
 
     public void setResponsabiliProgetto(List<Progetto> progetti , List<Dipendente> dipendenti){
@@ -498,8 +508,8 @@ public class ControllerMainPage {
     /**
      *  Metodo che si occupa di trovare e settare per ogni laboratorio
      *  il referente a lui assegnato
-     * @param laboratori
-     * @param dipendenti
+     * @param laboratori laboratori del database
+     * @param dipendenti dipendenti del database
      */
 
     public void setReferentiLaboratorio(List<Laboratorio> laboratori , List<Dipendente> dipendenti){
@@ -515,8 +525,8 @@ public class ControllerMainPage {
     /**
      *  Metodo che si occupa di trovare e settare per ogni laboratorio
      *  il progetto a lui assegnato
-     * @param laboratori
-     * @param progetti
+     * @param laboratori laboratori del database
+     * @param progetti progetti del database
      */
 
     public void setProgettiLaboratorio(List<Laboratorio> laboratori , List<Progetto> progetti){
@@ -532,8 +542,8 @@ public class ControllerMainPage {
     /**
      *  Metodo che si occupa di trovare e settare per ogni dipendente
      *  il laboratorio a lui assegnato
-     * @param dipendenti
-     * @param laboratori
+     * @param dipendenti dipendenti del database
+     * @param laboratori laboratori del database
      */
 
     public void setLaboratoriDipendente(List<Dipendente> dipendenti , List<Laboratorio> laboratori){
@@ -549,7 +559,7 @@ public class ControllerMainPage {
     /**
      * Metodo che si occupa di rimuovere dalla tabella
      * tutti i dipendenti che hanno un laboratorio
-     * @param dipendenti
+     * @param dipendenti dipendenti del database
      */
 
     public void rimuoviDipendentiAssegnati(List<Dipendente> dipendenti){
@@ -567,9 +577,9 @@ public class ControllerMainPage {
      * Metodo che si occupa di selezionare quali dipendenti
      * sono idonei per essere assegnati come referenti del
      * progetto selezionato
-     * @param dipendenti
-     * @param progetto
-     * @return
+     * @param dipendenti dipendenti del database
+     * @param progetto progetto selezionato
+     * @return dipendenti scelti
      */
 
     public List<Dipendente> listaReferentiProgettoPossibili(List<Dipendente> dipendenti , Progetto progetto){
@@ -593,9 +603,9 @@ public class ControllerMainPage {
      *  Metodo che si occupa di selezionare quali dipendenti
      *  sono idonei per essere assegnati come referenti del
      *  laboratorio selezionato
-     * @param dipendenti
-     * @param laboratorio
-     * @return
+     * @param dipendenti dipendenti del database
+     * @param laboratorio laboratorio selezionato
+     * @return dipendenti scelti
      */
 
     public List<Dipendente> listaReferentiLaboratorioPossibili(List<Dipendente> dipendenti , Laboratorio laboratorio){
@@ -616,9 +626,9 @@ public class ControllerMainPage {
      *  Metodo che si occupa di selezionare quali dipendenti
      *  sono idonei per essere assegnati come responsabili del
      *  progetto selezionato
-     * @param dipendenti
-     * @param progetto
-     * @return
+     * @param dipendenti dipendenti del database
+     * @param progetto progetto scelto
+     * @return dipendenti scelti
      */
 
     public List<Dipendente> listaResponsabiliProgettoPossibili(List<Dipendente> dipendenti , Progetto progetto){

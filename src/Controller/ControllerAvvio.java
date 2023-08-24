@@ -5,8 +5,11 @@ import GUI.GUImain;
 import Model.Dipendente;
 import Model.Laboratorio;
 import Model.Progetto;
-
 import java.util.List;
+
+/**
+ * Classe che si occupa di avviare il programma
+ */
 
 public class ControllerAvvio {
     ConnectionController connectionController = new ConnectionController();
@@ -16,10 +19,15 @@ public class ControllerAvvio {
     GUImain guimain = new GUImain();
     ControllerMainPage controllerMainPage = new ControllerMainPage(dipendenteDAO, progettoDAO, laboratorioDAO , guimain);
 
+    /**
+     * Costruttore che setta il controller dell'interfaccia grafica e la fa partire
+     * @throws Exception
+     */
+
     public ControllerAvvio() throws Exception {
         guimain.setController(controllerMainPage);
-        guimain.setVisible(true);
         inizializzaGui();
+        guimain.setVisible(true);
     }
 
     /**
