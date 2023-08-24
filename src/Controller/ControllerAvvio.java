@@ -41,13 +41,13 @@ public class ControllerAvvio {
         guimain.setDipendenti(getDipendenti());
         guimain.setLaboratori(getLaboratori());
         guimain.setProgetti(getProgetti());
-        guimain.setLaboratoriDipendenti();
         guimain.setProgettiLaboratorio();
         guimain.setReferenteLaboratorio();
         guimain.setProgettiLaboratorio();
         guimain.setReferenteProgetto();
         guimain.setLaboratoriProgetto();
         guimain.setResponsabiliProgetto();
+        guimain.setLaboratoriDipendenti();
     }
 
     /**

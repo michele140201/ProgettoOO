@@ -95,8 +95,24 @@ public class ControllerMainPage {
      */
     public void licenziaDipendente(Dipendente dipendente) {
         try {
-            if (dipendente.getId() != laboratorioDAO.getIdReferente(dipendente.getLaboratorio())) {
-                dipendenteDAO.removeDipendente(dipendente);
+            int id;
+            if(dipendente.getLaboratorio() != null){
+                if(dipendente.getLaboratorio().getReferente() != null){
+                    id = dipendente.getLaboratorio().getReferente().getId();
+                    System.out.println(dipendente.getLaboratorio().getReferente().getId());
+                }else{
+                    System.out.println(dipendente.getLaboratorio().getReferente());
+                    id = 0;
+                }
+            }else{
+                id = 0;
+            }
+
+
+            System.out.println(dipendente.getId());
+
+            if (dipendente.getId() != id) {
+                //dipendenteDAO.removeDipendente(dipendente);
                 guImain.showInfoMessage("Dipendente Licenziato! Poverino :(");
                 guImain.rimuoviDipendente(dipendente);
                 guImain.aggiornaTabelleDopoLicenziamento(dipendente);
@@ -359,7 +375,7 @@ public class ControllerMainPage {
 
     public void setReferenteLaboratorio(Dipendente dipendente, Laboratorio laboratorio) {
         try {
-            laboratorioDAO.assegnaDipendente(laboratorio, dipendente);
+            laboratorioDAO.assegnaReferente(laboratorio, dipendente);
             guImain.aggiornaReferenteLaboratorio(laboratorio, dipendente);
         } catch (Exception e) {
             e.printStackTrace();
@@ -545,6 +561,8 @@ public class ControllerMainPage {
      * @param dipendenti dipendenti del database
      * @param laboratori laboratori del database
      */
+
+    //todo settare laboratori dipendenti
 
     public void setLaboratoriDipendente(List<Dipendente> dipendenti , List<Laboratorio> laboratori){
         for (Dipendente dipendente : dipendenti) {

@@ -92,7 +92,7 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
      */
 
     @Override
-    public void assegnaDipendente(Laboratorio laboratorio, Dipendente dipendente) throws Exception {
+    public void assegnaReferente(Laboratorio laboratorio, Dipendente dipendente) throws Exception {
         String sql = ("update Laboratorio set referente = " + dipendente.getId() + "where laboratorio.nome_lab = '" + laboratorio.getNome() + "'");
         try {
             Connection connection = connectionController.getConnection();

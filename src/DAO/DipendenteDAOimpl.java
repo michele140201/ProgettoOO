@@ -3,34 +3,20 @@ package DAO;
 import Controller.*;
 import Model.Dipendente;
 import Model.Laboratorio;
-import Model.Progetto;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Implementazione dell'interfaccia DipendenteDAO per database PostgreSQL
+ */
 public class DipendenteDAOimpl implements DipendenteDAO {
     private final ConnectionController connectionController;
 
     public DipendenteDAOimpl(ConnectionController connectionController) {
         this.connectionController = connectionController;
     }
-
-    /**
-     * funzione che ottiene tutti i dipendenti dal database
-     * @return
-     * @throws Exception
-     */
-
-
-    /**
-     * rimuove un dipendente dal database
-     *
-     * @param dipendente
-     * @throws Exception
-     */
 
     @Override
     public void removeDipendente(Dipendente dipendente) throws Exception {
@@ -44,13 +30,6 @@ public class DipendenteDAOimpl implements DipendenteDAO {
         }
 
     }
-
-    /**
-     * funzione che inserisce un dipendente nel database
-     *
-     * @param dipendente
-     * @throws Exception
-     */
 
     @Override
     public void insertDipendente(Dipendente dipendente) throws Exception {
@@ -72,13 +51,6 @@ public class DipendenteDAOimpl implements DipendenteDAO {
 
     }
 
-    /**
-     * funzione che genera un nuovo id per un dipendente
-     *
-     * @return
-     * @throws Exception
-     */
-
     private int generaId() throws Exception {
         String sql = ("select MAX(id_dip) as Max from dipendente ");
         int id = 0;
@@ -95,14 +67,6 @@ public class DipendenteDAOimpl implements DipendenteDAO {
 
     }
 
-    /**
-     * funzione che setta un laboratorio dal database
-     *
-     * @param laboratorio
-     * @param dipendente
-     * @throws Exception
-     */
-
     @Override
     public void setLaboratorio(Laboratorio laboratorio, Dipendente dipendente) throws Exception {
         String sql = ("update Dipendente set nome_lab = '" + laboratorio.getNome() + "' where Dipendente.id_dip = " + dipendente.getId());
@@ -116,13 +80,6 @@ public class DipendenteDAOimpl implements DipendenteDAO {
 
     }
 
-    /**
-     * funzione che promuove un dipendente nel database
-     *
-     * @param dipendente
-     * @throws Exception
-     */
-
     @Override
     public void promuovi(Dipendente dipendente) throws Exception {
         String sql = ("update Dipendente set Dirigente = 'yes' , data_promozione = '" + Date.valueOf(LocalDate.now()) + "' where Dipendente.id_dip = " + dipendente.getId());
@@ -134,13 +91,6 @@ public class DipendenteDAOimpl implements DipendenteDAO {
             throw new Exception(e);
         }
     }
-
-    /**
-     * funzione che degrada un dipendente nel database
-     *
-     * @param dipendente
-     * @throws Exception
-     */
 
     @Override
     public void degrada(Dipendente dipendente) throws Exception {
@@ -154,13 +104,6 @@ public class DipendenteDAOimpl implements DipendenteDAO {
         }
 
     }
-
-    /**
-     * funzione che ottiene tutti i dipendenti nel database
-     *
-     * @return
-     * @throws Exception
-     */
 
     public List<Dipendente> getDipendenti() throws Exception {
         String sql = ("select * from dipendente");
