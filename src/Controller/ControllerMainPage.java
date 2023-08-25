@@ -95,24 +95,8 @@ public class ControllerMainPage {
      */
     public void licenziaDipendente(Dipendente dipendente) {
         try {
-            int id;
-            if(dipendente.getLaboratorio() != null){
-                if(dipendente.getLaboratorio().getReferente() != null){
-                    id = dipendente.getLaboratorio().getReferente().getId();
-                    System.out.println(dipendente.getLaboratorio().getReferente().getId());
-                }else{
-                    System.out.println(dipendente.getLaboratorio().getReferente());
-                    id = 0;
-                }
-            }else{
-                id = 0;
-            }
-
-
-            System.out.println(dipendente.getId());
-
-            if (dipendente.getId() != id) {
-                //dipendenteDAO.removeDipendente(dipendente);
+            if (dipendente.getId() != laboratorioDAO.getIdReferente(dipendente.getLaboratorio())) {
+                dipendenteDAO.removeDipendente(dipendente);
                 guImain.showInfoMessage("Dipendente Licenziato! Poverino :(");
                 guImain.rimuoviDipendente(dipendente);
                 guImain.aggiornaTabelleDopoLicenziamento(dipendente);
