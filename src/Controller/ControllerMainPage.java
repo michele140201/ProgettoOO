@@ -118,8 +118,12 @@ public class ControllerMainPage {
      */
     public void assegnaLaboratorio(Dipendente dipendente, Laboratorio laboratorio) {
         try {
-            dipendenteDAO.setLaboratorio(laboratorio, dipendente);
-            guImain.aggiornaLaboratorioDipendente(laboratorio, dipendente);
+            if(dipendente.isReferenteLaboratorio()){
+                guImain.showErrorMessage("Impossibile effettuare l'assegnazione");
+            }else{
+                dipendenteDAO.setLaboratorio(laboratorio, dipendente);
+                guImain.aggiornaLaboratorioDipendente(laboratorio, dipendente);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             guImain.showErrorMessage("Errore nel Database");
@@ -200,20 +204,13 @@ public class ControllerMainPage {
     public void degrada(Dipendente dipendente) {
         try {
             if (dipendente.isDirigente()) {
-                Progetto progetto = dipendente.getLaboratorio().getProgetto();
-                if(progetto != null){
-                    if(progetto.getResponsabile().getId() == dipendente.getId()){
+                    if(dipendente.isResponsabileProgetto()){
                         guImain.showErrorMessage("IMPOSSIBILE DEGRADARE");
                     }else{
                         dipendenteDAO.degrada(dipendente);
                         guImain.degradaDipendente(dipendente);
                         guImain.showInfoMessage("DEGRADATO!");
                     }
-                }else {
-                    dipendenteDAO.degrada(dipendente);
-                    guImain.degradaDipendente(dipendente);
-                    guImain.showInfoMessage("DEGRADATO!");
-                }
             } else {
                 guImain.showErrorMessage("IMPOSSIBILE DEGRADARE!");
             }
@@ -461,13 +458,11 @@ public class ControllerMainPage {
 
     public void setLaboratoriProgetto(List<Progetto> progetti , List<Laboratorio> laboratori){
         for (Progetto progetto : progetti) {
-            List<Laboratorio> laboratoriProgetto = new ArrayList<>();
             for (Laboratorio laboratorio : laboratori) {
                 if (progetto.getNome() == laboratorio.getProgetto().getNome()) {
-                    laboratoriProgetto.add(laboratorio);
+                    progetto.addLaboratorio(laboratorio);
                 }
             }
-            progetto.setLaboratori(laboratoriProgetto);
         }
     }
 

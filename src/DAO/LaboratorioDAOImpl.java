@@ -149,6 +149,6 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
         } catch (SQLException e) {
             throw new Exception(e);
         }
-
     }
+
 }

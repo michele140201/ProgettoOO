@@ -261,4 +261,21 @@ public class Dipendente {
     public void setDataPromozione(Date dataPromozione) {
         this.dataPromozione = dataPromozione;
     }
+
+    public boolean isResponsabileProgetto(){
+        if(getLaboratorio() != null){
+            if(getLaboratorio().getProgetto() != null){
+                return getLaboratorio().getProgetto().getResponsabile() == this;
+            }else return false;
+        }else return false;
+    }
+
+    public boolean isReferenteLaboratorio(){
+            if(getLaboratorio() != null){
+                if(getLaboratorio().getReferente() != null){
+                    return getLaboratorio().getReferente() == this;
+                }else return false;
+            }else return false;
+    }
+
 }

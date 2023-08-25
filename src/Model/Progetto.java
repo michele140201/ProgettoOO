@@ -1,5 +1,6 @@
 package Model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +27,7 @@ public class Progetto {
         setCup(cup);
         setReferente(referente);
         setResponsabile(responsabile);
+        this.laboratori = new ArrayList<>();
     }
 
     /**

@@ -60,7 +60,6 @@ public class GUImain extends JFrame {
 
     public GUImain() {
         inizializzaGui();
-
         dialogoNuovoDipendenteButton.addActionListener(event ->{
             dialogoInserimentoDipendente.setVisible(true);
         });
@@ -173,6 +172,7 @@ public class GUImain extends JFrame {
         inizializzaTabellaProgetti();
         inizializzaPulsantiGrado();
         inizializzaDialoghi();
+
     }
 
     private JTable creaTabella(JScrollPane tab, TableModel modello, String nome) {

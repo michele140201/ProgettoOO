@@ -58,7 +58,8 @@ public class ControllerAvvio {
      */
 
     private List<Progetto> getProgetti() throws Exception {
-        return progettoDAO.getProgetti();
+        List<Progetto> progetti = progettoDAO.getProgetti();
+        return progetti;
     }
 
     /**
@@ -69,7 +70,8 @@ public class ControllerAvvio {
      */
 
     private List<Dipendente> getDipendenti() throws Exception {
-        return dipendenteDAO.getDipendenti();
+        List<Dipendente> dipendenti = dipendenteDAO.getDipendenti();
+        return dipendenti;
     }
 
     /**
@@ -80,7 +82,8 @@ public class ControllerAvvio {
      */
 
     private List<Laboratorio> getLaboratori() throws Exception{
-        return laboratorioDAO.getLaboratori();
+        List<Laboratorio> laboratori = laboratorioDAO.getLaboratori();
+        return laboratori;
     }
 
 }
