@@ -2,11 +2,12 @@ package GUI;
 
 import java.util.Collections;
 import java.util.List;
-
 import javax.swing.table.AbstractTableModel;
-
-
 import Model.Laboratorio;
+
+/**
+ * Classe che implementa la tabella dei laboratori usata nel GUImain
+ */
 
 public class ModelloLaboratori extends AbstractTableModel {
 

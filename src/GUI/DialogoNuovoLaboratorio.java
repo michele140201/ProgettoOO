@@ -1,8 +1,11 @@
 package GUI;
 
 import Model.Laboratorio;
-
 import javax.swing.*;
+
+/**
+ * Classe che implementa la finestra di dialogo per inserire un nuovo laboratorio
+ */
 
 public class DialogoNuovoLaboratorio extends JPanel {
     private JTextField nomeLaboratorioTextField;

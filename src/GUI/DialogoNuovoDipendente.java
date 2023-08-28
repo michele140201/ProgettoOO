@@ -6,6 +6,10 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.time.LocalDate;
 
+/**
+ * Classe che implementa la finestra di dialogo per inserire un nuovo dipendente
+ */
+
 public class DialogoNuovoDipendente extends JPanel {
     private JPanel Assumi;
     private JTextField nomeTextField;

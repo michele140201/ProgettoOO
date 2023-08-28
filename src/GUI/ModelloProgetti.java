@@ -1,11 +1,13 @@
 package GUI;
 
-import Model.Dipendente;
 import Model.Progetto;
-
 import javax.swing.table.AbstractTableModel;
 import java.util.Collections;
 import java.util.List;
+
+/**
+ * Classe che implementa la tabella dei progetti usata nel GUImain
+ */
 
 public class ModelloProgetti extends AbstractTableModel {
     private List<Progetto> progetti;

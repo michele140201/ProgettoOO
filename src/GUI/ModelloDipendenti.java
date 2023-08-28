@@ -4,18 +4,28 @@ package GUI;
 
 import java.util.Collections;
 import java.util.List;
-
 import javax.swing.table.AbstractTableModel;
-
 import Model.Dipendente;
+
+/**
+ * Classe che implementa la tabella dei dipendenti usata nel GUImain
+ */
 
 public class ModelloDipendenti extends AbstractTableModel {
 
     private List<Dipendente> dipendenti;
 
+    /**
+     * Crea una nuova tabella senza elementi
+     */
     public ModelloDipendenti() {
         this(Collections.emptyList());
     }
+
+    /**
+     * Crea una nuova tabella con gli elementi che gli vengono passati
+     * @param dipendenti lista di dipendenti
+     */
 
     public ModelloDipendenti(List<Dipendente> dipendenti) {
         setDipendenti(dipendenti);
@@ -24,7 +34,7 @@ public class ModelloDipendenti extends AbstractTableModel {
     /**
      * Metodo che ritorna tutti i dipendenti
      * presenti nella Tabella
-     * @return
+     * @return tutti i dipendenti della tabella
      */
 
     public List<Dipendente> getDipendenti() {
@@ -34,7 +44,7 @@ public class ModelloDipendenti extends AbstractTableModel {
     /**
      * Metodo che permette di settare i dipendenti della Tabella
      * con i dipendenti che gli vengono passati
-     * @param dipendenti
+     * @param dipendenti dipendenti da settare
      */
 
     public void setDipendenti(List<Dipendente> dipendenti) {
@@ -45,7 +55,7 @@ public class ModelloDipendenti extends AbstractTableModel {
     /**
      * Metodo che aggiunge un dipendente
      * alla Tabella
-     * @param dipendente
+     * @param dipendente dipendente da aggiungere
      */
 
     public void aggiungiDipendente(Dipendente dipendente) {
@@ -56,7 +66,7 @@ public class ModelloDipendenti extends AbstractTableModel {
     /**
      * Metodo che rimuove il dipendente selezionato
      * dalla Tabella
-     * @param dipendente
+     * @param dipendente dipendente da rimuovere
      */
 
     public void rimuoviDipendente(Dipendente dipendente) {
@@ -67,8 +77,8 @@ public class ModelloDipendenti extends AbstractTableModel {
     /**
      * Metodo che ritorna il dipendente
      * della riga selezionata
-     * @param rowIndex
-     * @return
+     * @param rowIndex indice di riga scelto
+     * @return dipendente scelto
      */
 
     public Dipendente getDipendente(int rowIndex) {
@@ -77,7 +87,7 @@ public class ModelloDipendenti extends AbstractTableModel {
 
     /**
      * Metodo che ritorna quanti dipendenti sono presenti nella Tabella
-     * @return
+     * @return numero di dipendenti
      */
 
     @Override
@@ -87,7 +97,7 @@ public class ModelloDipendenti extends AbstractTableModel {
 
     /**
      * Metodo che ritorna quante colonne presenta la Tabella
-     * @return
+     * @return numero di colonne
      */
 
     @Override
@@ -99,7 +109,7 @@ public class ModelloDipendenti extends AbstractTableModel {
      * Metodo che ritorna il valore della Tabella nel punto selezionato
      * @param rowIndex        the row whose value is to be queried
      * @param columnIndex     the column whose value is to be queried
-     * @return
+     * @return attributo del dipendente scelto
      */
 
     @Override
@@ -132,7 +142,7 @@ public class ModelloDipendenti extends AbstractTableModel {
     /**
      * Metodo che ritorna il nome della colonna selezionata
      * @param column  the column being queried
-     * @return
+     * @return nome della colonna scelta
      */
 
     @Override

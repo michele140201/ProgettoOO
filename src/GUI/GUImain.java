@@ -4,8 +4,6 @@ import Controller.ControllerMainPage;
 import Model.Dipendente;
 import Model.Laboratorio;
 import Model.Progetto;
-
-
 import java.sql.Date;
 import javax.swing.*;
 import javax.swing.table.TableModel;
@@ -13,6 +11,9 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Classe che implementa l'interfaccia grafica principale
+ */
 
 public class GUImain extends JFrame {
     private final DialogoNuovoDipendente interfacciaDipendente = new DialogoNuovoDipendente();
@@ -60,6 +61,7 @@ public class GUImain extends JFrame {
 
     public GUImain() {
         inizializzaGui();
+
         dialogoNuovoDipendenteButton.addActionListener(event ->{
             dialogoInserimentoDipendente.setVisible(true);
         });
@@ -490,8 +492,9 @@ public class GUImain extends JFrame {
 
     private void setComboBoxReferenteProgetto(JComboBox comboBox, Progetto progetto) {
         comboBox.removeAllItems();
-        List<Dipendente> dipendenti =  controllerMainPage.listaReferentiProgettoPossibili(getModelloDipendenti().getDipendenti() , progetto);
-        for (Dipendente dipendente : dipendenti) {
+        List<Dipendente> dipendenti = getModelloDipendenti().getDipendenti();
+        List<Dipendente> dipendentiScelti =  controllerMainPage.listaReferentiProgettoPossibili( dipendenti , progetto);
+        for (Dipendente dipendente : dipendentiScelti) {
             comboBox.addItem(dipendente);
         }
     }

@@ -1,8 +1,10 @@
 package GUI;
 
-import Model.Progetto;
-
 import javax.swing.*;
+
+/**
+ * Classe che implementa la finestra di dialogo per inserire un nuovo progetto
+ */
 
 public class DialogoNuovoProgetto extends JPanel {
     private JTextField inserisciNomeProgettoMAXTextField;
