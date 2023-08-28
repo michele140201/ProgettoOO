@@ -12,9 +12,18 @@ import java.util.List;
 public class ModelloProgetti extends AbstractTableModel {
     private List<Progetto> progetti;
 
+    /**
+     * Crea una tabella vuota
+     */
+
     public ModelloProgetti() {
         this(Collections.emptyList());
     }
+
+    /**
+     * Crea una tabella con gli elementi che gli vengono passati
+     * @param progetti progetti da settare
+     */
 
     public ModelloProgetti(List<Progetto> progetti) {
         setProgetti(progetti);
@@ -23,7 +32,7 @@ public class ModelloProgetti extends AbstractTableModel {
     /**
      * Metodo che ritorna tutti i progetti
      * presenti nella Tabella
-     * @return
+     * @return tutti i progetti
      */
 
     public List<Progetto> getProgetti() {
@@ -33,7 +42,7 @@ public class ModelloProgetti extends AbstractTableModel {
     /**
      * Metodo che setta i progetti nella Tabella
      * con quelli che gli vengono passati
-     * @param progetti
+     * @param progetti progetti da settare
      */
 
     public void setProgetti(List<Progetto> progetti) {
@@ -44,7 +53,7 @@ public class ModelloProgetti extends AbstractTableModel {
     /**
      * Metodo che aggiunge un progetto
      * alla Tabella
-     * @param progetto
+     * @param progetto progetto da aggiungere
      */
 
     public void aggiungiProgetto(Progetto progetto) {
@@ -55,7 +64,7 @@ public class ModelloProgetti extends AbstractTableModel {
     /**
      * Metodo che rimuove il progetto selezionato
      * dalla Tabella
-     * @param progetto
+     * @param progetto progetto da rimuovere
      */
 
     public void rimuoviProgetto(Progetto progetto) {
@@ -67,7 +76,7 @@ public class ModelloProgetti extends AbstractTableModel {
      * Metodo che ritorna il Progetto
      * della riga selezionata
      * @param rowIndex
-     * @return
+     * @return progetto selezionato
      */
 
     public Progetto getProgetto(int rowIndex) {
@@ -77,7 +86,7 @@ public class ModelloProgetti extends AbstractTableModel {
     /**
      *Metodo che ritorna quanti progetti
      * ci sono nella Tabella
-     * @return
+     * @return numero progetti
      */
 
     @Override
@@ -88,7 +97,7 @@ public class ModelloProgetti extends AbstractTableModel {
     /**
      * Metodo che ritorna quante colonne
      * ci sono nella Tabella
-     * @return
+     * @return numero colonne
      */
 
     @Override
@@ -99,9 +108,9 @@ public class ModelloProgetti extends AbstractTableModel {
     /**
      * Metodo che ritorna il valore
      * nel punto selezionato
-     * @param rowIndex        the row whose value is to be queried
-     * @param columnIndex     the column whose value is to be queried
-     * @return
+     * @param rowIndex riga selezionata
+     * @param columnIndex colonna selezionata
+     * @return attributo del progetto selezionato
      */
 
     @Override
@@ -128,8 +137,8 @@ public class ModelloProgetti extends AbstractTableModel {
     /**
      * Metodo che ritorna il nome
      * della colonna selezionata
-     * @param column  the column being queried
-     * @return
+     * @param column  colonna selezionata
+     * @return nome della colonna selezionata
      */
 
     @Override

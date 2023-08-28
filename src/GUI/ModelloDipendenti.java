@@ -107,8 +107,8 @@ public class ModelloDipendenti extends AbstractTableModel {
 
     /**
      * Metodo che ritorna il valore della Tabella nel punto selezionato
-     * @param rowIndex        the row whose value is to be queried
-     * @param columnIndex     the column whose value is to be queried
+     * @param rowIndex  riga selezionata
+     * @param columnIndex  colonna selezionata
      * @return attributo del dipendente scelto
      */
 
@@ -141,7 +141,7 @@ public class ModelloDipendenti extends AbstractTableModel {
 
     /**
      * Metodo che ritorna il nome della colonna selezionata
-     * @param column  the column being queried
+     * @param column colonna selezionata
      * @return nome della colonna scelta
      */
 

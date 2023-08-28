@@ -13,9 +13,18 @@ public class ModelloLaboratori extends AbstractTableModel {
 
     private List<Laboratorio> laboratori;
 
+    /**
+     * Crea una nuova tabella vuota
+     */
+
     public ModelloLaboratori() {
         this(Collections.emptyList());
     }
+
+    /**
+     * Crea una nuova tabella con gli elementi che gli vengono passati
+     * @param laboratori laboratori da settare
+     */
 
     public ModelloLaboratori(List<Laboratorio> laboratori) {
         setLaboratori(laboratori);
@@ -24,7 +33,7 @@ public class ModelloLaboratori extends AbstractTableModel {
     /**
      * Metodo che ritorna tutti i laboratori
      * presenti nella Tabella
-     * @return
+     * @return tutti i laboratori
      */
 
     public List<Laboratorio> getLaboratori() {
@@ -34,7 +43,7 @@ public class ModelloLaboratori extends AbstractTableModel {
     /**
      * Metodo che setta nella Tabella
      * i laboratori che gli vengono passati
-     * @param laboratori
+     * @param laboratori laboratori da settare
      */
 
     public void setLaboratori(List<Laboratorio> laboratori) {
@@ -45,7 +54,7 @@ public class ModelloLaboratori extends AbstractTableModel {
     /**
      * Metodo che aggiunge un laboratorio
      * alla Tabella
-     * @param laboratorio
+     * @param laboratorio laboratorio da aggiungere
      */
 
     public void aggiungiLaboratorio(Laboratorio laboratorio) {
@@ -56,7 +65,7 @@ public class ModelloLaboratori extends AbstractTableModel {
     /**
      * Metodo che rimuove il laboratorio selezionato
      * dalla Tabella
-     * @param laboratorio
+     * @param laboratorio laboratorio da rimuovere
      */
 
     public void rimuoviLaboratorio(Laboratorio laboratorio) {
@@ -67,8 +76,8 @@ public class ModelloLaboratori extends AbstractTableModel {
     /**
      * Metodo che ritorna il Laboratorio
      * della riga selezionata
-     * @param rowIndex
-     * @return
+     * @param rowIndex riga selezionata
+     * @return laboratorio selezionato
      */
 
     public Laboratorio getLaboratorio(int rowIndex) {
@@ -78,7 +87,7 @@ public class ModelloLaboratori extends AbstractTableModel {
     /**
      * Metodo che ritorna quanti laboratori
      * ci sono nella Tabella
-     * @return
+     * @return numero laboratori
      */
 
     @Override
@@ -89,7 +98,7 @@ public class ModelloLaboratori extends AbstractTableModel {
     /**
      * Metodo che ritorna quante colonne
      * ci sono nella Tabella
-     * @return
+     * @return colonne della tabella
      */
 
     @Override
@@ -100,9 +109,9 @@ public class ModelloLaboratori extends AbstractTableModel {
     /**
      * Metodo che restituisce il valore nella Tabella
      * nel punto selezionato
-     * @param rowIndex        the row whose value is to be queried
-     * @param columnIndex     the column whose value is to be queried
-     * @return
+     * @param rowIndex  riga selezionata
+     * @param columnIndex  colonna selezionata
+     * @return attributo del dipendente selezionato
      */
 
     @Override
@@ -129,8 +138,8 @@ public class ModelloLaboratori extends AbstractTableModel {
     /**
      * Metodo che restituisce il nome della
      * colonna selezionata
-     * @param column  the column being queried
-     * @return
+     * @param column  colonna selezionata
+     * @return nome della colonna selezionata
      */
 
     @Override
