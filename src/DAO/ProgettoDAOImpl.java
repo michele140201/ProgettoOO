@@ -2,13 +2,14 @@ package DAO;
 
 import Model.Dipendente;
 import Model.Progetto;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import Controller.*;
-
 import java.sql.*;
+
+/**
+ * Implementazione dell'interfaccia ProgettoDAO per database PostgreSQL
+ */
 
 public class ProgettoDAOImpl implements ProgettoDAO {
     private final ConnectionController connectionController;
@@ -16,13 +17,6 @@ public class ProgettoDAOImpl implements ProgettoDAO {
     public ProgettoDAOImpl(ConnectionController connectionController) {
         this.connectionController = connectionController;
     }
-
-    /**
-     * funzione che riporta tutti i progetti nel database
-     *
-     * @return
-     * @throws Exception
-     */
 
     @Override
     public List<Progetto> getProgetti() throws Exception {
@@ -46,13 +40,6 @@ public class ProgettoDAOImpl implements ProgettoDAO {
 
     }
 
-    /**
-     * funzione che genera il cup di un progetto
-     *
-     * @return
-     * @throws Exception
-     */
-
     private int generaCup() throws Exception {
         int cup = 1;
         String sql = ("SELECT max(cup) as massimo from progetto");
@@ -70,13 +57,6 @@ public class ProgettoDAOImpl implements ProgettoDAO {
 
     }
 
-    /**
-     * funzione che inserisce un nuovo progetto nel database
-     *
-     * @param progetto
-     * @throws Exception
-     */
-
     @Override
     public void inserisci(Progetto progetto) throws Exception {
         progetto.setCup(generaCup());
@@ -91,13 +71,6 @@ public class ProgettoDAOImpl implements ProgettoDAO {
 
     }
 
-    /**
-     * funzione che rimuove un progetto nel database
-     *
-     * @param progetto
-     * @throws Exception
-     */
-
     @Override
     public void rimuovi(Progetto progetto) throws Exception {
         String sql = ("Delete from progetto where progetto.cup = " + progetto.getCup());
@@ -110,14 +83,6 @@ public class ProgettoDAOImpl implements ProgettoDAO {
         }
 
     }
-
-    /**
-     * funzione che setta un nuovo referente nel progetto
-     *
-     * @param dipendente
-     * @param progetto
-     * @throws Exception
-     */
 
     @Override
     public void setReferente(Dipendente dipendente, Progetto progetto) throws Exception {
@@ -139,13 +104,6 @@ public class ProgettoDAOImpl implements ProgettoDAO {
 
     }
 
-    /**
-     * funzione che setta un nuovo responsabile nel progetto
-     *
-     * @param dipendente
-     * @param progetto
-     * @throws Exception
-     */
     @Override
     public void setResponsabile(Dipendente dipendente, Progetto progetto) throws Exception {
 
