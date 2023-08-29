@@ -21,7 +21,7 @@ public class DialogoNuovoProgetto extends JPanel {
     /**
      * Metodo che ritorna il nome
      * inserito dall'utente
-     * @return
+     * @return nome progetto inserito
      */
 
     public String getProgetto() {

@@ -36,7 +36,7 @@ public class DialogoNuovoLaboratorio extends JPanel {
     /**
      * Metodo che ritorna il nome
      * inserito dall'utente
-     * @return
+     * @return nome laboratorio inserito
      */
 
     public String getNome(){
@@ -46,7 +46,7 @@ public class DialogoNuovoLaboratorio extends JPanel {
     /**
      * Metodo che ritorna il topic
      * selezionato dall'utente
-     * @return
+     * @return topic laboratorio inserito
      */
 
     public Laboratorio.Topic getTopic(){

@@ -28,7 +28,7 @@ public class GUImain extends JFrame {
     private final JComboBox<Progetto> progettoLaboratorioComboBox = new JComboBox<>();
     private final JComboBox<Dipendente> referenteLaboratorioComboBox = new JComboBox<>();
     private JTabbedPane PannelloPrincipale;
-    private JPanel Visual;
+    private JPanel Dipendenti;
     private JPanel Progetti;
     private JPanel Laboratori;
     private JButton mostraDipendentiNonAssegnatiButton;
@@ -81,6 +81,7 @@ public class GUImain extends JFrame {
         visualizzaCarrieraButton.addActionListener(event -> buttonVisualizzaCarriera());
 
         //ACTION LISTENER DI PROGETTO
+
         nuovoProgettoButton.addActionListener(event -> dialogoInserimentoProgetto.setVisible(true));
 
         eliminaProgettoButton.addActionListener(event -> controllerMainPage.eliminaProgetto(getProgettoSelezionato()));
@@ -101,7 +102,9 @@ public class GUImain extends JFrame {
                 dialogoInserimentoProgetto.setVisible(false);
                 interfacciaProgetto.clear();
         });
+
         //ACTION LISTENER DI LABORATORIO
+
         dialogoNuovoLaboratorioButton.addActionListener(event -> dialogoInserimentoLaboratorio.setVisible(true));
 
         creaNuovoLaboratorioButton.addActionListener(event -> {

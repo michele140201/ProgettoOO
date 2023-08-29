@@ -96,20 +96,20 @@ public class DialogoNuovoDipendente extends JPanel {
      * Metodo che ritorna la data relativa
      * al giorno, al mese e all'anno che
      * gli vengono passati
-     * @param Giorno
-     * @param mese
-     * @param Anno
-     * @return
+     * @param giorno giorno della data
+     * @param mese mese della data
+     * @param anno anno della data
+     * @return data
      */
 
-    private java.sql.Date converti(int Giorno, Mese mese, int Anno) {
-        return new java.sql.Date(Anno, mese.ordinal() , Giorno);
+    private java.sql.Date converti(int giorno, Mese mese, int anno) {
+        return new java.sql.Date(anno, mese.ordinal() , giorno);
     }
 
     /**
      * Metodo che ritorna il nome
      * inserito dall'utente
-     * @return
+     * @return nome dipendente inserito
      */
 
     public String getNome() {
@@ -119,7 +119,7 @@ public class DialogoNuovoDipendente extends JPanel {
     /**
      * Metodo che ritorna il cognome
      * inserito dall' utente
-     * @return
+     * @return cognome dipendente inserito
      */
 
     public String getCognome(){
@@ -130,7 +130,7 @@ public class DialogoNuovoDipendente extends JPanel {
      * Metodo che ritorna se il
      * nuovo dipendente deve essere assunto
      * come dirigente o meno
-     * @return
+     * @return se il dipendente è dirigente
      */
 
     public boolean getDirigente(){
@@ -142,7 +142,7 @@ public class DialogoNuovoDipendente extends JPanel {
      * Metodo che converte i dati inseriti dall'utente
      * relativi alla data di nascita del dipendente
      * in una data
-     * @return
+     * @return data di nascita del dipendente
      */
 
     public Date getDataNascita(){
