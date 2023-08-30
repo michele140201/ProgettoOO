@@ -1,6 +1,9 @@
 package GUI;
-
 import Controller.*;
+
+/**
+ * Classe main per far partire il proglamma
+ */
 
 public class Applicazione {
 
