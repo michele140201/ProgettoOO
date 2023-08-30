@@ -27,7 +27,6 @@ public class Progetto {
         setCup(cup);
         setReferente(referente);
         setResponsabile(responsabile);
-        this.laboratori = new ArrayList<>();
     }
 
     /**

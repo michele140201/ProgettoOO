@@ -180,6 +180,14 @@ public class GUImain extends JFrame {
 
     }
 
+    /**
+     * Metodo che tra una tabella con schermata, modello e nome della tabella
+     * @param tab schermata dove inserire la tabella
+     * @param modello modello della tabella
+     * @param nome nome della tabella
+     * @return tabella
+     */
+
     private JTable creaTabella(JScrollPane tab, TableModel modello, String nome) {
         JTable tabella = new JTable(modello) {
             public boolean isCellEditable(int row, int column) {
@@ -202,7 +210,7 @@ public class GUImain extends JFrame {
     /**
      * funzione per creare una schermata di dialogo
      *
-     * @return
+     * @return schermata di dialogo
      */
 
     private JDialog creaDialogo() {
@@ -218,7 +226,7 @@ public class GUImain extends JFrame {
     }
 
     /**
-     * funzione per visualizzare gli scatti di carriera
+     * Metodo per visualizzare gli scatti di carriera
      */
 
     public void buttonVisualizzaCarriera() {
@@ -232,7 +240,7 @@ public class GUImain extends JFrame {
      * Un progetto per essere idoneo deve avere
      * massimo 2 laboratori assegnati
      *
-     * @param comboBox
+     * @param comboBox combobox dei progetti da assegnare al laboratorio
      */
 
     private void setProgettiLaboratorioComboBox(JComboBox comboBox) {
@@ -246,7 +254,7 @@ public class GUImain extends JFrame {
 
 
     /**
-     * funzione per inizializzare la tabella dipendenti
+     * Metodo per inizializzare la tabella dipendenti
      */
 
     private void inizializzaTabellaDipendenti() {
@@ -255,7 +263,7 @@ public class GUImain extends JFrame {
     }
 
     /**
-     * funzione per inizializzare la tabella laboratori
+     * Metodo per inizializzare la tabella laboratori
      */
 
     private void inizializzaTabellaLaboratori() {
@@ -264,7 +272,7 @@ public class GUImain extends JFrame {
     }
 
     /**
-     * funzione per inizializzare la tabella progetti
+     * Metodo per inizializzare la tabella progetti
      */
 
     private void inizializzaTabellaProgetti() {
@@ -274,9 +282,9 @@ public class GUImain extends JFrame {
 
 
     /**
-     * funzione per inserire i dipendenti nella tabella
+     * Metodo per settare i dipendenti nella tabella
      *
-     * @param dipendenti
+     * @param dipendenti dipendenti da inserire
      */
 
     public void setDipendenti(List<Dipendente> dipendenti) {
@@ -285,9 +293,9 @@ public class GUImain extends JFrame {
     }
 
     /**
-     * funzione per inserire i laboratori nella tabella
+     * Metodo per settare i laboratori nella tabella
      *
-     * @param laboratori
+     * @param laboratori laboratori da inserire
      */
 
     public void setLaboratori(List<Laboratorio> laboratori) {
@@ -295,9 +303,9 @@ public class GUImain extends JFrame {
     }
 
     /**
-     * funzione per inserire i progetti nella tabella
+     * Metodo per settare i progetti nella tabella
      *
-     * @param progetti
+     * @param progetti progetti da settare
      */
 
     public void setProgetti(List<Progetto> progetti) {
@@ -305,9 +313,9 @@ public class GUImain extends JFrame {
     }
 
     /**
-     * funzione per aggiungere un dipendente nella tabella
+     * Metodo per aggiungere un dipendente nella tabella
      *
-     * @param dipendente
+     * @param dipendente dipendente da aggiungere
      */
 
     public void aggiungiDipendente(Dipendente dipendente) {
@@ -317,9 +325,9 @@ public class GUImain extends JFrame {
     }
 
     /**
-     * funzione per rimuovere un dipendente dalla tabella
+     * Metodo per rimuovere un dipendente dalla tabella
      *
-     * @param dipendente
+     * @param dipendente dipendente da rimuovere
      */
 
     public void rimuoviDipendente(Dipendente dipendente) {
@@ -329,9 +337,9 @@ public class GUImain extends JFrame {
     }
 
     /**
-     * funzione per aggiungere un laboratorio nella tabella
+     * Metodo per aggiungere un laboratorio nella tabella
      *
-     * @param laboratorio
+     * @param laboratorio laboratorio da aggiungere
      */
 
     public void aggiungiLaboratorio(Laboratorio laboratorio) {
@@ -339,9 +347,9 @@ public class GUImain extends JFrame {
     }
 
     /**
-     * funzione per rimuovere un laboratorio dalla tabella
+     * Metodo per rimuovere un laboratorio dalla tabella
      *
-     * @param laboratorio
+     * @param laboratorio laboratorio da rimuovere
      */
 
     public void rimuoviLaboratorio(Laboratorio laboratorio) {
@@ -349,9 +357,9 @@ public class GUImain extends JFrame {
     }
 
     /**
-     * funzione per rimuovere un progetto dalla tabella
+     * Metodo per rimuovere un progetto dalla tabella
      *
-     * @param progetto
+     * @param progetto progetto da rimuovere
      */
 
     public void rimuoviProgetto(Progetto progetto) {
@@ -361,7 +369,7 @@ public class GUImain extends JFrame {
     /**
      * funzione per ottenere il modello della tabella dipendenti
      *
-     * @return
+     * @return modello della tabella dipendenti
      */
 
     private ModelloDipendenti getModelloDipendenti() {
@@ -371,7 +379,7 @@ public class GUImain extends JFrame {
     /**
      * funzione per ottenere il modello della tabella laboratori
      *
-     * @return
+     * @return modello della tabella laboratori
      */
 
     private ModelloLaboratori getModelloLaboratori() {
@@ -381,7 +389,7 @@ public class GUImain extends JFrame {
     /**
      * funzione per ottenere il modello della tabella progetti
      *
-     * @return
+     * @return modello della tabella progetti
      */
 
     private ModelloProgetti getModelloProgetti() {
@@ -391,7 +399,7 @@ public class GUImain extends JFrame {
     /**
      * funzione per ottenere il dipendente selezionato
      *
-     * @return
+     * @return dipendente selezionato
      */
 
     private Dipendente getDipendenteSelezionato() {
@@ -402,7 +410,7 @@ public class GUImain extends JFrame {
     /**
      * funzione per ottenere il laboratorio selezionato
      *
-     * @return
+     * @return laboratorio selezionato
      */
     private Laboratorio getLaboratorioSelezionato() {
         ModelloLaboratori modello = getModelloLaboratori();
@@ -412,7 +420,7 @@ public class GUImain extends JFrame {
     /**
      * funzione per ottenere il progetto selezionato
      *
-     * @return
+     * @return progetto selezionato
      */
 
     private Progetto getProgettoSelezionato() {
@@ -423,7 +431,7 @@ public class GUImain extends JFrame {
     /**
      * funzione per mostrare un messaggio di errore
      *
-     * @param messaggio
+     * @param messaggio messaggio da mostrare
      */
 
     public void showErrorMessage(String messaggio) {
@@ -433,7 +441,7 @@ public class GUImain extends JFrame {
     /**
      * funzione per mostrare un messaggio info
      *
-     * @param messaggio
+     * @param messaggio messaggio da mostrare
      */
 
     public void showInfoMessage(String messaggio) {
@@ -464,7 +472,7 @@ public class GUImain extends JFrame {
     /**
      * funzione che setta il controller della gui
      *
-     * @param controller
+     * @param controller controller da settare
      */
 
 
@@ -475,8 +483,8 @@ public class GUImain extends JFrame {
     /**
      * funzione che setta la combo box di assegnazione di un laboratorio ad un dipendente
      *
-     * @param comboBox
-     * @param laboratori
+     * @param comboBox combobox di laboratori
+     * @param laboratori laboratori del dipendente
      */
 
     private void setComboBoxLaboratorioDipendente(JComboBox comboBox, List<Laboratorio> laboratori) {
@@ -489,8 +497,8 @@ public class GUImain extends JFrame {
     /**
      * funzione che setta la combo box di assegnazione di un referente ad un progetto
      *
-     * @param comboBox
-     * @param progetto
+     * @param comboBox combobox di referenti
+     * @param progetto progetto selezionato
      */
 
     private void setComboBoxReferenteProgetto(JComboBox comboBox, Progetto progetto) {
@@ -505,8 +513,8 @@ public class GUImain extends JFrame {
     /**
      * funzione che setta la combo box di assegnazione di un referete ad un laboratorio
      *
-     * @param comboBox
-     * @param laboratorio
+     * @param comboBox combobox di referenti
+     * @param laboratorio laboratorio selezionato
      */
 
     private void setComboBoxReferenteLaboratorio(JComboBox comboBox, Laboratorio laboratorio) {
@@ -520,7 +528,7 @@ public class GUImain extends JFrame {
     /**
      * funzione per creare la schermata di assegnazione di un laboratorio ad un dipendente
      *
-     * @return
+     * @return schermata di assegnazione di un laboratorio ad un dipendente
      */
 
     private JDialog schermataDialogoAssegnazioneLaboratorioDipendente() {
@@ -545,7 +553,7 @@ public class GUImain extends JFrame {
     /**
      * funzione per creare la schermata di assegnazione di un responsabile ad un progetto
      *
-     * @return
+     * @return schermata di assegnazione di un responsabile ad un progetto
      */
 
     private JDialog schermataDialogoAssegnazioneResponsabileProgetto() {
@@ -568,7 +576,7 @@ public class GUImain extends JFrame {
     /**
      * funzione per creare la schermata di assegnazione di un referente ad un progetto
      *
-     * @return
+     * @return schermata di assegnazione di un referente ad un progetto
      */
 
     private JDialog schermataDialogoAssegnazioneReferenteProgetto() {
@@ -591,7 +599,7 @@ public class GUImain extends JFrame {
     /**
      * funzione per creare la schermata di assegnazione di un referente ad un laboratorio
      *
-     * @return
+     * @return schermata di assegnazione di un referente ad un laboratorio
      */
 
     private JDialog schermataDialogoAssegnazioneReferenteLaboratorio() {
@@ -613,8 +621,8 @@ public class GUImain extends JFrame {
     /**
      * funzione per aggiornare il laboratorio di un dipendente
      *
-     * @param laboratorio
-     * @param dipendente
+     * @param laboratorio laboratorio da settare
+     * @param dipendente dipendente selezionato
      */
 
     public void aggiornaLaboratorioDipendente(Laboratorio laboratorio, Dipendente dipendente) {
@@ -626,8 +634,8 @@ public class GUImain extends JFrame {
     /**
      * funzione per aggiornare il responsabile di un progetto
      *
-     * @param progetto
-     * @param dipendente
+     * @param progetto progetto selezionato
+     * @param dipendente responsabile da settare
      */
 
     public void aggiornaResponsabileProgetto(Progetto progetto, Dipendente dipendente) {
@@ -638,8 +646,8 @@ public class GUImain extends JFrame {
     /**
      * funzione per aggiornare il referente di un progetto
      *
-     * @param progetto
-     * @param dipendente
+     * @param progetto progetto selezionato
+     * @param dipendente referente da settare
      */
 
     public void aggiornaReferenteProgetto(Progetto progetto, Dipendente dipendente) {
@@ -720,7 +728,7 @@ public class GUImain extends JFrame {
     /**
      * funzione per inizializzare la schermata di assegnazione dei progetti ai laboratori
      *
-     * @return
+     * @return schermata di assegnazione di un progetto ad un laboratorio
      */
 
     public JDialog schermataAssegnazioneProgettiLaboratorio() {
@@ -744,8 +752,8 @@ public class GUImain extends JFrame {
     /**
      * funzione per inizializzare la combobox di assegnazione dei responsabili idonei per il progetto scelto
      *
-     * @param comboBox
-     * @param progetto
+     * @param comboBox combobox responsabili
+     * @param progetto progetto scelto
      */
 
     public void setResponsabiliProgettoComboBox(JComboBox comboBox, Progetto progetto) {
@@ -764,8 +772,8 @@ public class GUImain extends JFrame {
     /**
      * funzione per aggiornare il progetto di un laboratorio
      *
-     * @param laboratorio
-     * @param progetto
+     * @param laboratorio laboratorio scelto
+     * @param progetto progetto da settare
      */
 
     public void aggiornaProgettoLaboratorio(Laboratorio laboratorio, Progetto progetto) {
@@ -778,8 +786,8 @@ public class GUImain extends JFrame {
     /**
      * funzione per aggiornare il referente di un laboratorio
      *
-     * @param laboratorio
-     * @param dipendente
+     * @param laboratorio laboratorio scelto
+     * @param dipendente referente da settare
      */
 
     public void aggiornaReferenteLaboratorio(Laboratorio laboratorio, Dipendente dipendente) {
@@ -790,7 +798,7 @@ public class GUImain extends JFrame {
     /**
      * funzione per aggiornare le tabelle dopo un licenziamento
      *
-     * @param dipendente
+     * @param dipendente dipendente licenziato
      */
 
     public void aggiornaTabelleDopoLicenziamento(Dipendente dipendente) {
@@ -811,7 +819,7 @@ public class GUImain extends JFrame {
     /**
      * funzione per aggiornare le tabelle dopo l'elimizazione di un progetto
      *
-     * @param progetto
+     * @param progetto progetto eliminato
      */
 
     public void aggiornaTabelleDopoEliminazioneProgetto(Progetto progetto) {
@@ -826,7 +834,7 @@ public class GUImain extends JFrame {
     /**
      * funzione per aggiornare le tabelle dopo l'eliminazione di un laboratorio
      *
-     * @param laboratorio
+     * @param laboratorio laboratorio eliminato
      */
 
     public void aggiornaTabelleDopoEliminazioneLaboratorio(Laboratorio laboratorio) {
@@ -839,15 +847,29 @@ public class GUImain extends JFrame {
         getModelloDipendenti().fireTableDataChanged();
     }
 
+    /**
+     * degrada il dipendente selezionato
+     * @param dipendente dipendente selezionato
+     */
+
     public void degradaDipendente(Dipendente dipendente) {
         dipendente.setDataPromozione(null);
         dipendente.setDirigente(false);
     }
 
+    /**
+     * promuove il dipendente selezionato
+     * @param dipendente dipendente da promuovere
+     */
+
     public void promuoviDipendente(Dipendente dipendente) {
         dipendente.setDataPromozione(Date.valueOf(LocalDate.now()));
         dipendente.setDirigente(true);
     }
+
+    /**
+     * Metodo che inizializza i dialoghi
+     */
 
     private void inizializzaDialoghi(){
         dialogoInserimentoDipendente.setLayout(new BorderLayout());

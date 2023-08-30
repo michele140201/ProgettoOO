@@ -457,12 +457,14 @@ public class ControllerMainPage {
      */
 
     public void setLaboratoriProgetto(List<Progetto> progetti , List<Laboratorio> laboratori){
+        List<Laboratorio> laboratoriProgetto = new ArrayList<>();
         for (Progetto progetto : progetti) {
             for (Laboratorio laboratorio : laboratori) {
                 if (progetto.getNome() == laboratorio.getProgetto().getNome()) {
-                    progetto.addLaboratorio(laboratorio);
+                    laboratoriProgetto.add(laboratorio);
                 }
             }
+            progetto.setLaboratori(laboratoriProgetto);
         }
     }
 
