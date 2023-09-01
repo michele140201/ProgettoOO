@@ -92,21 +92,4 @@ public class LaboratorioDAOImpl implements LaboratorioDAO {
 
     }
 
-    @Override
-    public int getIdReferente(Laboratorio laboratorio) throws Exception {
-        int idDip = 0;
-        String sql = ("Select referente from laboratorio where laboratorio.nome_lab = '" + laboratorio.getNome() + "'");
-        try {
-            Connection connection = connectionController.getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                idDip = resultSet.getInt("referente");
-            }
-            return idDip;
-        } catch (SQLException e) {
-            throw new Exception(e);
-        }
-    }
-
 }

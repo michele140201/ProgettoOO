@@ -95,13 +95,13 @@ public class ControllerMainPage {
      */
     public void licenziaDipendente(Dipendente dipendente) {
         try {
-            if (dipendente.getId() != laboratorioDAO.getIdReferente(dipendente.getLaboratorio())) {
+            if (!dipendente.equals(dipendente.getLaboratorio().getReferente())) {
                 dipendenteDAO.removeDipendente(dipendente);
                 guImain.showInfoMessage("Dipendente Licenziato! Poverino :(");
                 guImain.rimuoviDipendente(dipendente);
                 guImain.aggiornaTabelleDopoLicenziamento(dipendente);
             } else {
-                guImain.showErrorMessage("Il Dipendente è Responsabile di Laboratorio");
+                guImain.showErrorMessage("Il Dipendente è referente di Laboratorio");
             }
         } catch (Exception e) {
             e.printStackTrace();

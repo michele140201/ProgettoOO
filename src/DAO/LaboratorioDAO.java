@@ -53,12 +53,4 @@ public interface LaboratorioDAO {
 
     void assegnaProgetto(Laboratorio laboratorio, Progetto progetto) throws Exception;
 
-    /**
-     * Metodo che ritorna l'id del referente assegnato al laboratorio
-     * @param laboratorio laboratorio scelto
-     * @return id referente
-     * @throws Exception eventuali problemi nell'interazione con il database
-     */
-
-    int getIdReferente(Laboratorio laboratorio) throws Exception;
 }
