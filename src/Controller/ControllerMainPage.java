@@ -536,8 +536,6 @@ public class ControllerMainPage {
      * @param laboratori laboratori del database
      */
 
-    //todo settare laboratori dipendenti
-
     public void setLaboratoriDipendente(List<Dipendente> dipendenti , List<Laboratorio> laboratori){
         for (Dipendente dipendente : dipendenti) {
             for (Laboratorio laboratorio : laboratori) {
