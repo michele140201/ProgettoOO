@@ -25,9 +25,7 @@ public class ControllerAvvio {
      */
 
     public ControllerAvvio() throws Exception {
-        guimain.setController(controllerMainPage);
         inizializzaGui();
-        guimain.setVisible(true);
     }
 
     /**
@@ -38,6 +36,7 @@ public class ControllerAvvio {
      */
 
     private void inizializzaGui() throws Exception {
+        guimain.setController(controllerMainPage);
         guimain.setDipendenti(getDipendenti());
         guimain.setLaboratori(getLaboratori());
         guimain.setProgetti(getProgetti());
@@ -48,6 +47,7 @@ public class ControllerAvvio {
         guimain.setLaboratoriProgetto();
         guimain.setResponsabiliProgetto();
         guimain.setLaboratoriDipendenti();
+        guimain.setVisible(true);
     }
 
     /**
