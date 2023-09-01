@@ -803,13 +803,13 @@ public class GUImain extends JFrame {
 
     public void aggiornaTabelleDopoLicenziamento(Dipendente dipendente) {
         for (Progetto progetto : getModelloProgetti().getProgetti()) {
-            if (progetto.getResponsabile().getId() == dipendente.getId()) {
+            if (progetto.getResponsabile().equals(dipendente)) {
                 controllerMainPage.rimuoviResponsabile(progetto);
             }
         }
 
         for (Progetto progetto : getModelloProgetti().getProgetti()) {
-            if (progetto.getReferente().getId() == dipendente.getId()) {
+            if (progetto.getReferente().equals(dipendente)) {
                 controllerMainPage.rimuoviReferente(progetto);
             }
         }
@@ -824,7 +824,7 @@ public class GUImain extends JFrame {
 
     public void aggiornaTabelleDopoEliminazioneProgetto(Progetto progetto) {
         for (Laboratorio laboratorio : getModelloLaboratori().getLaboratori()) {
-            if (laboratorio.getProgetto().getCup() == progetto.getCup()) {
+            if (laboratorio.getProgetto().equals(progetto)) {
                 controllerMainPage.rimuoviProgetto(laboratorio);
             }
         }
@@ -839,9 +839,8 @@ public class GUImain extends JFrame {
 
     public void aggiornaTabelleDopoEliminazioneLaboratorio(Laboratorio laboratorio) {
         for (Dipendente dipendente : getModelloDipendenti().getDipendenti()) {
-            if (dipendente.getLaboratorio().getNome() != null) {
-                if (dipendente.getLaboratorio().getNome().equals(laboratorio.getNome()))
-                    controllerMainPage.rimuoviLaboratorio(dipendente);
+            if (dipendente.getLaboratorio().equals(laboratorio)) {
+                controllerMainPage.rimuoviLaboratorio(dipendente);
             }
         }
         getModelloDipendenti().fireTableDataChanged();

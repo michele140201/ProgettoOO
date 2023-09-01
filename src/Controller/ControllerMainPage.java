@@ -294,26 +294,19 @@ public class ControllerMainPage {
         try {
             Dipendente referente = laboratorio.getProgetto().getReferente();
             Dipendente responsabile = laboratorio.getProgetto().getResponsabile();
-            if (referente != null) {
-                if (referente.getLaboratorio() != null) {
-                    if (referente.getLaboratorio().getNome().equals(laboratorio.getNome())) {
-                        progettoDAO.setReferente(null, laboratorio.getProgetto());
-                        laboratorio.getProgetto().setReferente(dipendenteVuoto);
-                    }
+            if(referente != null){
+                if (referente.getLaboratorio().equals(laboratorio)) {
+                    progettoDAO.setReferente(null, laboratorio.getProgetto());
+                    laboratorio.getProgetto().setReferente(dipendenteVuoto);
                 }
-
             }
 
-            if (responsabile != null) {
-                if (responsabile.getLaboratorio() != null) {
-                    if (responsabile.getLaboratorio().getNome().equals(laboratorio.getNome())) {
-                        progettoDAO.setResponsabile(null, laboratorio.getProgetto());
-                        laboratorio.getProgetto().setResponsabile(dipendenteVuoto);
-                    }
+            if(responsabile != null){
+                if (responsabile.getLaboratorio().equals(laboratorio)) {
+                    progettoDAO.setResponsabile(null, laboratorio.getProgetto());
+                    laboratorio.getProgetto().setResponsabile(dipendenteVuoto);
                 }
-
             }
-
 
             laboratorioDAO.assegnaProgetto(laboratorio, progetto);
             guImain.showInfoMessage("Aggiornamento Riuscito");
@@ -460,7 +453,7 @@ public class ControllerMainPage {
         List<Laboratorio> laboratoriProgetto = new ArrayList<>();
         for (Progetto progetto : progetti) {
             for (Laboratorio laboratorio : laboratori) {
-                if (progetto.getNome() == laboratorio.getProgetto().getNome()) {
+                if (progetto.getCup() == laboratorio.getProgetto().getCup()) {
                     laboratoriProgetto.add(laboratorio);
                 }
             }
@@ -512,7 +505,7 @@ public class ControllerMainPage {
     public void setReferentiLaboratorio(List<Laboratorio> laboratori , List<Dipendente> dipendenti){
         for (Laboratorio laboratorio : laboratori) {
             for (Dipendente dipendente : dipendenti) {
-                if (laboratorio.getReferente().getId() == dipendente.getId()) {
+                if (laboratorio.getReferente().getId() == (dipendente.getId())) {
                     laboratorio.setReferente(dipendente);
                 }
             }
@@ -548,7 +541,7 @@ public class ControllerMainPage {
     public void setLaboratoriDipendente(List<Dipendente> dipendenti , List<Laboratorio> laboratori){
         for (Dipendente dipendente : dipendenti) {
             for (Laboratorio laboratorio : laboratori) {
-                if (laboratorio.getNome() == dipendente.getLaboratorio().getNome()) {
+                if (laboratorio.getNome().equals(dipendente.getLaboratorio().getNome())) {
                     dipendente.setLaboratorio(laboratorio);
                 }
             }
@@ -586,12 +579,10 @@ public class ControllerMainPage {
         List<Dipendente> dipendentiScelti = new ArrayList<>();
         for (Dipendente dipendente : dipendenti) {
             for (Laboratorio laboratorio : progetto.getLaboratori()) {
-                if (dipendente.getLaboratorio().getNome() != null) {
-                    if (dipendente.getLaboratorio().getNome().equals(laboratorio.getNome())) {
+                    if (dipendente.getLaboratorio().equals(laboratorio)) {
                         if (time.convert(Date.valueOf(LocalDate.now()).getTime() - dipendente.getDataAssunzione().getTime(), TimeUnit.MILLISECONDS) / 365 >= 7)
                             dipendentiScelti.add(dipendente);
                     }
-                }
             }
 
         }
@@ -612,7 +603,7 @@ public class ControllerMainPage {
         List<Dipendente> dipendentiScelti = new ArrayList<>();
         for (Dipendente dipendente : dipendenti) {
             if (dipendente.getLaboratorio().getNome() != null) {
-                if (dipendente.getLaboratorio().getNome().equals(laboratorio.getNome())) {
+                if (dipendente.getLaboratorio().equals(laboratorio)) {
                     if (time.convert(Date.valueOf(LocalDate.now()).getTime() - dipendente.getDataAssunzione().getTime(), TimeUnit.MILLISECONDS) / 365 >= 7)
                         dipendentiScelti.add(dipendente);
                 }
@@ -634,12 +625,10 @@ public class ControllerMainPage {
         List<Dipendente> dipendentiScelti = new ArrayList<>();
         for (Dipendente dipendente : dipendenti) {
             for (Laboratorio laboratorio : progetto.getLaboratori()) {
-                if (dipendente.getLaboratorio().getNome() != null) {
-                    if (dipendente.getLaboratorio().getNome().equals(laboratorio.getNome())) {
+                    if (dipendente.getLaboratorio().equals(laboratorio)) {
                         if (dipendente.isDirigente())
                             dipendentiScelti.add(dipendente);
                     }
-                }
             }
         }
         return dipendentiScelti;
