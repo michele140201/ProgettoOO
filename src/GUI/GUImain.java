@@ -61,7 +61,28 @@ public class GUImain extends JFrame {
 
     public GUImain() {
         inizializzaGui();
+        inizializzaListener();
+    }
 
+    private void inizializzaGui(){
+        setContentPane(PannelloPrincipale);
+        setSize(1000, 1000);
+        setLocationRelativeTo(null);
+        setBackground(Color.CYAN);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        inizializzaTabellaDipendenti();
+        inizializzaTabellaLaboratori();
+        inizializzaTabellaProgetti();
+        inizializzaPulsantiGrado();
+        inizializzaDialoghi();
+
+    }
+
+    /**
+     * Metodo che aggiunge tutti i Listener ai bottoni
+     */
+
+    private void inizializzaListener(){
         dialogoNuovoDipendenteButton.addActionListener(event ->{
             dialogoInserimentoDipendente.setVisible(true);
         });
@@ -96,11 +117,11 @@ public class GUImain extends JFrame {
         });
 
         creaNuovoProgettoButton.addActionListener(event -> {
-                String nome = interfacciaProgetto.getProgetto();
-                Progetto progetto = controllerMainPage.nuovoProgetto(nome);
-                getModelloProgetti().aggiungiProgetto(progetto);
-                dialogoInserimentoProgetto.setVisible(false);
-                interfacciaProgetto.clear();
+            String nome = interfacciaProgetto.getProgetto();
+            Progetto progetto = controllerMainPage.nuovoProgetto(nome);
+            getModelloProgetti().aggiungiProgetto(progetto);
+            dialogoInserimentoProgetto.setVisible(false);
+            interfacciaProgetto.clear();
         });
 
         //ACTION LISTENER DI LABORATORIO
@@ -148,36 +169,22 @@ public class GUImain extends JFrame {
         });
 
         assegnaProgettoButton.addActionListener(event -> {
-                JDialog dialogoAssegnazioneProgettoLaboratorio = schermataAssegnazioneProgettiLaboratorio();
-                setProgettiLaboratorioComboBox(progettoLaboratorioComboBox);
-                dialogoAssegnazioneProgettoLaboratorio.setVisible(true);
+            JDialog dialogoAssegnazioneProgettoLaboratorio = schermataAssegnazioneProgettiLaboratorio();
+            setProgettiLaboratorioComboBox(progettoLaboratorioComboBox);
+            dialogoAssegnazioneProgettoLaboratorio.setVisible(true);
         });
 
         assegnaResponsabileButton.addActionListener(event -> {
-                JDialog dialogoAssegnazioneResponsabile = schermataDialogoAssegnazioneResponsabileProgetto();
-                Progetto progetto = getProgettoSelezionato();
-                if (progetto.getLaboratori().size() > 0) {
-                    setResponsabiliProgettoComboBox(responsabileProgettoComboBox, progetto);
-                    if(responsabileProgettoComboBox.getItemCount() > 0)
-                        dialogoAssegnazioneResponsabile.setVisible(true);
-                } else {
-                    showErrorMessage("Nessun laboratorio assegnato");
-                }
+            JDialog dialogoAssegnazioneResponsabile = schermataDialogoAssegnazioneResponsabileProgetto();
+            Progetto progetto = getProgettoSelezionato();
+            if (progetto.getLaboratori().size() > 0) {
+                setResponsabiliProgettoComboBox(responsabileProgettoComboBox, progetto);
+                if(responsabileProgettoComboBox.getItemCount() > 0)
+                    dialogoAssegnazioneResponsabile.setVisible(true);
+            } else {
+                showErrorMessage("Nessun laboratorio assegnato");
+            }
         });
-    }
-
-    private void inizializzaGui(){
-        setContentPane(PannelloPrincipale);
-        setSize(1000, 1000);
-        setLocationRelativeTo(null);
-        setBackground(Color.CYAN);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        inizializzaTabellaDipendenti();
-        inizializzaTabellaLaboratori();
-        inizializzaTabellaProgetti();
-        inizializzaPulsantiGrado();
-        inizializzaDialoghi();
-
     }
 
     /**
@@ -851,7 +858,7 @@ public class GUImain extends JFrame {
      * @param dipendente dipendente selezionato
      */
 
-    public void degradaDipendente(Dipendente dipendente) {
+        public void degradaDipendente(Dipendente dipendente) {
         dipendente.setDataPromozione(null);
         dipendente.setDirigente(false);
     }
@@ -870,7 +877,7 @@ public class GUImain extends JFrame {
      * Metodo che inizializza i dialoghi
      */
 
-    private void inizializzaDialoghi(){
+        private void inizializzaDialoghi(){
         dialogoInserimentoDipendente.setLayout(new BorderLayout());
         dialogoInserimentoDipendente.setModal(true);
         dialogoInserimentoDipendente.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);

@@ -60,5 +60,6 @@ public class DialogoNuovoLaboratorio extends JPanel {
 
     public void clear() {
         nomeJTextField.setText(" ");
+        topicJComboBox.setSelectedIndex(0);
     }
 }

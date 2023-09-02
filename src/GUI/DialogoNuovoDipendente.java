@@ -119,7 +119,7 @@ public class DialogoNuovoDipendente extends JPanel {
     /**
      * Metodo che ritorna il cognome
      * inserito dall' utente
-     * @return cognome dipendente inserito
+     * @return cognome dipendente   inserito
      */
 
     public String getCognome(){
