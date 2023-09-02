@@ -20,21 +20,21 @@ public class DialogoNuovoDipendente extends JPanel {
     private JTextField giornoDiNascitaTextField;
     private JTextField meseDiNascitaTextField;
     private JTextField annoDiNascitaTextField;
-    private JComboBox mesiNascita;
-    private JSpinner GiornoNascita;
+    private JComboBox meseNascita;
+    private JSpinner giornoNascita;
     private JSpinner AnnoNascita;
     private JTextField nomeInseritoTextField;
 
     private SpinnerNumberModel YearModel;
-    private SpinnerNumberModel GiorniModel28;
-    private SpinnerNumberModel GiorniModel30;
-    private SpinnerNumberModel GiorniModel31;
+    private SpinnerNumberModel giorniModel28;
+    private SpinnerNumberModel giorniModel30;
+    private SpinnerNumberModel giorniModel31;
     private final int currentYear = LocalDate.now().getYear();
 
     public DialogoNuovoDipendente(){
         inizializzaInserimentoDipendente();
 
-        mesiNascita.addActionListener(new ActionListener() {
+        meseNascita.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 sceltaMese();
@@ -52,20 +52,21 @@ public class DialogoNuovoDipendente extends JPanel {
       */
 
     private void sceltaMese() {
-        int i = 0;
-        String MeseScelto = (String) mesiNascita.getSelectedItem();
-        if (MeseScelto.equals("Febbraio")) {
-            i = (int) GiornoNascita.getValue();
-            if (i > 28) i = 28;
-            GiornoNascita.setModel(GiorniModel28);
-            GiorniModel28.setValue(i);
-        } else if (MeseScelto.equals("Novembre") || MeseScelto.equals("Giugno") || MeseScelto.equals("Aprile") || MeseScelto.equals("Settembre")) {
-            i = (int) GiornoNascita.getValue();
+        Mese MeseScelto =(Mese) meseNascita.getSelectedItem();
+        if (MeseScelto.toString().equals("Febbraio")) {
+            int i = (int) giornoNascita.getValue();
+            giornoNascita.setModel(giorniModel28);
+            if(i > 28) giornoNascita.setValue(28);
+            else giornoNascita.setValue(i);
+        } else if (MeseScelto.toString().equals("Novembre") || MeseScelto.toString().equals("Giugno") || MeseScelto.toString().equals("Aprile") || MeseScelto.toString().equals("Settembre")) {
+            int i = (int) giornoNascita.getValue();
             if (i > 30) i = 30;
-            GiornoNascita.setModel(GiorniModel30);
-            GiorniModel30.setValue(i);
+            giornoNascita.setModel(giorniModel30);
+            giorniModel30.setValue(i);
         } else {
-            GiornoNascita.setModel(GiorniModel31);
+            int i = (int) giornoNascita.getValue();
+            giornoNascita.setModel(giorniModel31);
+            giornoNascita.setValue(i);
         }
     }
 
@@ -78,7 +79,7 @@ public class DialogoNuovoDipendente extends JPanel {
     private void inizializzaInserimentoDipendente() {
         add(Assumi);
         for (Mese mese : Mese.values()) {
-            mesiNascita.addItem(mese);
+            meseNascita.addItem(mese);
 
         }
         dirigenteBox.setEditable(true);
@@ -86,10 +87,10 @@ public class DialogoNuovoDipendente extends JPanel {
         dirigenteBox.addItem("SI");
         YearModel = new SpinnerNumberModel(currentYear - 30, currentYear - 80, currentYear - 18, 1);
         AnnoNascita.setModel(YearModel);
-        GiorniModel28 = new SpinnerNumberModel(1, 1, 28, 1);
-        GiorniModel30 = new SpinnerNumberModel(1, 1, 30, 1);
-        GiorniModel31 = new SpinnerNumberModel(1, 1, 31, 1);
-        GiornoNascita.setModel(GiorniModel31);
+        giorniModel28 = new SpinnerNumberModel(1, 1, 28, 1);
+        giorniModel30 = new SpinnerNumberModel(1, 1, 30, 1);
+        giorniModel31 = new SpinnerNumberModel(1, 1, 31, 1);
+        giornoNascita.setModel(giorniModel31);
     }
 
     /**
@@ -146,18 +147,24 @@ public class DialogoNuovoDipendente extends JPanel {
      */
 
     public Date getDataNascita(){
-        return converti((int)GiornoNascita.getValue(), (Mese) mesiNascita.getSelectedItem(),(int) AnnoNascita.getValue() - 1900);
+        return converti((int) giornoNascita.getValue(), (Mese) meseNascita.getSelectedItem(),(int) AnnoNascita.getValue() - 1900);
     }
 
 
     /**
-     * Metodo che rimuove tutti i dati
-     * all'interno del campo nome e cognome
+     * Metodo che pulisce i campi della schermata di inserimento
+     * in modo da creare un'interfaccia di inserimento nuova
      */
 
     public void clear(){
         nomeInseritoTextField.setText(null);
         cognomeInseritoTextField.setText(null);
+        giorniModel28.setValue(1);
+        giorniModel30.setValue(1);
+        giorniModel31.setValue(1);
+        giornoNascita.setValue(giorniModel31);
+        meseNascita.setSelectedIndex(1);
+        AnnoNascita.setValue(currentYear - 30);
     }
 
     private enum Mese{
