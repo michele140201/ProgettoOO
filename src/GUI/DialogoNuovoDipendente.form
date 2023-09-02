@@ -152,7 +152,7 @@
               <background color="-3801096"/>
             </properties>
           </component>
-          <component id="7bd7" class="javax.swing.JSpinner" binding="AnnoNascita">
+          <component id="7bd7" class="javax.swing.JSpinner" binding="annoNascita">
             <constraints>
               <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>

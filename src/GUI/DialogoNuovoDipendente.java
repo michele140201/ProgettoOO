@@ -22,7 +22,7 @@ public class DialogoNuovoDipendente extends JPanel {
     private JTextField annoDiNascitaTextField;
     private JComboBox meseNascita;
     private JSpinner giornoNascita;
-    private JSpinner AnnoNascita;
+    private JSpinner annoNascita;
     private JTextField nomeInseritoTextField;
 
     private SpinnerNumberModel YearModel;
@@ -33,12 +33,9 @@ public class DialogoNuovoDipendente extends JPanel {
 
     public DialogoNuovoDipendente(){
         inizializzaInserimentoDipendente();
-
-        meseNascita.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                sceltaMese();
-            }
+        meseNascita.addActionListener(event -> sceltaMese());
+        giornoNascita.addChangeListener(event ->{
+            if( (int) giornoNascita.getValue() > 28) sceltaMese();
         });
     }
 
@@ -86,7 +83,7 @@ public class DialogoNuovoDipendente extends JPanel {
         dirigenteBox.addItem("NO");
         dirigenteBox.addItem("SI");
         YearModel = new SpinnerNumberModel(currentYear - 30, currentYear - 80, currentYear - 18, 1);
-        AnnoNascita.setModel(YearModel);
+        annoNascita.setModel(YearModel);
         giorniModel28 = new SpinnerNumberModel(1, 1, 28, 1);
         giorniModel30 = new SpinnerNumberModel(1, 1, 30, 1);
         giorniModel31 = new SpinnerNumberModel(1, 1, 31, 1);
@@ -147,7 +144,7 @@ public class DialogoNuovoDipendente extends JPanel {
      */
 
     public Date getDataNascita(){
-        return converti((int) giornoNascita.getValue(), (Mese) meseNascita.getSelectedItem(),(int) AnnoNascita.getValue() - 1900);
+        return converti((int) giornoNascita.getValue(), (Mese) meseNascita.getSelectedItem(),(int) annoNascita.getValue() - 1900);
     }
 
 
@@ -164,7 +161,7 @@ public class DialogoNuovoDipendente extends JPanel {
         giorniModel31.setValue(1);
         giornoNascita.setValue(giorniModel31);
         meseNascita.setSelectedIndex(1);
-        AnnoNascita.setValue(currentYear - 30);
+        annoNascita.setValue(currentYear - 30);
     }
 
     private enum Mese{
