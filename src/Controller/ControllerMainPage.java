@@ -1,6 +1,6 @@
 package Controller;
 
-import GUI.GUImain;
+import GUI.GUIMain;
 import Model.Dipendente;
 import javax.swing.*;
 import java.sql.Date;
@@ -20,7 +20,7 @@ public class ControllerMainPage {
     private final ProgettoDAO progettoDAO;
     private final DipendenteDAO dipendenteDAO;
     private final LaboratorioDAO laboratorioDAO;
-    private final GUImain guImain;
+    private final GUIMain guImain;
     private final Dipendente dipendenteVuoto = new Dipendente();
     private final Laboratorio laboratorioVuoto = new Laboratorio();
     private final Progetto progettoVuoto = new Progetto();
@@ -33,7 +33,7 @@ public class ControllerMainPage {
      * @param guImain interfaccia grafica del programma
      */
 
-    public ControllerMainPage(DipendenteDAO dipendenteDAO, ProgettoDAO progettoDAO, LaboratorioDAO laboratorioDAO, GUImain guImain){
+    public ControllerMainPage(DipendenteDAO dipendenteDAO, ProgettoDAO progettoDAO, LaboratorioDAO laboratorioDAO, GUIMain guImain){
         this.dipendenteDAO = dipendenteDAO;
         this.laboratorioDAO = laboratorioDAO;
         this.progettoDAO = progettoDAO;

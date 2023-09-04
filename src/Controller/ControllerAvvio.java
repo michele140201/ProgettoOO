@@ -1,7 +1,7 @@
 package Controller;
 
 import DAO.*;
-import GUI.GUImain;
+import GUI.GUIMain;
 import Model.Dipendente;
 import Model.Laboratorio;
 import Model.Progetto;
@@ -16,7 +16,7 @@ public class ControllerAvvio {
     ProgettoDAO progettoDAO = new ProgettoDAOImpl(connectionController);
     DipendenteDAO dipendenteDAO = new DipendenteDAOimpl(connectionController);
     LaboratorioDAO laboratorioDAO = new LaboratorioDAOImpl(connectionController);
-    GUImain guimain = new GUImain();
+    GUIMain guimain = new GUIMain();
     ControllerMainPage controllerMainPage = new ControllerMainPage(dipendenteDAO, progettoDAO, laboratorioDAO , guimain);
 
     /**
