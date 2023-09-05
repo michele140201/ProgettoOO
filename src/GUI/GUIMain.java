@@ -79,10 +79,11 @@ public class GUIMain extends JFrame {
     }
 
     /**
-     * Metodo che aggiunge tutti i Listener ai bottoni
+     * Metodo che inizializza tutti i Listener dei bottoni
      */
 
     private void inizializzaListener(){
+
         dialogoNuovoDipendenteButton.addActionListener(event ->{
             dialogoInserimentoDipendente.setVisible(true);
         });

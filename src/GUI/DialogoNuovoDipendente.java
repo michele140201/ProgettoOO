@@ -157,7 +157,7 @@ public class DialogoNuovoDipendente extends JPanel {
         giorniModel28.setValue(1);
         giorniModel30.setValue(1);
         giorniModel31.setValue(1);
-        giornoNascita.setValue(giorniModel31);
+        giornoNascita.setModel(giorniModel31);
         meseNascita.setSelectedIndex(1);
         annoNascita.setValue(currentYear - 30);
     }
