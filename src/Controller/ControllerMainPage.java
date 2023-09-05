@@ -294,7 +294,7 @@ public class ControllerMainPage {
         try {
             Dipendente referente = laboratorio.getProgetto().getReferente();
             Dipendente responsabile = laboratorio.getProgetto().getResponsabile();
-            laboratorio.getProgetto().getLaboratori().remove(laboratorio);
+            if(laboratorio.getProgetto().getLaboratori() != null) laboratorio.getProgetto().getLaboratori().remove(laboratorio);
             if(referente != null){
                 if (laboratorio.equals(referente.getLaboratorio())) {
                     progettoDAO.setReferente(null, laboratorio.getProgetto());
