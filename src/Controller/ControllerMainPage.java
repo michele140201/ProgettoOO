@@ -294,15 +294,16 @@ public class ControllerMainPage {
         try {
             Dipendente referente = laboratorio.getProgetto().getReferente();
             Dipendente responsabile = laboratorio.getProgetto().getResponsabile();
+            laboratorio.getProgetto().getLaboratori().remove(laboratorio);
             if(referente != null){
-                if (referente.getLaboratorio().equals(laboratorio)) {
+                if (laboratorio.equals(referente.getLaboratorio())) {
                     progettoDAO.setReferente(null, laboratorio.getProgetto());
                     laboratorio.getProgetto().setReferente(dipendenteVuoto);
                 }
             }
 
             if(responsabile != null){
-                if (responsabile.getLaboratorio().equals(laboratorio)) {
+                if (laboratorio.equals(responsabile.getLaboratorio())) {
                     progettoDAO.setResponsabile(null, laboratorio.getProgetto());
                     laboratorio.getProgetto().setResponsabile(dipendenteVuoto);
                 }
@@ -450,8 +451,8 @@ public class ControllerMainPage {
      */
 
     public void setLaboratoriProgetto(List<Progetto> progetti , List<Laboratorio> laboratori){
-        List<Laboratorio> laboratoriProgetto = new ArrayList<>();
         for (Progetto progetto : progetti) {
+            List<Laboratorio> laboratoriProgetto = new ArrayList<>();
             for (Laboratorio laboratorio : laboratori) {
                 if (progetto.getCup() == laboratorio.getProgetto().getCup()) {
                     laboratoriProgetto.add(laboratorio);
