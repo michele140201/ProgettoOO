@@ -64,7 +64,10 @@ public class Progetto {
         this(0);
     }
 
-
+    public boolean equals(Progetto progetto){
+        if(this.getCup() == progetto.getCup()) return true;
+        else return false;
+    }
 
     /**
      * Metodo che si occupa di come viene visualizzato

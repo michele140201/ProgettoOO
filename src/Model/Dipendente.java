@@ -100,6 +100,16 @@ public class Dipendente {
         this(0);
     }
 
+    /**
+     * Overloading del metodo equals della classe Object
+     * @param dipendente
+     * @return
+     */
+    public boolean equals(Dipendente dipendente){
+        if(this.getId() == dipendente.getId()) return true;
+        else return false;
+    }
+
 
     /**
      * Metodo che si occupa di come viene visualizzato

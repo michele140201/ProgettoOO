@@ -52,6 +52,11 @@ public class Laboratorio {
         this(nome , topic , null , null);
     }
 
+    public boolean equals(Laboratorio laboratorio){
+        if(this.getNome().equals(laboratorio.getNome())) return true;
+        else return false;
+    }
+
     /**
      * Metodo che si occupa di come viene visualizzato
      * un laboratorio:
